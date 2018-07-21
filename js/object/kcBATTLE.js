@@ -8,8 +8,6 @@ var BATTLE = (function() {
 	var isPVP;
 	var node;
 	var bossNode;
-	var version; //1 - Before 2017-11-17 api_maxhps, 2 - After 2017-11-17 api_f_maxhps
-	var nightFirst;
 	
 	function BATTLE(playerFleet, battle, battleNode, PVP, boss) {
 		player = playerFleet;
@@ -21,8 +19,6 @@ var BATTLE = (function() {
 		isPVP = PVP | 0;
 		node = battleNode;
 		bossNode = boss | 0;
-		version = (dbattle.api_maxhps) ? 1 : 2;
-		nightFirst = !!dbattle.api_n_hougeki1;
 	};
 
 	start = function() {//possible armor break state - api_xal01
@@ -30,22 +26,12 @@ var BATTLE = (function() {
 		appendPhase("TITLE_BATTLE_START");
 		var enemyId = (dbattle.api_ship_ke) ? dbattle.api_ship_ke: nightBattle.api_ship_ke;
 		
-		var enemyHp;
-		if (version == 1) {
-			enemyHp = (dbattle.api_ship_ke) ? dbattle.api_nowhps.slice(7) : nightBattle.api_nowhps.slice(7);
-		} else {
-			enemyHp = (dbattle.api_ship_ke) ? dbattle.api_e_nowhps : nightBattle.api_e_nowhps;
-		}
+		var enemyHp = (dbattle.api_ship_ke) ? dbattle.api_nowhps.slice(7) : nightBattle.api_nowhps.slice(7);
 		if (combinedE){
 			var enemyCId = (dbattle.api_ship_ke_combined) ? dbattle.api_ship_ke_combined: nightBattle.api_ship_ke_combined;
-			var enemyCHp;
-			if (version == 1) {
-				enemyCHp = (dbattle.api_nowhps_combined) ? dbattle.api_nowhps_combined.slice(7) : nightBattle.api_nowhps_combined.slice(7);
-			} else {
-				enemyCHp = (dbattle.api_e_nowhps_combined) ? dbattle.api_e_nowhps_combined : nightBattle.api_e_nowhps_combined;
-			}
+			var enemyCHp = (dbattle.api_nowhps_combined) ? dbattle.api_nowhps_combined.slice(7) : nightBattle.api_nowhps_combined.slice(7);
 
-			opponent.addCombinedFleet(enemyId, enemyCId, enemyHp, enemyCHp, 1);
+			opponent.addCombinedFleet(enemyId, enemyCId, enemyHp, enemyCHp);
 		}
 		else
 			opponent.addFleet(enemyId, enemyHp);
@@ -128,7 +114,7 @@ var BATTLE = (function() {
 		var kou = dbattle.api_kouku;
 		var body = document.createElement('tbody');
 		appendPhase("TITLE_AIR_BATTLE");
-		if (kou && kou.api_plane_from && ((kou.api_plane_from[0] && kou.api_plane_from[0][0] != -1) || (kou.api_plane_from[1] && kou.api_plane_from[1][0] != -1))) {
+		if (kou && kou.api_plane_from && (kou.api_plane_from[0][0] != -1 || kou.api_plane_from[1][0] != -1)) {
 			kouku(kou, body, player.mainFleet);
 		} else {
 			body.append(getTextRow("AIR_NONE", []));
@@ -137,16 +123,16 @@ var BATTLE = (function() {
 		tab.append(body);
 	};
 
-	support = function(support_flag, support_info) {
+	support = function() {
 		var body = document.createElement('tbody');
 		appendPhase("TITLE_SUPPORTING_FIRE");
-		body.append(getTextRow("SUPPORT_START", [bossNode, support_flag]));
-		if(support_flag == 1) {
+		body.append(getTextRow("SUPPORT_START", [bossNode, dbattle.api_support_flag]));
+		if(dbattle.api_support_flag == 1) {
 			var fleet = (bossNode) ? player.supportBoss : player.supportNode;
 			
-			kouku(support_info.api_support_airatack, body, fleet);
+			kouku(dbattle.api_support_info.api_support_airatack, body, fleet);
 		} else {
-			var support = support_info.api_support_hourai;
+			var support = dbattle.api_support_info.api_support_hourai;
 			var damages = [], crits = [];
 			for (var i=0; i<support.api_damage.length; i++) {
 					damages.push(Math.floor(support.api_damage[i]));
@@ -154,13 +140,13 @@ var BATTLE = (function() {
 				}
 				if (damages[0] == -1) { damages = damages.slice(1); crits = crits.slice(1); }
 				for (var i=0; i<damages.length; i++) {
-					var ship = (i<6) ? opponent.mainFleet[i] : (opponent.escortFleet) ? opponent.escortFleet[i-6] : null;
+					var ship = (i<6) ? opponent.mainFleet[i] : opponent.escortFleet[i-6];
 					if (!ship) continue;
 					ship.damage(Math.floor(damages[i]));
 					
-					if(support_flag == 2) {
-						if(damages[i] >= 1) body.append(getTextRow("SHELL_DAMAGE", [ship.name, crits[i], damages[i]]));
-					} else if (support_flag == 3) {
+					if(dbattle.api_support_flag == 2) {
+						if(damages[i] >= 1) body.append(getTextRow("SHELL_DAMAGE", [ship.name, support.api_cl_list[i+1], damages[i], crits[i]]));
+					} else if (dbattle.api_support_flag == 3) {
 						if(damages[i] >= 1) body.append(getTextRow("TORP_DAMAGE", ["Support Fleet", ship.name, damages[i], crits[i]]));
 					}
 					
@@ -285,48 +271,20 @@ var BATTLE = (function() {
 	};
 
 	yasen = function() {
-		if (nightBattle.api_friendly_info && nightBattle.api_friendly_battle) {
-			var friendFleet = new FLEET();
-			friendFleet.addFleet(nightBattle.api_friendly_info.api_ship_id, nightBattle.api_friendly_info.api_nowhps);
-			yasenHougeki(nightBattle.api_friendly_battle.api_hougeki, friendFleet);
-		}
-	
-		if (nightBattle.api_n_support_flag && nightBattle.api_n_support_flag > 0) {
-			support(nightBattle.api_n_support_flag, nightBattle.api_n_support_info);
-		}
-		
-		var hou = nightBattle.api_hougeki;
-		if (hou.api_at_list) yasenHougeki(hou);
-	};
-	
-	yasenHougeki = function(hou, playerFleet) {
-		playerFleet = playerFleet || player;
-	
 		var body = document.createElement('tbody');
 		appendPhase("TITLE_NIGHT_BATTLE");
-		
-		var f1 = (playerFleet.isCombined()) ? playerFleet.escortFleet : playerFleet.mainFleet;
+
+		var f1 = (player.isCombined()) ? player.escortFleet : player.mainFleet;
 		var f2 = (yasen.api_active_deck && yasen.api_active_deck[1] == 2) ? opponent.escortFleet : opponent.mainFleet;
-	
-		for (var j = 0; j < hou.api_at_list.length; j++) {
-			if (hou.api_at_list[j] == -1) continue;
-			
+		var hou = nightBattle.api_hougeki;
+
+		for (var j = 1; j < hou.api_at_list.length; j++) {
 			var attacker,
 			    defender,
 			    dam;
 
-			if (version == 1) {
-				attacker = (hou.api_at_list[j] > 6) ? f2[hou.api_at_list[j] - 7] : f1[hou.api_at_list[j] - 1];
-				defender = (hou.api_df_list[j][0] > 6) ? f2[hou.api_df_list[j][0] - 7] : f1[hou.api_df_list[j][0] - 1];
-			} else {
-				if (hou.api_at_eflag[j]) {
-					attacker = (hou.api_at_list[j] >= 6 && opponent.mainFleet.length <= 6) ? opponent.escortFleet[hou.api_at_list[j] - 6] : opponent.mainFleet[hou.api_at_list[j]];
-					defender = (hou.api_df_list[j][0] >= 6 && playerFleet.mainFleet.length <= 6) ? playerFleet.escortFleet[hou.api_df_list[j][0] - 6] : playerFleet.mainFleet[hou.api_df_list[j][0]];
-				} else {
-					attacker = (hou.api_at_list[j] >= 6 && playerFleet.mainFleet.length <= 6) ? playerFleet.escortFleet[hou.api_at_list[j] - 6] : playerFleet.mainFleet[hou.api_at_list[j]];
-					defender = (hou.api_df_list[j][0] >= 6 && opponent.mainFleet.length <= 6) ? opponent.escortFleet[hou.api_df_list[j][0] - 6] : opponent.mainFleet[hou.api_df_list[j][0]];
-				}
-			}
+			attacker = (hou.api_at_list[j] > 6) ? f2[hou.api_at_list[j] - 7] : f1[hou.api_at_list[j] - 1];
+			defender = (hou.api_df_list[j][0] > 6) ? f2[hou.api_df_list[j][0] - 7] : f1[hou.api_df_list[j][0] - 1];
 			dam = 0;
 			for (var k=0; k<hou.api_damage[j].length; k++) {
 				if (hou.api_damage[j][k] > 0) dam += hou.api_damage[j][k];
@@ -358,19 +316,11 @@ var BATTLE = (function() {
 		var stage2 = kouku.api_stage2;
 		var stage3 = kouku.api_stage3;
 		var stage3_combined = kouku.api_stage3_combined;
-		if (opponent.combined && !stage3_combined) {
-			stage3_combined = {};
-			for (var prop in stage3) {
-				stage3_combined[prop] = [];
-				for (var i=6; i<stage3[prop].length; i++) stage3_combined[prop].push(stage3[prop][i]); //6 okay for old version because ignored as -1
-			}
-		}
-		
 		var fAttackers = [],
 		    eAttackers = [];
-		if (!islbas && kouku.api_plane_from[0] && kouku.api_plane_from[0][0] != -1) {
+		if (!islbas && kouku.api_plane_from[0][0] != -1) {
 			for (var i = 0; i < kouku.api_plane_from[0].length; i++) {
-				var ship = (isbombing) ? kouku.api_plane_from[0][i] : (kouku.api_plane_from[0][i] < 7 || player.mainFleet.length >= 7) ? fleet[kouku.api_plane_from[0][i] - 1] : player.escortFleet[kouku.api_plane_from[0][i] - 7];
+				var ship = (isbombing) ? kouku.api_plane_from[0][i] : (kouku.api_plane_from[0][i] < 7) ? fleet[kouku.api_plane_from[0][i] - 1] : player.escortFleet[kouku.api_plane_from[0][i] - 7];
 				if (isbombing && kouku.api_squadron_plane.length <= i)
 					continue;
 				/*
@@ -382,7 +332,7 @@ var BATTLE = (function() {
 
 				fAttackers.push(ship);
 			}
-			table.append(getTextRow("AIR_START", [arrayToString(fAttackers), stage1.api_f_count, (stage2 && stage2.api_f_count) ? stage2.api_f_count : 0]));
+			table.append(getTextRow("AIR_START", [arrayToString(fAttackers), stage1.api_f_count, (stage2) ? stage2.api_f_count : 0]));
 		}
 
 		if (!islbas && kouku.api_plane_from[1] && kouku.api_plane_from[1][0] != -1) {
@@ -392,7 +342,7 @@ var BATTLE = (function() {
 					slot -= 6;
 				eAttackers.push(opponent.mainFleet[slot - 1]);
 			}
-			table.append(getTextRow("AIR_START", [arrayToString(eAttackers), stage1.api_e_count, (stage2 && stage2.api_e_count) ? stage2.api_e_count: 0]));
+			table.append(getTextRow("AIR_START", [arrayToString(eAttackers), stage1.api_e_count, (stage2) ? stage2.api_e_count: 0]));
 		}
 
 		if (stage1.api_f_count > 0)
@@ -429,61 +379,60 @@ var BATTLE = (function() {
 			    eTargets = [],
 			    eCTargets = [];
 
-			for (var i = 0; i < Math.max(player.mainFleet.length,opponent.mainFleet.length); i++) {
-				var ind = (version == 1) ? i + 1 : i;
+			for (var i = 0; i < 6; i++) {
 				if (kouku.api_stage3.api_fdam && fleet[i]) {
-					var dam = Math.floor(kouku.api_stage3.api_fdam[ind]);
+					var dam = Math.floor(kouku.api_stage3.api_fdam[i + 1]);
 					//remember later, .1 = protect
 					player.mainFleet[i].curHP -= dam;
-					if (kouku.api_stage3.api_frai_flag[ind] || kouku.api_stage3.api_fbak_flag[ind])
+					if (kouku.api_stage3.api_frai_flag[i + 1] || kouku.api_stage3.api_fbak_flag[i + 1])
 						eTargets.push({
 							ship : player.mainFleet[i],
 							damage : (dam > 0) ? dam : 0,
-							protect : (dam != kouku.api_stage3.api_fdam[ind]),
-							crit : kouku.api_stage3.api_fcl_flag[ind],
-							rai : kouku.api_stage3.api_frai_flag[ind]
+							protect : (dam != kouku.api_stage3.api_fdam[i + 1]),
+							crit : kouku.api_stage3.api_fcl_flag[i + 1],
+							rai : kouku.api_stage3.api_frai_flag[i + 1]
 						});
 				}
 
 				if (kouku.api_stage3.api_edam && opponent.mainFleet[i]) {
-					var dam = Math.floor(kouku.api_stage3.api_edam[ind]);
+					var dam = Math.floor(kouku.api_stage3.api_edam[i + 1]);
 					//remember later, .1 = protect
 					opponent.mainFleet[i].curHP -= dam;
-					if (stage3.api_erai_flag[ind] || stage3.api_ebak_flag[ind])
+					if (stage3.api_erai_flag[i + 1] || stage3.api_ebak_flag[i + 1])
 						fTargets.push({
 							ship : opponent.mainFleet[i],
 							damage : (dam > 0) ? dam : 0,
-							protect : (dam != stage3.api_edam[ind]),
-							crit : stage3.api_ecl_flag[ind],
-							rai : stage3.api_erai_flag[ind]
+							protect : (dam != stage3.api_edam[i + 1]),
+							crit : stage3.api_ecl_flag[i + 1],
+							rai : stage3.api_erai_flag[i + 1]
 						});
 				}
 
 				if (stage3_combined) {
-					if (stage3_combined.api_fdam && player.escortFleet && player.escortFleet[i]) {
-						var dam = Math.floor(stage3_combined.api_fdam[ind]);
+					if (stage3_combined.api_fdam && player.escortFleet) {
+						var dam = Math.floor(stage3_combined.api_fdam[i + 1]);
 						//remember later, .1 = protect
 						player.escortFleet[i].curHP -= dam;
-						if (stage3_combined.api_frai_flag[ind] || stage3_combined.api_fbak_flag[ind])
+						if (stage3_combined.api_frai_flag[i + 1] || stage3_combined.api_fbak_flag[i + 1])
 							eTargets.push({
 								ship : player.escortFleet[i],
 								damage : (dam > 0) ? dam : 0,
-								protect : (dam != stage3_combined.api_fdam[ind]),
-								crit : stage3_combined.api_fcl_flag[ind],
-								rai : stage3_combined.api_frai_flag[ind]
+								protect : (dam != stage3_combined.api_fdam[i + 1]),
+								crit : stage3_combined.api_fcl_flag[i + 1],
+								rai : stage3_combined.api_frai_flag[i + 1]
 							});
 					}
-					if (stage3_combined.api_edam && opponent.escortFleet && opponent.escortFleet[i]) {
-						var dam = Math.floor(stage3_combined.api_edam[ind]);
+					if (stage3_combined.api_edam && opponent.escortFleet) {
+						var dam = Math.floor(stage3_combined.api_edam[i + 1]);
 						//remember later, .1 = protect
 						opponent.escortFleet[i].curHP -= dam;
-						if (stage3_combined.api_erai_flag[ind] || stage3_combined.api_ebak_flag[ind])
+						if (stage3_combined.api_erai_flag[i + 1] || stage3_combined.api_ebak_flag[i + 1])
 							fTargets.push({
 								ship : opponent.escortFleet[i],
 								damage : (dam > 0) ? dam : 0,
-								protect : (dam != stage3.api_edam[ind]),
-								crit : stage3_combined.api_ecl_flag[ind],
-								rai : stage3_combined.api_erai_flag[ind]
+								protect : (dam != stage3.api_edam[i + 1]),
+								crit : stage3_combined.api_ecl_flag[i + 1],
+								rai : stage3_combined.api_erai_flag[i + 1]
 							});
 					}
 				}
@@ -514,63 +463,34 @@ var BATTLE = (function() {
 		    eAttack = [],
 		    eTargets = [];
 
-		var num = Math.max(rai.api_frai.length, rai.api_erai.length);
+		var num = (combinedE) ? 12 : 6;
 		for (var i = 0; i < num; i++) {
-			if (version == 1) {
-				if (rai.api_frai[i + 1] > 0) {
-					fTorpedos.push((i >= 6) ? fleet[i - 6] : fleet[i]);
-					fAttack.push({
-						atk : rai.api_fydam[i + 1],
-						crit : ((rai.api_fcl[i + 1] == 2)? 2 : 1)
-					});
+			if (rai.api_frai[i + 1] > 0) {
+				fTorpedos.push((i >= 6) ? fleet[i - 6] : fleet[i]);
+				fAttack.push({
+					atk : rai.api_fydam[i + 1],
+					crit : ((rai.api_fcl[i + 1] == 2)? 2 : 1)
+				});
 
-					if ((combinedE && rai.api_frai[i + 1] >= 7)) {
-						fTargets.push(opponent.escortFleet[rai.api_frai[i + 1] - 7]);
-					} else {
-						fTargets.push(opponent.mainFleet[rai.api_frai[i + 1] - 1]);
-					}
+				if ((combinedE && rai.api_frai[i + 1] >= 7)) {
+					fTargets.push(opponent.escortFleet[rai.api_frai[i + 1] - 7]);
+				} else {
+					fTargets.push(opponent.mainFleet[rai.api_frai[i + 1] - 1]);
 				}
-				if (rai.api_erai[i + 1] > 0) {
-					eTorpedos.push((combinedE) ? opponent.escortFleet[i - 6] : opponent.mainFleet[i]);
-					eAttack.push({
-						atk : rai.api_eydam[i + 1],
-						crit : ((rai.api_ecl[i + 1] == 2)? 2 : 1)
-					});
+			}
+			if (rai.api_erai[i + 1] > 0) {
+				eTorpedos.push((combinedE) ? opponent.escortFleet[i - 6] : opponent.mainFleet[i]);
+				eAttack.push({
+					atk : rai.api_eydam[i + 1],
+					crit : ((rai.api_ecl[i + 1] == 2)? 2 : 1)
+				});
 
-					if ((opponent.escortFleet && rai.api_erai[i + 1] >= 7)) {
-						eTargets.push(fleet[rai.api_erai[i + 1] - 7]);
-					} else {
-						eTargets.push(player.mainFleet[rai.api_erai[i + 1] - 1]);
-					}
-
+				if ((opponent.escortFleet && rai.api_erai[i + 1] >= 7)) {
+					eTargets.push(fleet[rai.api_erai[i + 1] - 7]);
+				} else {
+					eTargets.push(player.mainFleet[rai.api_erai[i + 1] - 1]);
 				}
-			} else {
-				if (rai.api_frai[i] > -1) {
-					fTorpedos.push((i >= 6 && player.mainFleet.length <= 6) ? player.escortFleet[i - 6] : player.mainFleet[i]);
-					fAttack.push({
-						atk : rai.api_fydam[i],
-						crit : ((rai.api_fcl[i] == 2)? 2 : 1)
-					});
 
-					if (rai.api_frai[i] >= 6 && opponent.mainFleet.length <= 6) {
-						fTargets.push(opponent.escortFleet[rai.api_frai[i] - 6]);
-					} else {
-						fTargets.push(opponent.mainFleet[rai.api_frai[i]]);
-					}
-				}
-				if (rai.api_erai[i] > -1) {
-					eTorpedos.push((i >= 6 && opponent.mainFleet.length <= 6) ? opponent.escortFleet[i - 6] : opponent.mainFleet[i]);
-					eAttack.push({
-						atk : rai.api_eydam[i],
-						crit : ((rai.api_ecl[i] == 2)? 2 : 1)
-					});
-
-					if (rai.api_erai[i] >= 6 && player.mainFleet.length <= 6) {
-						eTargets.push(player.escortFleet[rai.api_erai[i] - 6]);
-					} else {
-						eTargets.push(player.mainFleet[rai.api_erai[i]]);
-					}
-				}
 			}
 		}
 
@@ -598,45 +518,27 @@ var BATTLE = (function() {
 	};
 
 	hougeki = function(hou, fleet, body) {
-		for (var j = 0; j < hou.api_at_list.length; j++) {
-			if (hou.api_at_list[j] == -1) continue;
-			
+		for (var j = 1; j < hou.api_at_list.length; j++) {
 			var attacker,
 			    defender,
 			    damage;
-			
-			if (version == 1) {
-				if (combinedE) {
-					if (hou.api_at_eflag[j])
-						attacker = (hou.api_at_list[j] > 6) ? opponent.escortFleet[hou.api_at_list[j] - 7] : opponent.mainFleet[hou.api_at_list[j] - 1];
-					else
-						attacker = (hou.api_at_list[j] > 6) ? player.escortFleet[hou.api_at_list[j] - 7] : player.mainFleet[hou.api_at_list[j] - 1];
-				} else {
-					attacker = (hou.api_at_list[j] > 6) ? opponent.mainFleet[hou.api_at_list[j] - 7] : fleet[hou.api_at_list[j] - 1];
-				}
+
+			if (combinedE) {
+				if (hou.api_at_eflag[j])
+					attacker = (hou.api_at_list[j] > 6) ? opponent.escortFleet[hou.api_at_list[j] - 7] : opponent.mainFleet[hou.api_at_list[j] - 1];
+				else
+					attacker = (hou.api_at_list[j] > 6) ? player.escortFleet[hou.api_at_list[j] - 7] : player.mainFleet[hou.api_at_list[j] - 1];
 			} else {
-				if (hou.api_at_eflag[j]) {
-					attacker = (hou.api_at_list[j] >= 6 && opponent.mainFleet.length <= 6) ? opponent.escortFleet[hou.api_at_list[j] - 6] : opponent.mainFleet[hou.api_at_list[j]];
-				} else {
-					attacker = (hou.api_at_list[j] >= 6 && player.mainFleet.length <= 6) ? player.escortFleet[hou.api_at_list[j] - 6] : player.mainFleet[hou.api_at_list[j]];
-				}
+				attacker = (hou.api_at_list[j] > 6) ? opponent.mainFleet[hou.api_at_list[j] - 7] : fleet[hou.api_at_list[j] - 1];
 			}
-			
-			if (version == 1) {
-				if (combinedE) {
-					if (!hou.api_at_eflag[j])
-						defender = (hou.api_df_list[j][0] > 6) ? opponent.escortFleet[hou.api_df_list[j][0] - 7] : opponent.mainFleet[hou.api_df_list[j][0] - 1];
-					else
-						defender = (hou.api_df_list[j][0] > 6) ? player.escortFleet[hou.api_df_list[j][0] - 7] : player.mainFleet[hou.api_df_list[j][0] - 1];
-				} else {
-					defender = (hou.api_df_list[j][0] > 6) ? opponent.mainFleet[hou.api_df_list[j][0] - 7] : fleet[hou.api_df_list[j][0] - 1];
-				}
+
+			if (combinedE) {
+				if (!hou.api_at_eflag[j])
+					defender = (hou.api_df_list[j][0] > 6) ? opponent.escortFleet[hou.api_df_list[j][0] - 7] : opponent.mainFleet[hou.api_df_list[j][0] - 1];
+				else
+					defender = (hou.api_df_list[j][0] > 6) ? player.escortFleet[hou.api_df_list[j][0] - 7] : player.mainFleet[hou.api_df_list[j][0] - 1];
 			} else {
-				if (!hou.api_at_eflag[j]) {
-					defender = (hou.api_df_list[j][0] >= 6 && opponent.mainFleet.length <= 6) ? opponent.escortFleet[hou.api_df_list[j][0] - 6] : opponent.mainFleet[hou.api_df_list[j][0]];
-				} else {
-					defender = (hou.api_df_list[j][0] >= 6 && player.mainFleet.length <= 6) ? player.escortFleet[hou.api_df_list[j][0] - 6] : player.mainFleet[hou.api_df_list[j][0]];
-				}
+				defender = (hou.api_df_list[j][0] > 6) ? opponent.mainFleet[hou.api_df_list[j][0] - 7] : fleet[hou.api_df_list[j][0] - 1];
 			}
 
 			body.append(getTextRow("SHELL_TARGET", [attacker.name, hou.api_at_type[j], defender.name]));
@@ -711,26 +613,16 @@ var BATTLE = (function() {
 			formation();
 		if (dbattle.api_search)
 			detection();
-		if (dbattle.api_n_support_flag && dbattle.api_n_support_flag > 0)
-			support(dbattle.api_n_support_flag, dbattle.api_n_support_info);
-		if (dbattle.api_n_hougeki1 && dbattle.api_n_hougeki1.api_at_list) {
-			yasenHougeki(dbattle.api_n_hougeki1);
-		}
-		if (dbattle.api_n_hougeki2 && dbattle.api_n_hougeki2.api_at_list) {
-			yasenHougeki(dbattle.api_n_hougeki2);
-		}
 		if (dbattle.api_air_base_injection)
 			jetLbas();
 		if (dbattle.api_injection_kouku)
 			jetAttack();
 		if (dbattle.api_air_base_attack)
 			lbas();
-		if (nightFirst && dbattle.api_support_flag && dbattle.api_support_flag > 0)
-			support(dbattle.api_support_flag, dbattle.api_support_info);
 		if (dbattle.api_stage_flag)
 			airAttack();
-		if (!nightFirst && dbattle.api_support_flag && dbattle.api_support_flag > 0)
-			support(dbattle.api_support_flag, dbattle.api_support_info);
+		if (dbattle.api_support_flag && dbattle.api_support_flag > 0)
+			support();
 		if (dbattle.api_opening_taisen_flag)
 			oasw();
 		if (dbattle.api_opening_flag)

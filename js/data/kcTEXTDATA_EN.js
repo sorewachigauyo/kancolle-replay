@@ -46,7 +46,6 @@ var TEXTDATA_EN = {
 				3: "Diamond",
 				4: "Echelon",
 				5: "Line Abreast",
-				6: "Vanguard",
 				11: "Cruising Formation 1",
 				12: "Cruising Formation 2",
 				13: "Cruising Formation 3",
@@ -345,9 +344,7 @@ var TEXTDATA_EN = {
 				3: "torpedo cut-in",
 				4: "gun cut-in (secondary)",
 				5: "gun cut-in (main)",
-				6: "carrier cut-in",
-				7: "gun-torpedo-radar cut-in",
-				8: "torpedo-radar-lookout cut-in"
+				6: "carrier cut-in"
 			}
 		}
 	},

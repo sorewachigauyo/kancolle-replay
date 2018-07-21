@@ -24,7 +24,7 @@ function makeTable(root, name, num, islbas) {
 		table.append(tr);
 	}
 
-	var numeq = (islbas)? 4 : 6;
+	var numeq = (islbas)? 4 : 5;
 	for (var j = 0; j < numeq; j++) {
 		tr = $('<tr></tr>');
 		for (var i = 0; i < num; i++)
@@ -47,19 +47,12 @@ function fillTableF(API, num, combined, translate) {
 		} else $('#name' + num + i).text(fleet[i].mst_id + '.');
 		if (!translate) {
 			if (SHIPDATA[fleet[i].mst_id]) $('#img' + num + i).attr('src', 'assets/icons/' + SHIPDATA[fleet[i].mst_id].image);
-			var maxhp;
-			if (b.api_maxhps) {
-				var key = (combined) ? 'api_maxhps_combined' : 'api_maxhps';
-				maxhp = b[key][i+1];
-			} else { //new format
-				var key = (combined) ? 'api_f_maxhps_combined' : 'api_f_maxhps';
-				maxhp = b[key][i];
-			}
+			var maxhps = (combined) ? 'api_maxhps_combined' : 'api_maxhps';
 			var fparam = (combined) ? 'api_fParam_combined' : 'api_fParam';
-			$('#lvl' + num + i).text(fleet[i].level); $('#hp' + num + i).text(maxhp);
+			$('#lvl' + num + i).text(fleet[i].level); $('#hp' + num + i).text(b[maxhps][i + 1]);
 			$('#fp' + num + i).text(b[fparam][i][0]); $('#tp' + num + i).text(b[fparam][i][1]); $('#aa' + num + i).text(b[fparam][i][2]); $('#ar' + num + i).text(b[fparam][i][3]);
 		}
-		for (var j = 0; j < 6; j++) {
+		for (var j = 0; j < 5; j++) {
 			if (!fleet[i].equip[j]) continue;
 			if (EQDATA[fleet[i].equip[j]]) $('#eq' + j + num + i).text(EQDATA[fleet[i].equip[j]][$('#radJP').prop('checked') ? 'nameJP' : 'name']);
 			else $('#eq' + j + num + i).text(fleet[i].equip[j]);
@@ -121,8 +114,7 @@ function loadFleetInfo(API, translate) {
 			} else $('#name2' + k + i).text(mid + '.');
 			if (!translate) {
 				if (SHIPDATA[mid]) $('#img2' + k + i).attr('src', 'assets/icons/' + SHIPDATA[mid].image);
-				var maxhp = (b.api_maxhps)? b.api_maxhps[i + 7] : b.api_e_maxhps[i];
-				$('#lvl2' + k + i).text(b.api_ship_lv[i + 1]); $('#hp2' + k + i).text(maxhp);
+				$('#lvl2' + k + i).text(b.api_ship_lv[i + 1]); $('#hp2' + k + i).text(b.api_maxhps[i + 7]);
 				$('#fp2' + k + i).text(b.api_eParam[i][0]); $('#tp2' + k + i).text(b.api_eParam[i][1]); $('#aa2' + k + i).text(b.api_eParam[i][2]); $('#ar2' + k + i).text(b.api_eParam[i][3]);
 			}
 			for (var j = 0; j < 4; j++) {
@@ -147,8 +139,7 @@ function loadFleetInfo(API, translate) {
 				} else $('#name2c' + k + i).text(mid + '.');
 				if (!translate) {
 					if (SHIPDATA[mid]) $('#img2c' + k + i).attr('src', 'assets/icons/' + SHIPDATA[mid].image);
-					var maxhp = (b.api_maxhps_combined)? b.api_maxhps_combined[i + 7] : b.api_e_maxhps_combined[i];
-					$('#lvl2c' + k + i).text(b.api_ship_lv_combined[i + 1]); $('#hp2c' + k + i).text(maxhp);
+					$('#lvl2c' + k + i).text(b.api_ship_lv_combined[i + 1]); $('#hp2c' + k + i).text(b.api_maxhps_combined[i + 7]);
 					$('#fp2c' + k + i).text(b.api_eParam_combined[i][0]); $('#tp2c' + k + i).text(b.api_eParam_combined[i][1]); $('#aa2c' + k + i).text(b.api_eParam_combined[i][2]); $('#ar2c' + k + i).text(b.api_eParam_combined[i][3]);
 				}
 				for (var j = 0; j < 4; j++) {
@@ -156,32 +147,6 @@ function loadFleetInfo(API, translate) {
 					if (EQDATA[b.api_eSlot_combined[i][j]]) $('#eq' + j + '2c' + k + i).text(EQDATA[b.api_eSlot_combined[i][j]][$('#radJP').prop('checked') ? 'nameJP' : 'name']);
 					else $('#eq' + j + '2c' + k + i).text(b.api_eSlot_combined[i][j]);
 					$('#eq' + j + '2c' + k + i).attr('title', b.api_eSlot_combined[i][j]);
-				}
-			}
-		}
-		if (API.battles[k].yasen && API.battles[k].yasen.api_friendly_info) {
-			var d = API.battles[k].yasen.api_friendly_info;
-			if (!translate) {
-				$('#enemyfleetspace > br:last-child').remove();
-				makeTable('enemyfleetspace', '2f' + k, d.api_ship_id.length);
-			}
-			for (var i=0; i<d.api_ship_id.length; i++) {
-				var mid = d.api_ship_id[i];
-				if (mid <= 0) continue;
-				if (SHIPDATA[mid]) {
-					if ($('#radJP').prop('checked')) $('#name2f' + k + i).text(mid + '. ' + SHIPDATA[mid].nameJP);
-					else $('#name2f' + k + i).text(mid + '. ' + SHIPDATA[mid].name);
-				} else $('#name2f' + k + i).text(mid + '.');
-				if (!translate) {
-					if (SHIPDATA[mid]) $('#img2f' + k + i).attr('src', 'assets/icons/' + SHIPDATA[mid].image);
-					$('#lvl2f' + k + i).text(d.api_ship_lv[i]); $('#hp2f' + k + i).text(d.api_nowhps[i]+'/'+d.api_maxhps[i]);
-					$('#fp2f' + k + i).text(d.api_Param[i][0]); $('#tp2f' + k + i).text(d.api_Param[i][1]); $('#aa2f' + k + i).text(d.api_Param[i][2]); $('#ar2f' + k + i).text(d.api_Param[i][3]);
-				}
-				for (var j = 0; j < 4; j++) {
-					if (d.api_Slot[i][j] <= 0) continue;
-					if (EQDATA[d.api_Slot[i][j]]) $('#eq' + j + '2f' + k + i).text(EQDATA[d.api_Slot[i][j]][$('#radJP').prop('checked') ? 'nameJP' : 'name']);
-					else $('#eq' + j + '2f' + k + i).text(d.api_Slot[i][j]);
-					$('#eq' + j + '2f' + k + i).attr('title', d.api_Slot[i][j]);
 				}
 			}
 		}
@@ -210,18 +175,6 @@ var uri = new URI(window.location.href);
 var qs = uri.search(true);
 if (qs.fromImg) {
 	loadImgURL(qs.fromImg);
-} else if (qs.fromLZString) {
-	/*
-		- LZString.compressToEncodedURIComponent(str) to encode strings
-		- LZString.decompressFromEncodedURIComponent(str) to decode from LZString-encoded strings
-     */
-	try {
-		var decompressed = LZString.decompressFromEncodedURIComponent(qs.fromLZString);
-		document.getElementById('code').value = decompressed;
-		loadCode();
-	} catch (e) {
-		console.error('error while processing lz-string data', e)
-	}
 } else if (window.location.hash.length > 5) {
 	document.getElementById('code').value = decodeURIComponent(window.location.hash.substr(1));
 	loadCode();
