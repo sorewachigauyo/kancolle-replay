@@ -3145,7 +3145,6 @@ var MAPDATA = {
 						type: 1,
 						x: 658,
 						y: 241,
-						aironly: true,
 						compDiff: {
 							3: ['Hard']
 						},
@@ -3164,7 +3163,8 @@ var MAPDATA = {
 							var historicalList = [78,79,124,125,70,120,69,9,10,32,23];
 							historicalList.forEach(id => {
 								if (isShipInList(ships.ids,id)) historicalCount++;
-							})
+								if (isShipInList(ships.escort.ids,id)) historicalCount++;
+							});
 							if (CHDATA.fleets.combined == 2 || historicalCount > 6) return 'C';
 							else if (ships.speed == 5) return 'A';
 							else return 'C';
@@ -3182,10 +3182,10 @@ var MAPDATA = {
 							var historicalList = [78,79,124,125,70,120,69,9,10,32,23];
 							historicalList.forEach(id => {
 								if (isShipInList(ships.ids,id)) historicalCount++;
-							})
-							var mainFleetIds = ships.ids.slice(0,5);
+								if (isShipInList(ships.escort.ids,id)) historicalCount++;
+							});
 							if (historicalCount > 6) return 'G'
-							else if (historicalCount > 2 && isShipInList(mainFleetIds,78) && isShipInList(mainFleetIds,79)) return 'E';
+							else if (historicalCount > 2 && isShipInList(ships.ids,78) && isShipInList(ships.ids,79)) return 'E';
 							else return 'D';
 						},
 					},
@@ -3193,14 +3193,13 @@ var MAPDATA = {
 						type: 1,
 						x: 557,
 						y: 295,
-						aironly: true,
 						compDiff: {
 							3: ['Hard']
 						},
 						routeC: function(ships){
 							var mainFleetIds = ships.ids.slice(0,5);
 							if (isShipInList(ships.ids,460)) return 'G';
-							else if (isShipInList(mainFleetIds,131) && isShipInList(mainFleetIds,143) && isShipInList(ships.ids.slice(6,11),171)) 
+							else if (isShipInList(ships.ids,131) && isShipInList(ships.ids,143) && isShipInList(ships.escorts.ids,171)) 
 								{ return 'F'; }
 							else if (ships.CV + ships.CVB == 4) return 'F';
 							else return 'G';
