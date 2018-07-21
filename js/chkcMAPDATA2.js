@@ -2976,7 +2976,7 @@ var MAPDATA = {
 				name: 'E-1',
 				nameT: 'Patrol off Buntan (ez sub map)',
 				fleetTypes: [0],
-				bgmMap: 2031,
+				bgmMap: 2431,
 				bgmDN: 70,
 				bgmNN: 70,
 				bgmDB: 71,
@@ -3030,9 +3030,9 @@ var MAPDATA = {
 							1: ['Easy 1', 'Easy 2', 'Easy 3']
 						},
 						routeC: function(ships){
-							if (ships.speed === 5 || (ships.FBB && ships.FBB + ships.CVL === 1)
+							if (ships.speed == 5 || (ships.FBB && ships.FBB + ships.CVL === 1)
 								|| 6 - (ships.DD + ships.CL + ships.CLT + ships.CT) < 2 ) return 'E';
-							else if (ships.speed === 10 && ships.FBB === 0 && ships.CL > 0) return 'D';
+							else if (ships.speed == 10 && ships.FBB == 0 && ships.CL > 0) return 'D';
 							else return 'E';
 						}
 					},
@@ -3078,9 +3078,8 @@ var MAPDATA = {
 					},
 					'G' : {
 						type: 1,
-						x: 593,
-						y: 311,
-						subonly: true,
+						x: 284,
+						y: 333,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2', 'Hard 3', 'Hard 4'],
 							2: ['Medium 1', 'Medium 2', 'Medium 3', 'Medium 4', 'Medium 5'],
@@ -3112,7 +3111,157 @@ var MAPDATA = {
 						end: true,
 					},
 				},
-			}
+			},
+			2: {
+				name: 'E-3',
+				nameT: 'The Second Naval Battle of Malaya (I skipped E2 cuz its a TP map)',
+				fleetTypes: [1,2],
+				bgmMap: 2431,
+				bgmDN: 71,
+				bgmNN: 71,
+				bgmDB: 72,
+				bgmNB: 72,
+				bossnode: 10,
+				maphp: {
+					3: { 1: 4200 },
+					2: { 1: 3600 },
+					1: { 1: 3000 },
+				},
+				finalhp: {
+					3: 644,
+					2: 700,
+					1: 644,
+				},
+				giveLock: 3,
+				checkLock: [1,2],
+				nodes:{
+					'Start':{
+						type: 0,
+						x: 0,
+						y: 0,
+						route: 'B',
+					},
+					'A':{
+						type: 1,
+						x: 0,
+						y: 0,
+						aironly: true,
+						compDiff: {
+							3: ['Hard']
+						},
+						route: 'C',
+					},
+					'B':{
+						type: 1,
+						x: 0,
+						y: 0,
+						subonly: true,
+						compDiff: {
+							3: ['Hard 1','Hard 2','Hard 3','Hard 4']
+						},
+						routeC: function(ships){
+							var historicalCount = 0;
+							var historicalList = [78,79,124,125,70,120,69,9,10,32,23];
+							historicalList.forEach(id => {
+								if (isShipInList(ships.ids,id)) historicalCount++;
+							})
+							if (CHDATA.fleets.combined == 2 || historicalCount > 6) return 'C';
+							else if (ships.speed == 5) return 'A';
+							else return 'C';
+						},
+					},
+					'C':{
+						type: 1,
+						x: 0,
+						y: 0,
+						compDiff: {
+							3: ['Hard 1','Hard 2','Hard 3']
+						},
+						routeC: function(ships){
+							var historicalCount = 0;
+							var historicalList = [78,79,124,125,70,120,69,9,10,32,23];
+							historicalList.forEach(id => {
+								if (isShipInList(ships.ids,id)) historicalCount++;
+							})
+							var mainFleetIds = ships.ids.slice(0,5);
+							if (historicalCount > 6) return 'G'
+							else if (historicalCount > 2 && isShipInList(mainFleetIds,78) && isShipInList(mainFleetIds,79)) return 'E';
+							else return 'D';
+						},
+					},
+					'D':{
+						type: 1,
+						x: 0,
+						y: 0,
+						aironly: true,
+						compDiff: {
+							3: ['Hard']
+						},
+						routeC: function(ships){
+							var mainFleetIds = ships.ids.slice(0,5);
+							if (isShipInList(ships.ids,460)) return 'G';
+							else if (isShipInList(mainFleetIds,131) && isShipInList(mainFleetIds,143) && isShipInList(ships.ids.slice(6,11),171)) 
+								{ return 'F'; }
+							else if (ships.CV + ships.CVB == 4) return 'F';
+							else return 'G';
+						},
+					},
+					'E':{
+						type: 4,
+						resource: 1,
+						x: 0,
+						y: 0,
+						route: 'G',
+					},
+					'F':{
+						type: 4,
+						resource: 1,
+						x: 0,
+						y: 0,
+						route: 'G',
+					},
+					'G' : {
+						type: 1,
+						x: 284,
+						y: 333,
+						compDiff: {
+							3: ['Hard 1', 'Hard 2', 'Hard 3'],
+						},
+						routeL : {100:"H",0:"I"},
+					},
+					'H' : {
+						type: 1,
+						x: 284,
+						y: 333,
+						compDiff: {
+							3: ['Hard 1', 'Hard 2', 'Hard 3'],
+						},
+						route : "J",
+					},
+					'I':{
+						type: 3,
+						x: 0,
+						y: 0,
+						end: true,
+					},
+					'J':{
+						type: 1,
+						x: 0,
+						y: 0,
+						end: true,
+						compDiff: {
+							3: ['Hard 1', 'Hard 2'],
+							2: ['Medium 1', 'Medium 2'],
+							1: ['Easy 1', 'Easy 2']
+						},
+						compDiffF: {
+							3: ['Hard F'],
+							2: ['Medium F'],
+							1: ['Easy F']
+						},
+					},
+				},
+			},
 		}
 	},
 }

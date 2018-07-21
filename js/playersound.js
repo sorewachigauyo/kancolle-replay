@@ -175,6 +175,7 @@ var BGMLIST = {
 	2027: {url:'assets/music/Sound_bgm_almi.ogg'},
 	2031: {url:'assets/music/903y.ogg'},
 	2131: {url:'assets/music/904wNeo.ogg'},
+	2431: {url:'assets/music/910a.oga'},
 	3001: {url:'assets/music/Sound_se_18.ogg'},
 	3002: {url:'assets/music/Sound_se_63.ogg'},
 	3003: {url:'assets/music/Sound_se_52.ogg'},
