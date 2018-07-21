@@ -2967,14 +2967,14 @@ var MAPDATA = {
 		name: 'Summer 2016',
 		date: '2016-08-12',
 		diffMode: 2,
-		allowDiffs: [3,2,1],
+		allowDiffs: [3],
 		allowFleets: [0,1,2],
 		bannerImg: 'http://kure.kancollewiki.net/images/a/af/2016SummerEventBanner.png',
 		bannerImgAlt: 'http://kure.kancollewiki.net/images/4/4e/2016SummerEventBannerAlt.png',
 		maps: {
 			1: {
 				name: 'E-1',
-				nameT: 'Patrol off Buntan',
+				nameT: 'Patrol off Buntan (ez sub map)',
 				fleetTypes: [0],
 				bgmMap: 2031,
 				bgmDN: 70,
@@ -3013,7 +3013,7 @@ var MAPDATA = {
 						x: 675,
 						y: 231,
 						compDiff:{
-							3: ['Hard 1', 'Hard 2', 'Hard 3'],
+							3: ['Hard 1', 'Hard 2', 'Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1', 'Medium 2', 'Medium 3'],
 							1: ['Easy 1', 'Easy 2']
 						},
@@ -3025,7 +3025,7 @@ var MAPDATA = {
 						y: 190,
 						subonly: true,
 						compDiff: {
-							3: ['Hard 1', 'Hard 2'],
+							3: ['Hard 1', 'Hard 2','Hard 3','Hard 4'],
 							2: ['Medium 1', 'Medium 2'],
 							1: ['Easy 1', 'Easy 2', 'Easy 3']
 						},
@@ -3058,7 +3058,7 @@ var MAPDATA = {
 						x: 464,
 						y: 190,
 						compDiff: {
-							3: ['Hard 1', 'Hard 2', 'Hard 3'],
+							3: ['Hard 1', 'Hard 2', 'Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1', 'Medium 2', 'Medium 3'],
 							1: ['Easy 1', 'Easy 2']
 						},
@@ -3070,7 +3070,7 @@ var MAPDATA = {
 						y: 304,
 						subonly: true,
 						compDiff: {
-							3: ['Hard 1', 'Hard 2', 'Hard 3'],
+							3: ['Hard 1', 'Hard 2', 'Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1', 'Medium 2', 'Medium 3'],
 							1: ['Easy 1', 'Easy 2']
 						},
