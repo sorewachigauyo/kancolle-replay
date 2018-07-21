@@ -3114,7 +3114,7 @@ var MAPDATA = {
 			},
 			2: {
 				name: 'E-2',
-				nameT: 'The Second Naval Battle of Malaya (I skipped E2 cuz its a TP map)',
+				nameT: 'The Second Naval Battle of Malaya (I skipped the real E2 cuz its a TP map)',
 				fleetTypes: [1,2],
 				bgmMap: 2431,
 				bgmDN: 71,
@@ -3137,14 +3137,14 @@ var MAPDATA = {
 				nodes:{
 					'Start':{
 						type: 0,
-						x: 0,
-						y: 0,
+						x: 656,
+						y: 83,
 						route: 'B',
 					},
 					'A':{
 						type: 1,
-						x: 0,
-						y: 0,
+						x: 658,
+						y: 241,
 						aironly: true,
 						compDiff: {
 							3: ['Hard']
@@ -3153,8 +3153,8 @@ var MAPDATA = {
 					},
 					'B':{
 						type: 1,
-						x: 0,
-						y: 0,
+						x: 641,
+						y: 162,
 						subonly: true,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4']
@@ -3172,8 +3172,8 @@ var MAPDATA = {
 					},
 					'C':{
 						type: 1,
-						x: 0,
-						y: 0,
+						x: 583,
+						y: 230,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3']
 						},
@@ -3191,8 +3191,8 @@ var MAPDATA = {
 					},
 					'D':{
 						type: 1,
-						x: 0,
-						y: 0,
+						x: 557,
+						y: 295,
 						aironly: true,
 						compDiff: {
 							3: ['Hard']
@@ -3209,21 +3209,21 @@ var MAPDATA = {
 					'E':{
 						type: 4,
 						resource: 1,
-						x: 0,
-						y: 0,
+						x: 538,
+						y: 149,
 						route: 'G',
 					},
 					'F':{
 						type: 4,
 						resource: 1,
-						x: 0,
-						y: 0,
+						x: 501,
+						y: 331,
 						route: 'G',
 					},
 					'G' : {
 						type: 1,
-						x: 284,
-						y: 333,
+						x: 471,
+						y: 202,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2', 'Hard 3'],
 						},
@@ -3231,8 +3231,8 @@ var MAPDATA = {
 					},
 					'H' : {
 						type: 1,
-						x: 284,
-						y: 333,
+						x: 439,
+						y: 275,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2', 'Hard 3'],
 						},
@@ -3240,14 +3240,14 @@ var MAPDATA = {
 					},
 					'I':{
 						type: 3,
-						x: 0,
-						y: 0,
+						x: 374,
+						y: 149,
 						end: true,
 					},
 					'J':{
 						type: 1,
-						x: 0,
-						y: 0,
+						x: 369,
+						y: 340,
 						end: true,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2'],
