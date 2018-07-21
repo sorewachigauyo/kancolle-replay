@@ -3113,7 +3113,7 @@ var MAPDATA = {
 				},
 			},
 			2: {
-				name: 'E-3',
+				name: 'E-2',
 				nameT: 'The Second Naval Battle of Malaya (I skipped E2 cuz its a TP map)',
 				fleetTypes: [1,2],
 				bgmMap: 2431,
