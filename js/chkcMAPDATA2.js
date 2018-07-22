@@ -3275,76 +3275,76 @@ var MAPDATA = {
 						},
 					},
 				},
-				3:{
-					name: 'E-3',
-					nameT: 'Victory over the Dawn Horizon! (If you get B rank or higher you beat the event)',
-					fleetTypes: [0],
-					bgmMap: 17,
-					bgmDN: 55,
-					bgmNN: 55,
-					bgmDB: 17,
-					bgmNB: 17,
-					bossnode: 4,
-					maphp: {
-						3: { 1: 1330 },
-						2: { 1: 4000 },
-						1: { 1: 4000 },
+			},
+			3:{
+				name: 'E-3',
+				nameT: 'Victory over the Dawn Horizon! (If you get B rank or higher you beat the event)',
+				fleetTypes: [0],
+				bgmMap: 17,
+				bgmDN: 55,
+				bgmNN: 55,
+				bgmDB: 17,
+				bgmNB: 17,
+				bossnode: 4,
+				maphp: {
+					3: { 1: 1330 },
+					2: { 1: 4000 },
+					1: { 1: 4000 },
+				},
+				finalhp: {
+					3: 500,
+					2: 400,
+					1: 400,
+				},
+				checkLock: ['1','2','3'],
+				nodes:{
+					'Start':{
+						type: 0,
+						x: 154,
+						y: 140,
+						route: 'A',
 					},
-					finalhp: {
-						3: 500,
-						2: 400,
-						1: 400,
+					'A':{
+						type: 1,
+						x: 289,
+						y: 240,
+						route: 'B',
+						compDiff:{
+							3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
+						},
 					},
-					checkLock: ['1','2','3'],
-					nodes:{
-						'Start':{
-							type: 0,
-							x: 154,
-							y: 140,
-							route: 'A',
+					'B':{
+						type: 1,
+						x: 445,
+						y: 317,
+						route: 'C',
+						subonly: true,
+						compDiff:{
+							3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
 						},
-						'A':{
-							type: 1,
-							x: 289,
-							y: 240,
-							route: 'B',
-							compDiff:{
-								3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
-							},
+					},
+					'C':{
+						type: 1,
+						x: 654,
+						y: 348,
+						route: 'D',
+						compDiff:{
+							3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5']
 						},
-						'B':{
-							type: 1,
-							x: 445,
-							y: 317,
-							route: 'C',
-							subonly: true,
-							compDiff:{
-								3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
-							},
+					},
+					'D':{
+						type: 0,
+						x: 856,
+						y: 296,
+						end: true,
+						compDiff:{
+							3:['Hard 1','Hard 2','Hard 3']
 						},
-						'C':{
-							type: 1,
-							x: 654,
-							y: 348,
-							route: 'D',
-							compDiff:{
-								3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5']
-							},
+						compDiffF:{
+							3:['Hard F1','Hard F2']
 						},
-						'D':{
-							type: 0,
-							x: 856,
-							y: 296,
-							end: true,
-							compDiff:{
-								3:['Hard 1','Hard 2','Hard 3']
-							},
-							compDiffF:{
-								3:['Hard F1','Hard F2']
-							},
-						},
-					}
-				}
+					},
+				},
 			},
 		}
 	},
