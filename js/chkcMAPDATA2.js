@@ -3344,7 +3344,7 @@ var MAPDATA = {
 						},
 					},
 					'D':{
-						type: 0,
+						type: 1,
 						x: 642,
 						y: 253,
 						boss: true,
