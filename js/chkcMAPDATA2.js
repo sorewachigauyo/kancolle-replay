@@ -4132,7 +4132,7 @@ var MAPDATA = {
 							const hasSendai = isShipInList(ships.ids,54)
 							let hasHistoricalFubuki = false;
 							[9,10,32].forEach( mid => {
-								if (isShipInList(shops.ids,mid)) { hasHistoricalFubuki = true; }
+								if (isShipInList(ships.ids,mid)) { hasHistoricalFubuki = true; }
 							});
 							const CAVflag = (hasSendai && hasHistoricalFubuki) || (ships.AV);
 							if (ships.aBB || ships.aCV) return 'C';
