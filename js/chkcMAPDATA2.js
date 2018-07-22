@@ -3273,6 +3273,7 @@ var MAPDATA = {
 						x: 369,
 						y: 340,
 						end: true,
+						boss: true,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2'],
 							2: ['Medium 1', 'Medium 2'],
@@ -3346,6 +3347,7 @@ var MAPDATA = {
 						type: 0,
 						x: 642,
 						y: 253,
+						boss: true,
 						end: true,
 						compDiff:{
 							3:['Hard 1','Hard 2','Hard 3']
