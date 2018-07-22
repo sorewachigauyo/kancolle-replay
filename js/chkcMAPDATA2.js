@@ -4301,7 +4301,7 @@ var MAPDATA = {
 						},
 					},
 					'D':{
-						type: 0,
+						type: 1,
 						x: 642,
 						y: 253,
 						boss: true,
@@ -4340,6 +4340,7 @@ function isShipInList(ships,basemid) {
 	}
 	return false;
 }
+<<<<<<< HEAD
 
 function mapChangePart(worldnum,mapnum,part) {
 	if (!MAPDATA[worldnum].maps[mapnum].parts) return;
@@ -4347,3 +4348,5 @@ function mapChangePart(worldnum,mapnum,part) {
 		MAPDATA[worldnum].maps[mapnum][key] = MAPDATA[worldnum].maps[mapnum].parts[part][key];
 	}
 }
+=======
+>>>>>>> cfc4c06b081456fb17a2928418f4473dc42324f6
