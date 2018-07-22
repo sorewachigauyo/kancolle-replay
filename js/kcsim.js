@@ -101,6 +101,7 @@ var MECHANICS = {
 	morale: true,
 };
 var NERFPTIMPS = false;
+var BREAKPTIMPS = false;
 
 function getRepairCost(ship) {
 	var base = (ship.maxHP - ship.HP)*SHIPDATA[ship.mid].fuel;
@@ -200,7 +201,7 @@ function shell(ship,target,APIhou) {
 		for (var i=0; i<ship.equips.length; i++) {
 			if ([MAINGUNS,MAINGUNSAA,SECGUN,AAGUN].indexOf(ship.equips[i].type) != -1) sguns++;
 		}
-		if (sguns >= 2) { accMod *= 1.5; postMod *= 1.2; } //acc is guess
+		if (sguns >= 2 && !(BREAKPTIMPS && ship.type == 'DD')) { accMod *= 1.5; postMod *= 1.2; } //acc is guess
 		
 		if (!NERFPTIMPS) accMod2 *= .5;
 	}
@@ -350,7 +351,7 @@ function NBattack(ship,target,NBonly,NBequips,APIyasen) {
 		for (var i=0; i<ship.equips.length; i++) {
 			if ([MAINGUNS,MAINGUNSAA,SECGUN,AAGUN].indexOf(ship.equips[i].type) != -1) sguns++;
 		}
-		if (sguns >= 2) { accMod *= 1.5; postMod *= 1.2; } //acc is guess
+		if (sguns >= 2 && !(BREAKPTIMPS && ship.type == 'DD')) { accMod *= 1.5; postMod *= 1.2; } //acc is guess
 		
 		if (!NERFPTIMPS) accMod2 *= .5;
 	}
@@ -570,7 +571,7 @@ function nightPhase(order1,order2,alive1,subsalive1,alive2,subsalive2,NBonly,API
 		if (i < order1.length && order1[i].canNB()) {
 			if (subsalive2.length && order1[i].canASW() && !order1[i].planeasw) {
 				var target = choiceWProtect(subsalive2);
-				if (ASW(order1[i],target,!NBonly,APIhou)) subsalive2.splice(subsalive2.indexOf(target),1);
+				if (ASW(order1[i],target,(!NBonly&&!order1[i].isescort),APIhou)) subsalive2.splice(subsalive2.indexOf(target),1);
 			} else if (alive2.length) {
 				var target = choiceWProtect(alive2,slrerolls2);
 				// if (light2 && Math.random() < .2) target = alive2[lightship2];
@@ -581,7 +582,7 @@ function nightPhase(order1,order2,alive1,subsalive1,alive2,subsalive2,NBonly,API
 		if (i < order2.length && order2[i].canNB()) {
 			if (subsalive1.length && order2[i].canASW() && !order2[i].planeasw) {
 				var target = choiceWProtect(subsalive1);
-				if (ASW(order2[i],target,!NBonly,APIhou)) subsalive1.splice(subsalive1.indexOf(target),1);
+				if (ASW(order2[i],target,(!NBonly&&!order2[i].isescort),APIhou)) subsalive1.splice(subsalive1.indexOf(target),1);
 			} else if (alive1.length) {
 				var target = choiceWProtect(alive1,slrerolls1);
 				// if (light1 && Math.random() < .2) target = alive1[lightship1];

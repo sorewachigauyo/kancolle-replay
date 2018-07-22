@@ -8726,7 +8726,7 @@ var SHIPDATA = {
 		image: 'KWarspiteKai.jpg',
 		type: 'BB',
 		nid: 1444,
-		added: '2015-08-12',
+		added: '2016-08-12',
 		fitclass: 5,
 		HP: 82, HPmax: 92,
 		FP: 106, FPbase: 86,
@@ -10467,7 +10467,7 @@ var SHIPDATA = {
 		nameJP: 'Warspite',
 		image: 'KWarspite.jpg',
 		type: 'BB',
-		added: '2015-08-12',
+		added: '2016-08-12',
 		fitclass: 5,
 		HP: 72, HPmax: 87,
 		FP: 92, FPbase: 72,
@@ -16430,7 +16430,7 @@ var SHIPDATA = {
 		FP: 50,
 		TP: 140,
 		AA: 0,
-		AR: 49, //53 -> 49, how to handle?
+		AR: 53, //53 -> 49, how to handle?
 		EV: 38,
 		ASW: 0,
 		LOS: 30,
@@ -16454,7 +16454,7 @@ var SHIPDATA = {
 		FP: 70,
 		TP: 155,
 		AA: 0,
-		AR: 69, //73 -> 69
+		AR: 73, //73 -> 69
 		EV: 48,
 		ASW: 0,
 		LOS: 36,
@@ -16478,7 +16478,7 @@ var SHIPDATA = {
 		FP: 90,
 		TP: 170,
 		AA: 0,
-		AR: 89, //93 -> 89
+		AR: 93, //93 -> 89
 		EV: 68,
 		ASW: 0,
 		LOS: 48,

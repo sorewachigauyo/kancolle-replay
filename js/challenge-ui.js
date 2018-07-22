@@ -28,6 +28,7 @@ function chCreateFleetTable(root,num,name,noheader) {
 		divWrap.append('<div class="ftinfo" style="width:80px;display:none"><img title="Effective LoS" src="assets/stats/los3.png"/><span id="fleetefflos'+num+'"></span></div>');
 		divWrap.append('<div class="ftinfo" style="width:80px"><img title="Air Power" src="assets/stats/ac.png"/><span id="fleetap'+num+'"></span></div>');
 		divWrap.append('<div class="ftinfo" style="width:80px"><img title="Fleet Speed" src="assets/stats/sp.png"/><span id="fleetspd'+num+'"></span></div>');
+		divWrap.append('<div class="ftinfo" style="width:80px"><img title="Transport Load-Off" src="assets/items/25.png" style="margin-top:-6px"/><span id="fleettransport'+num+'"></span></div>');
 		divWrap.append('<br style="clear:both"/>');
 	}
 	for (var i=1; i<=6; i++) {
@@ -415,6 +416,10 @@ function chProcessKC3File2() {
 			CHDATA.event.maps[mapnum].hp = getMapHP(EVENTNUM,mapnum,2);
 			CHDATA.event.maps[mapnum].diff = 2;
 		}
+		if (MAPDATA[EVENTNUM].maps[mapnum].parts) {
+			mapChangePart(EVENTNUM,mapnum,1);
+			CHDATA.event.maps[mapnum].part = 1;
+		}
 	}
 	var stats = ['FP','TP','AA','AR','EV','ASW','LOS'];
 	for (var sid in kcdata.ships) {
@@ -591,20 +596,24 @@ function chDoStartChecks() {
 	
 	chDoStartChecksFleet(1,errors);
 	
-	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,total:0};
+	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,CT:0,total:0,ids:[]};
 	var flag = null
 	for (var i=0; i<CHDATA.fleets[1].length; i++) {
 		if (!CHDATA.fleets[1][i]) continue;
 		if (!flag) flag = CHDATA.fleets[1][i];
 		counts[SHIPDATA[CHDATA.ships[CHDATA.fleets[1][i]].masterId].type]++;
+		counts.ids.push(CHDATA.ships[CHDATA.fleets[1][i]].masterId);
+		counts.total++;
 	}
 	if (CHDATA.fleets.combined) {
-		var countsE = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,total:0};
+		var countsE = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,CT:0,total:0,ids:[]};
 		var flagE = null;
 		for (var i=0; i<CHDATA.fleets[2].length; i++) {
 			if (!CHDATA.fleets[2][i]) continue;
 			if (!flagE) flagE = CHDATA.fleets[2][i];
 			countsE[SHIPDATA[CHDATA.ships[CHDATA.fleets[2][i]].masterId].type]++;
+			countsE.ids.push(CHDATA.ships[CHDATA.fleets[1][i]].masterId);
+			countsE.total++;
 		}
 	}
 	
@@ -628,7 +637,7 @@ function chDoStartChecks() {
 			if (counts.CLT) errors.push('Main Fleet: CLT not allowed');
 			if (counts.CA) errors.push('Main Fleet: CA not allowed');
 			if (counts.FBB + counts.BB) errors.push('Main Fleet: (F)BB not allowed');
-			if (counts.CV+counts.CVB+count.CVL) errors.push('Main Fleet: CV(L) not allowed');
+			if (counts.CV+counts.CVB+counts.CVL) errors.push('Main Fleet: CV(L) not allowed');
 			if (counts.SS+counts.SSV) errors.push('Main Fleet: SS(V) not allowed');
 			if (counts.AR) errors.push('Main Fleet: AR not allowed');
 		}
@@ -720,6 +729,9 @@ function chStart() {
 	}
 	MECHANICS.morale = true;
 	SHELLDMGBASE = CHDATA.config.shelldmgbase;
+	if (MAPDATA[CHDATA.event.world].ptImpSpecial == 2) { BREAKPTIMPS = true; NERFPTIMPS = false; }
+	else if (MAPDATA[CHDATA.event.world].ptImpSpecial == 1) { BREAKPTIMPS = false; NERFPTIMPS = true; }
+	else { BREAKPTIMPS = NERFPTIMPS = false; }
 	$('#sortiespace').hide();
 	$('#battlespace').show();
 	$('#battlespace').css('animation','');
@@ -799,7 +811,7 @@ function chGetSupportType(counts) {
 
 function chLoadFleet(sids,fleetnum) {
 	var simships = [];
-	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,total:0,ids:[],aBB:0,aCV:0,speed:10};
+	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,CT:0,total:0,ids:[],aBB:0,aCV:0,speed:10};
 	for (var i=0; i<sids.length; i++) {
 		if (sids[i] <= 0) continue;
 		var ship = CHDATA.ships[sids[i]];
@@ -993,6 +1005,13 @@ function chUpdateFleetInfo(fleetnum) {
 	$('#fleetap'+fleetnum).text(ap);
 	$('#fleetefflos'+fleetnum).text(Math.floor(los*10)/10);
 	$('#fleetspd'+fleetnum).text(spd);
+	
+	if (MAPDATA[CHDATA.event.world].transportCalc) {
+		let tp = MAPDATA[CHDATA.event.world].transportCalc(ships);
+		$('#fleettransport'+fleetnum).text(tp);
+	} else {
+		$('#fleettransport'+fleetnum).parent().hide();
+	}
 }
 
 // function chTableTrySetShip(sid,slot) {
@@ -1058,6 +1077,11 @@ function chLoadSortieInfo(mapnum) {
 		$('#srtHPText').text('CLEAR');
 		$('#srtHPText').css('color','#66FF66');
 		$('#srtHPBar').css('width','0');
+	}
+	if (mapdata.transport) {
+		$('#srtHPBar').css('background-color','#00ff00');
+	} else {
+		$('#srtHPBar').css('background-color','red');
 	}
 	
 	if (CHDATA.config.diffmode == 1) {
@@ -1192,8 +1216,14 @@ function chSortieEndChangeDiff() {
 }
 
 function chSortieChangeDiff(diff) {
+	if (MAPDATA[WORLD].maps[MAPNUM].parts) {
+		mapChangePart(WORLD,MAPNUM,1);
+		CHDATA.event.maps[CHDATA.event.mapnum].part = 1;
+	}
 	CHDATA.event.maps[CHDATA.event.mapnum].diff = diff;
 	CHDATA.event.maps[CHDATA.event.mapnum].hp = getMapHP(WORLD,CHDATA.event.mapnum,diff);
+	delete CHDATA.event.maps[CHDATA.event.mapnum].debuff;
+	delete CHDATA.event.maps[CHDATA.event.mapnum].debuffed;
 }
 
 var SORTIEERRORS = {
