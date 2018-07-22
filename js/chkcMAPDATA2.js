@@ -3974,8 +3974,8 @@ var MAPDATA = {
 						y: 231,
 						compDiff:{
 							3: ['Hard 1', 'Hard 2', 'Hard 3','Hard 4','Hard 5'],
-							2: ['Medium 1', 'Medium 2', 'Medium 3'],
-							1: ['Easy 1', 'Easy 2']
+							2: ['Medium 1', 'Medium 2', 'Medium 3','Medium 4','Medium 5','Medium 6'],
+							1: ['Easy 1', 'Easy 2','Easy 3','Easy 4']
 						},
 						route : 'C',
 					},
@@ -3986,8 +3986,8 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2','Hard 3','Hard 4'],
-							2: ['Medium 1', 'Medium 2'],
-							1: ['Easy 1', 'Easy 2', 'Easy 3']
+							2: ['Medium 1', 'Medium 2','Medium 3','Medium 4'],
+							1: ['Easy 1', 'Easy 2', 'Easy 3','Easy 4','Easy 5']
 						},
 						routeC: function(ships){
 							if (ships.speed == 5 || (ships.FBB && ships.FBB + ships.CVL === 1)
@@ -4019,8 +4019,8 @@ var MAPDATA = {
 						y: 190,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2', 'Hard 3','Hard 4','Hard 5'],
-							2: ['Medium 1', 'Medium 2', 'Medium 3'],
-							1: ['Easy 1', 'Easy 2']
+							2: ['Medium 1', 'Medium 2', 'Medium 3','Medium 4','Medium 5','Medium 6'],
+							1: ['Easy 1', 'Easy 2','Easy 3','Easy 4']
 						},
 						route : 'F',
 					},
@@ -4031,8 +4031,8 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: ['Hard 1', 'Hard 2', 'Hard 3','Hard 4','Hard 5'],
-							2: ['Medium 1', 'Medium 2', 'Medium 3'],
-							1: ['Easy 1', 'Easy 2']
+							2: ['Medium 1', 'Medium 2', 'Medium 3','Medium 4','Medium 5'],
+							1: ['Easy 1', 'Easy 2','Easy 3','Easy 4']
 						},
 						route : 'G',
 					},
