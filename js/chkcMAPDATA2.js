@@ -3155,9 +3155,14 @@ var MAPDATA = {
 							3: ['Hard']
 						},
 						route: 'C',
-						debuffGive: function(efleet) {
-							const damage = efleet.DMGTOTALS.reduce((a, b) => a + b, 0);
-							if (damage == 0) CHDATA.event.maps[2].debuff.A = true;
+						debuffGive: function(efleet,ffleet) {
+							let found = true;
+							ffleet.forEach(fleet => {
+								fleet.ships.forEach(ship => {
+									if (ship.HPprev != ship.HP) found = false;
+								});
+							});
+							if (found) CHDATA.event.maps[2].debuff.A = true;
 						},
 					},
 					'B':{
@@ -3214,9 +3219,14 @@ var MAPDATA = {
 							else if (ships.CV + ships.CVB == 4) return 'F';
 							else return 'G';
 						},
-						debuffGive: function(efleet) {
-							const damage = efleet.DMGTOTALS.reduce((a, b) => a + b, 0);
-							if (damage == 0) CHDATA.event.maps[2].debuff.D = true;
+						debuffGive: function(efleet,ffleet) {
+							let found = true;
+							ffleet.forEach(fleet => {
+								fleet.ships.forEach(ship => {
+									if (ship.HPprev != ship.HP) found = false;
+								});
+							});
+							if (found) CHDATA.event.maps[2].debuff.D = true;
 						},
 					},
 					'E':{

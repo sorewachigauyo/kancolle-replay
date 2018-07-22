@@ -1201,7 +1201,7 @@ function shuttersPostbattle(noshutters) {
 	pushShipStatusToUI();
 	if (MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive) {
 		if (!CHDATA.event.maps[MAPNUM].debuff) CHDATA.event.maps[MAPNUM].debuff = {};
-		MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive(FLEETS2[0]);
+				MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive(FLEETS2[0],FLEETS1);
 	}
 	FLEETS1[0].reset(true);
 	if (CHDATA.fleets.combined) FLEETS1[1].reset(true);
