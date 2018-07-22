@@ -3300,14 +3300,14 @@ var MAPDATA = {
 				nodes:{
 					'Start':{
 						type: 0,
-						x: 154,
-						y: 140,
+						x: 117,
+						y: 120,
 						route: 'A',
 					},
 					'A':{
 						type: 1,
-						x: 289,
-						y: 240,
+						x: 217,
+						y: 212,
 						route: 'B',
 						compDiff:{
 							3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
@@ -3315,8 +3315,8 @@ var MAPDATA = {
 					},
 					'B':{
 						type: 1,
-						x: 445,
-						y: 317,
+						x: 333,
+						y: 269,
 						route: 'C',
 						subonly: true,
 						compDiff:{
@@ -3325,8 +3325,8 @@ var MAPDATA = {
 					},
 					'C':{
 						type: 1,
-						x: 654,
-						y: 348,
+						x: 490,
+						y: 302,
 						route: 'D',
 						compDiff:{
 							3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5']
@@ -3334,8 +3334,8 @@ var MAPDATA = {
 					},
 					'D':{
 						type: 0,
-						x: 856,
-						y: 296,
+						x: 642,
+						y: 253,
 						end: true,
 						compDiff:{
 							3:['Hard 1','Hard 2','Hard 3']
