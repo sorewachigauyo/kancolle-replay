@@ -4023,10 +4023,9 @@ var MAPDATA = {
 							1: ['Easy 1', 'Easy 2', 'Easy 3','Easy 4','Easy 5']
 						},
 						routeC: function(ships){
-							if (ships.speed == 5 || (ships.FBB && ships.FBB + ships.CVL === 1)
-								|| 6 - (ships.DD + ships.CL + ships.CLT + ships.CT) < 2 ) return 'E';
-							else if (ships.speed == 10 && ships.FBB == 0 && ships.CL > 0) return 'D';
-							else return 'C';
+							if ((ships.FBB && ships.FBB + ships.CVL >= 2) || 6 - (ships.DD + ships.CL + ships.CLT + ships.CT) >= 2 ) return 'C';
+							else if (ships.speed == 10 && (ships.FBB == 0) && ships.CL) return 'D';
+							else return 'E';
 						}
 					},
 					'C' : {
@@ -4227,7 +4226,7 @@ var MAPDATA = {
 					'I': {
 						type: 1,
 						x: 340,
-						y: 191,
+						y: 193,
 						route: 'J',
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6'],
