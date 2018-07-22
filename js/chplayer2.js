@@ -995,9 +995,20 @@ function prepBattle(letter) {
 	if (mapdata.debuffAmount) {
 		var debuffCheck = MAPDATA[WORLD].maps[MAPNUM].debuffCheck;
 		if (debuffCheck && debuffCheck(CHDATA.event.maps[MAPNUM].debuff)) {
-			FLEETS2[0].ships[0].debuff = mapdata.debuffAmount;
+			switch (WORLD) {
+				case 31:
+					FLEETS2[0].ships[0].debuff = mapdata.debuffAmount;
+					break;
+				
+				case 35:
+					FLEET2[0].ships.forEach(ship, idx => {
+						if ([1696,1697,1698].includes(ship.mid)) { FLEET2[0].ships[idx].debuff = mapdata.debuffAmount; }
+					});
+					break;
+					}
+
+			}
 			console.log('debuff applied');
-		}
 	}
 	
 	if (CHDATA.fleets.combined) {
@@ -1190,7 +1201,7 @@ function shuttersPostbattle(noshutters) {
 	pushShipStatusToUI();
 	if (MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive) {
 		if (!CHDATA.event.maps[MAPNUM].debuff) CHDATA.event.maps[MAPNUM].debuff = {};
-		MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive(FLEETS2[0].ships);
+		MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive(FLEETS2[0]);
 	}
 	FLEETS1[0].reset(true);
 	if (CHDATA.fleets.combined) FLEETS1[1].reset(true);

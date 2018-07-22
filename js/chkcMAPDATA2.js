@@ -2760,7 +2760,8 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2'],
 						},
 						end: true,
-						debuffGive: function(ships) {
+						debuffGive: function(efleet) {
+							var ships = efleet.ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if ([1513,1536,1558].indexOf(ships[i].mid) != -1 && ships[i].HP > 0) found = false;
@@ -2912,7 +2913,8 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2'],
 						},
 						route: 'D',
-						debuffGive: function(ships) {
+						debuffGive: function(efleet) {
+							var ships = efleet.ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if ([1513,1536,1558].indexOf(ships[i].mid) != -1 && ships[i].HP > 0) found = false;
@@ -2933,7 +2935,8 @@ var MAPDATA = {
 							if (ships.escort.CLT) return 'O';
 							return 'L';
 						},
-						debuffGive: function(ships) {
+						debuffGive: function(efleet) {
+							const ships = efleet.ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if ([1513,1536,1558].indexOf(ships[i].mid) != -1 && ships[i].HP > 0) found = false;
@@ -3114,7 +3117,7 @@ var MAPDATA = {
 			},
 			2: {
 				name: 'E-2',
-				nameT: 'The Second Naval Battle of Malaya (I skipped the real E2 cuz its a TP map)',
+				nameT: 'The Second Naval Battle of Malaya (This is actually E-3)',
 				fleetTypes: [1,2],
 				bgmMap: 2431,
 				bgmDN: 71,
@@ -3134,6 +3137,9 @@ var MAPDATA = {
 				},
 				giveLock: 3,
 				checkLock: [1,2],
+				debuffCheck: function(debuff) {
+					return (debuff.A && debuff.D);
+				},
 				nodes:{
 					'Start':{
 						type: 0,
@@ -3149,6 +3155,10 @@ var MAPDATA = {
 							3: ['Hard']
 						},
 						route: 'C',
+						debuffGive: function(efleet) {
+							const damage = efleet.DMGTOTALS.reduce((a, b) => a + b, 0);
+							if (damage == 0) CHDATA.event.maps[2].debuff.A = true;
+						},
 					},
 					'B':{
 						type: 1,
@@ -3160,7 +3170,7 @@ var MAPDATA = {
 						},
 						routeC: function(ships){
 							var historicalCount = 0;
-							var historicalList = [78,79,124,125,70,120,69,9,10,32,23];
+							var historicalList = [78,79,124,125,70,120,69,9,10,32,23,113];
 							historicalList.forEach(id => {
 								if (isShipInList(ships.ids,id)) historicalCount++;
 								if (isShipInList(ships.escort.ids,id)) historicalCount++;
@@ -3179,7 +3189,7 @@ var MAPDATA = {
 						},
 						routeC: function(ships){
 							var historicalCount = 0;
-							var historicalList = [78,79,124,125,70,120,69,9,10,32,23];
+							var historicalList = [78,79,124,125,70,120,69,9,10,32,23,113];
 							historicalList.forEach(id => {
 								if (isShipInList(ships.ids,id)) historicalCount++;
 								if (isShipInList(ships.escort.ids,id)) historicalCount++;
@@ -3203,6 +3213,10 @@ var MAPDATA = {
 								{ return 'F'; }
 							else if (ships.CV + ships.CVB == 4) return 'F';
 							else return 'G';
+						},
+						debuffGive: function(efleet) {
+							const damage = efleet.DMGTOTALS.reduce((a, b) => a + b, 0);
+							if (damage == 0) CHDATA.event.maps[2].debuff.D = true;
 						},
 					},
 					'E':{
@@ -3236,6 +3250,7 @@ var MAPDATA = {
 							3: ['Hard 1', 'Hard 2', 'Hard 3'],
 						},
 						route : "J",
+						debuffAmount: 60,
 					},
 					'I':{
 						type: 3,
@@ -3260,6 +3275,76 @@ var MAPDATA = {
 						},
 					},
 				},
+				3:{
+					name: 'E-3',
+					nameT: 'Victory over the Dawn Horizon! (If you get B rank or higher you beat the event)',
+					fleetTypes: [0],
+					bgmMap: 17,
+					bgmDN: 55,
+					bgmNN: 55,
+					bgmDB: 17,
+					bgmNB: 17,
+					bossnode: 4,
+					maphp: {
+						3: { 1: 1330 },
+						2: { 1: 4000 },
+						1: { 1: 4000 },
+					},
+					finalhp: {
+						3: 500,
+						2: 400,
+						1: 400,
+					},
+					checkLock: ['1','2','3'],
+					nodes:{
+						'Start':{
+							type: 0,
+							x: 154,
+							y: 140,
+							route: 'A',
+						},
+						'A':{
+							type: 1,
+							x: 289,
+							y: 240,
+							route: 'B',
+							compDiff:{
+								3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
+							},
+						},
+						'B':{
+							type: 1,
+							x: 445,
+							y: 317,
+							route: 'C',
+							subonly: true,
+							compDiff:{
+								3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6']
+							},
+						},
+						'C':{
+							type: 1,
+							x: 654,
+							y: 348,
+							route: 'D',
+							compDiff:{
+								3:['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5']
+							},
+						},
+						'D':{
+							type: 0,
+							x: 856,
+							y: 296,
+							end: true,
+							compDiff:{
+								3:['Hard 1','Hard 2','Hard 3']
+							},
+							compDiffF:{
+								3:['Hard F1','Hard F2']
+							},
+						},
+					}
+				}
 			},
 		}
 	},
