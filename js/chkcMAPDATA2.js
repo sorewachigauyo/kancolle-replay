@@ -4192,8 +4192,8 @@ var MAPDATA = {
 					},
 					'F': {
 						type: 1,
-						x: 519,
-						y: 161,
+						x: 520,
+						y: 162,
 						subonly: true,
 						route: 'G',
 						compDiff: {
@@ -4205,8 +4205,8 @@ var MAPDATA = {
 					'G': {
 						type: 1,
 						x: 495,
-						y: 230,
-						route: 'G',
+						y: 231,
+						route: 'H',
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5','Hard 6'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
