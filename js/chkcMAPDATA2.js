@@ -3033,10 +3033,10 @@ var MAPDATA = {
 							1: ['Easy 1', 'Easy 2', 'Easy 3']
 						},
 						routeC: function(ships){
-							if (ships.speed == 5 && (ships.FBB && ships.FBB + ships.CVL === 1)
-								&& 6 - (ships.DD + ships.CL + ships.CLT + ships.CT) < 2 ) return 'E';
+							if (ships.speed == 5 || (ships.FBB && ships.FBB + ships.CVL === 1)
+								|| 6 - (ships.DD + ships.CL + ships.CLT + ships.CT) < 2 ) return 'E';
 							else if (ships.speed == 10 && ships.FBB == 0 && ships.CL > 0) return 'D';
-							else return 'E';
+							else return 'C';
 						}
 					},
 					'C' : {
