@@ -3175,7 +3175,7 @@ var MAPDATA = {
 								if (isShipInList(ships.ids,id)) historicalCount++;
 								if (isShipInList(ships.escort.ids,id)) historicalCount++;
 							});
-							if (CHDATA.fleets.combined == 2 || historicalCount > 6) return 'C';
+							if (CHDATA.fleets.combined == 1 || historicalCount > 6) return 'C';
 							else if (ships.speed == 5) return 'A';
 							else return 'C';
 						},
