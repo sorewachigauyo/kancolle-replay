@@ -1001,7 +1001,7 @@ function prepBattle(letter) {
 					break;
 				
 				case 35:
-					FLEETS2[0].ships.forEach(ship, idx => {
+					FLEETS2[0].ships.forEach((ship, idx) => {
 						if ([1696,1697,1698].includes(ship.mid)) { FLEETS2[0].ships[idx].debuff = mapdata.debuffAmount; }
 					});
 					break;
