@@ -4591,7 +4591,7 @@ var MAPDATA = {
 					'H':{
 						type: 1,
 						x: 484,
-						y: 255,
+						y: 225,
 						route: "I",
 						compDiff:{
 							3:['Hard 1','Hard 2','Hard 3'],
