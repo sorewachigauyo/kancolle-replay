@@ -424,7 +424,7 @@ function createShip(data,side,i,damaged) {
 
 function processAPI(root) {
 	var data = root.battles[0].data; //get first battle for initial hp values
-	if (Object.keys(data).length <= 0) {  //night only nodes
+	if (Object.keys(data).length <= 2) {  //night only nodes (adjust slightly for NB debuff)
 		data = root.battles[0].yasen;
 		stage.removeChild(bg);
 		stage.addChildAt(bg2,0);
@@ -561,8 +561,8 @@ function processAPI(root) {
 	for (var b=0; b<root.battles.length; b++) {
 		// console.log(root.battles[b]);
 		data = root.battles[b].data;
-		if (Object.keys(data).length <= 0) data = root.battles[b].yasen;
-		if (Object.keys(data).length <= 0) continue;
+		if (Object.keys(data).length <= 2) data = root.battles[b].yasen;
+		if (Object.keys(data).length <= 2) continue;
 		if (!data.api_formation) continue; //Fall 2016 battles didn't have some boss node data recorded, skip it. Later, add a way to play just NB if recorded?
 		
 		var f2 = [], f2c = [];
