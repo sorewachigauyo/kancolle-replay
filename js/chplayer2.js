@@ -1752,13 +1752,14 @@ function chUpdateMorale() {
 
 function chUpdateSupply() {
 	var results = CHDATA.temp;
-	var base = (results.landbomb)? .5 : 2;
+	var bomb = results.landbomb;
+	var base = (bomb)? .4 : 2;
 	var didNB = (results.rankDay && NBSELECT);
 	for (var i=0; i<FLEETS1[0].ships.length; i++) {
 		var ship = FLEETS1[0].ships[i];
 		if (ship.retreated) continue;
 		ship.fuelleft -= base;
-		if (!results.noammo) ship.ammoleft -= base + 1*didNB;
+		if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*didNB;
 		if (ship.fuelleft < 0) ship.fuelleft = 0;
 		if (ship.ammoleft < 0) ship.ammoleft = 0;
 	}
@@ -1767,7 +1768,7 @@ function chUpdateSupply() {
 			var ship = FLEETS1[1].ships[i];
 			if (ship.retreated) continue;
 			ship.fuelleft -= base;
-			if (!results.noammo) ship.ammoleft -= base + 1*didNB;
+			if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*didNB;
 			if (ship.fuelleft < 0) ship.fuelleft = 0;
 			if (ship.ammoleft < 0) ship.ammoleft = 0;
 		}

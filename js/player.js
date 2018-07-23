@@ -655,7 +655,7 @@ function processAPI(root) {
 				j++;
 			}
 		}
-		var NBonly = (!!data.api_hougeki || Object.keys(data).length <= 0 || data.api_n_hougeki1);
+		var NBonly = (!!data.api_hougeki || Object.keys(data).length <= 2 || data.api_n_hougeki1);
 		var battledata = [data.api_formation[2],data.api_formation[0],data.api_formation[1],0,0,(NBonly)?1:0];
 		var escape = [[],[]];
 		if (data.api_escape_idx) escape[0] = data.api_escape_idx;
