@@ -4664,7 +4664,7 @@ var MAPDATA = {
 								if (isShipInList(ships.ids,78) && isShipInList(ships.ids,79) && ships.CV + ships.CVB <= 2) return 'M';
 								if (isShipInList(ships.escort.ids,171)) return 'N';
 								if (ships.CLT > 2) return 'N';
-								if (isShipInList(ships.escorts.ids,69) && ships.CV + ships.CVB <= 2) return 'M';
+								if (isShipInList(ships.escort.ids,69) && ships.CV + ships.CVB <= 2) return 'M';
 								if (ships.CLT > 1) return 'N';
 							}
 							return 'M';
