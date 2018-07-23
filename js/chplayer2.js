@@ -769,16 +769,17 @@ var ONSORTIE = false;
 var testLOS = 101;
 
 function chPlayerStart() {
+	var multipleStart = MAPDATA[WORLD].maps[MAPNUM].multipleStart;
+	curletter = !multipleStart ? 'Start' : MAPDATA[WORLD].maps[MAPNUM].startCheck();
 	if (started) {
 		console.log('reset');
 		SM.stopBGM();
 		stage = STAGEMAP;
 		eventqueue = []; e = 0;
-		curletter = 'Start';
 		bossbar.active = false;
 	}
 	delete CHDATA.event.reachedTransport;
-	node = MAPDATA[WORLD].maps[MAPNUM].nodes['Start'];
+	node = MAPDATA[WORLD].maps[MAPNUM].nodes[curletter];
 	var mapshipindex = stage.getChildIndex(mapship);
 	stage.removeChild(mapship);
 	switch(CHDATA.fleets.combined) {
@@ -1018,7 +1019,8 @@ function prepBattle(letter) {
 				
 				case 35:
 					FLEETS2[0].ships.forEach((ship, idx) => {
-						if ([1696,1697,1698].includes(ship.mid)) { FLEETS2[0].ships[idx].debuff = mapdata.debuffAmount; }
+						if ([1696,1697,1698,1702,1703,1704].includes(ship.mid)) { FLEETS2[0].ships[idx].debuff = mapdata.debuffAmount; }
+						if ([1705,1706,1707].includes(ship.mid)) { FLEETS2[0].ships[idx].debuff = mapdata.debuffAmount * 2; }
 					});
 					break;
 					}
