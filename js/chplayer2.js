@@ -522,7 +522,7 @@ function mapStormNode(ship,letter) {
 		case 2: lostpercent = .25; break;
 		default: lostpercent = .2; break;
 	}
-	if (WORLD == 35) losspercent *= 0.5;
+	if (WORLD == 35) lostpercent *= 0.5;
 	var resname = (node.resource == 1)? 'fuelleft' : 'ammoleft';
 	lostshow = Math.floor(FLEETS1[0].ships[0][resname]*lostpercent*10);
 	for (var i=0; i<FLEETS1[0].ships.length; i++) {
