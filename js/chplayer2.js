@@ -522,7 +522,6 @@ function mapStormNode(ship,letter) {
 		case 2: lostpercent = .25; break;
 		default: lostpercent = .2; break;
 	}
-	if (WORLD == 35) lostpercent*=0.75;
 	var resname = (node.resource == 1)? 'fuelleft' : 'ammoleft';
 	lostshow = Math.floor(FLEETS1[0].ships[0][resname]*lostpercent*10);
 	for (var i=0; i<FLEETS1[0].ships.length; i++) {
@@ -1758,12 +1757,11 @@ function chUpdateSupply() {
 	var didNB = (results.rankDay && NBSELECT);
 	var NBonly = results.NBonly;
 	var combined = CHDATA.fleets.combined;
-	base = NBonly ? 0 : base;
 	for (var i=0; i<FLEETS1[0].ships.length; i++) {
 		var ship = FLEETS1[0].ships[i];
 		if (ship.retreated) continue;
-		ship.fuelleft -= base;
-		if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*(didNB || (NBonly && combined));
+		ship.fuelleft -= (NBonly && combined) ? 0 : base;
+		if (!results.noammo) ship.ammoleft -= (NBonly && combined) ? 0 : (bomb ? base * 2 : base) + 1*didNB;
 		if (ship.fuelleft < 0) ship.fuelleft = 0;
 		if (ship.ammoleft < 0) ship.ammoleft = 0;
 	}
@@ -1772,7 +1770,7 @@ function chUpdateSupply() {
 			var ship = FLEETS1[1].ships[i];
 			if (ship.retreated) continue;
 			ship.fuelleft -= base;
-			if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*(didNB || NBonly);
+			if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*didNB;
 			if (ship.fuelleft < 0) ship.fuelleft = 0;
 			if (ship.ammoleft < 0) ship.ammoleft = 0;
 		}
