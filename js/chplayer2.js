@@ -33,9 +33,26 @@ function InitUI() {
 	
 	if (CHDATA.fleets.supportN) {
 		$('#btnsupportN').css('opacity',1);
+	} else {
+		$('#btnsupportN').css('opacity',.5);
 	}
 	if (CHDATA.fleets.supportB) {
 		$('#btnsupportB').css('opacity',1);
+	} else {
+		$('#btnsupportB').css('opacity',.5);
+	}
+	
+	for (var i=1; i<=3; i++) {
+		if (CHDATA.fleets['lbas'+i]) $('#btnLBAS'+i).css('opacity',1);
+		else $('#btnLBAS'+i).css('opacity',.5);
+	}
+	
+	if (MAPDATA[WORLD].allowLBAS) {
+		$('#tabLBAS').parent().show();
+		var n = MAPDATA[WORLD].lbasSlotCount || 18;
+		SHIPDATA[5001].SLOTS = SHIPDATA[5002].SLOTS = SHIPDATA[5003].SLOTS = [n,n,n,n];
+	} else {
+		$('#tabLBAS').parent().hide();
 	}
 	
 	$('#mainspace').show();
@@ -319,6 +336,14 @@ function addMapNode(letter,type) {
 			nodeG = PIXI.Sprite.fromImage('assets/maps/nodeAir.png');
 			nodeG.pivot.set(35,22);
 		}
+	} else if (node.raid) {
+		if (CHDATA.event.maps[MAPNUM].visited.indexOf(letter) == -1) {
+			nodeG = PIXI.Sprite.fromImage('assets/maps/nodeW.png');
+			nodeG.pivot.set(10,10);
+		} else {
+			nodeG = PIXI.Sprite.fromImage('assets/maps/nodeRaid.png');
+			nodeG.pivot.set(29,16);
+		}
 	} else if (!node.boss) {
 		var img;
 		switch (type||node.type) {
@@ -377,7 +402,7 @@ function mapMoveShip(ship,x,y) {
 var FORMSELECTED;
 function mapBattleNode(ship,letter) {
 	if (!mapnodes[letter]) addMapNode(letter);
-	if (MAPDATA[WORLD].maps[MAPNUM].nodes[letter].aironly && WORLD > 27) addMapNode(letter);
+	if ((MAPDATA[WORLD].maps[MAPNUM].nodes[letter].aironly || MAPDATA[WORLD].maps[MAPNUM].nodes[letter].raid) && WORLD > 27) addMapNode(letter);
 
 	var radarstop = false, radartimer = 270;
 	updates.push([function() {
@@ -468,7 +493,13 @@ function mapResourceNode(ship,letter) {
 	
 	var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
 	// var num = node.min + Math.floor(Math.random()*(node.max-node.min+5)/5)*5;
-	var num = node.amount[Math.floor(Math.random()*node.amount.length)];
+	var num;
+	if (node.resource != 0) {
+		num = node.amount[Math.floor(Math.random()*node.amount.length)];
+	} else {
+		var ships = chGetShips();
+		num = MAPDATA[WORLD].transportCalc(ships,'A') + ' - ' + MAPDATA[WORLD].transportCalc(ships,'S');
+	}
 	var res = createResource(node.resource,num);
 	res.alpha = 0; res.position.set(ship.x-18,ship.y-10); res.counter = 40;
 	stage.addChild(res);
@@ -588,6 +619,7 @@ function createResource(type,num) {
 		case 2: icon = PIXI.Sprite.fromImage('assets/stats/ammo.png'); break;
 		case 3: icon = PIXI.Sprite.fromImage('assets/stats/steel.png'); break;
 		case 4: icon = PIXI.Sprite.fromImage('assets/stats/baux.png'); break;
+		case 0: icon = PIXI.Sprite.fromImage('assets/items/25.png'); icon.y = -8; break;
 	}
 	res.addChild(icon);
 	var text = new PIXI.Text(num.toString(),{font:'14px "Arno Pro Semibold"',fill:'#ffffff'});
@@ -770,8 +802,7 @@ var ONSORTIE = false;
 var testLOS = 101;
 
 function chPlayerStart() {
-	var multipleStart = MAPDATA[WORLD].maps[MAPNUM].multipleStart;
-	curletter = !multipleStart ? 'Start' : MAPDATA[WORLD].maps[MAPNUM].startCheck();
+	curletter = (MAPDATA[WORLD].maps[MAPNUM].startCheck)? MAPDATA[WORLD].maps[MAPNUM].startCheck() : 'Start';
 	if (started) {
 		console.log('reset');
 		SM.stopBGM();
@@ -779,7 +810,7 @@ function chPlayerStart() {
 		eventqueue = []; e = 0;
 		bossbar.active = false;
 	}
-	delete CHDATA.event.reachedTransport;
+	CHDATA.sortie = {};
 	node = MAPDATA[WORLD].maps[MAPNUM].nodes[curletter];
 	var mapshipindex = stage.getChildIndex(mapship);
 	stage.removeChild(mapship);
@@ -795,7 +826,11 @@ function chPlayerStart() {
 	var xboss = MAPDATA[WORLD].maps[MAPNUM].nodes[letterboss].x;
 	mapship.scale.set(((xboss < node.x)? -1 : 1),1);
 	chLoadMap(MAPNUM);
-	mapPhase(true);
+	if (CHDATA.fleets.lbas1 || CHDATA.fleets.lbas2 || CHDATA.fleets.lbas3) {
+		lbSelectPhase();
+	} else {
+		mapPhase(true);
+	}
 	if (!started) animate();
 	started = true;
 	ONSORTIE = true;
@@ -803,6 +838,9 @@ function chPlayerStart() {
 
 function chLoadMap(mapnum) {
 	stage.removeChild(map);
+	if (MAPDATA[WORLD].maps[MAPNUM].hiddenNodes) {
+		mapnum += MAPDATA[WORLD].maps[MAPNUM].currentState();
+	}
 	map = PIXI.Sprite.fromImage('assets/maps/'+CHDATA.event.world+'/'+mapnum+'.png');
 	stage.addChildAt(map,stage.getChildIndex(mapShutterBottom)+1);
 
@@ -817,12 +855,13 @@ function chLoadMap(mapnum) {
 	if (WORLD > 27) { //fill unvisited air nodes
 		for (var letter in MAPDATA[WORLD].maps[MAPNUM].nodes) {
 			var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
-			if (node.aironly && CHDATA.event.maps[mapnum].visited.indexOf(letter) == -1) addMapNode(letter);
+			if ((node.aironly||node.raid) && CHDATA.event.maps[mapnum].visited.indexOf(letter) == -1) addMapNode(letter);
 		}
 	}
 	
 	chResetMapSpritePos();
 }
+
 
 function mapPhase(first) {
 	if (first) {
@@ -857,7 +896,7 @@ function mapPhase(first) {
 	if (!curnode.routeS) mapPhase2(nextletter);
 	
 	if (MAPDATA[WORLD].maps[MAPNUM].transport && MAPDATA[WORLD].maps[MAPNUM].transport == curletter) {
-		CHDATA.event.reachedTransport = true;
+		CHDATA.sortie.reachedTransport = true;
 	}
 }
 
@@ -896,6 +935,165 @@ function mapPhase2(nextletter) {
 	}
 	
 	curletter = nextletter;
+}
+
+function lbSelectPhase() {
+	SM.playBGM(MAPDATA[WORLD].maps[MAPNUM].bgmMap);
+	
+	CHDATA.sortie.lbasNodes = {};
+	var currentBase = 1;
+	if (currentBase == 1 && !CHDATA.fleets.lbas1) currentBase = 2;
+	if (currentBase == 2 && !CHDATA.fleets.lbas2) currentBase = 3;
+	var currentNum = 0;
+	var areas = [];
+	var crosshairs = [];
+	var messages = [];
+	var nodeSelected = '';
+	
+	var afterSelect = function() {
+		var node = MAPDATA[WORLD].maps[MAPNUM].nodes[nodeSelected];
+		if (!CHDATA.sortie.lbasNodes[nodeSelected]) CHDATA.sortie.lbasNodes[nodeSelected] = [];
+		var concentrated = CHDATA.sortie.lbasNodes[nodeSelected].indexOf(currentBase) != -1;
+		CHDATA.sortie.lbasNodes[nodeSelected].push(currentBase);
+		currentNum++;
+		
+		var crosshair;
+		if (concentrated) crosshair = getFromPool('crosshair3','assets/maps/lbcrosshairs3.png');
+		else if (currentNum == 2) crosshair = getFromPool('crosshair2','assets/maps/lbcrosshairs2.png');
+		else crosshair = getFromPool('crosshair1','assets/maps/lbcrosshairs1.png');
+		crosshair.pivot.set(28);
+		crosshair.position.set(node.x+MAPOFFX,node.y+MAPOFFY);
+		crosshairs.push(crosshair);
+		stage.addChild(crosshair);
+
+		if (currentNum >= 2) {
+			for (var i=0; i<areas.length; i++) {
+				areas[i].interactive = false;
+			}
+			messages[currentBase-1].visible = false;
+			messageG.visible = true;
+		}
+		messageCancel.visible = true;
+	}
+	
+	var afterContinue = function() {
+		var num;
+		for (num=currentBase+1; num<=3; num++) {
+			if (CHDATA.fleets['lbas'+num]) {
+				currentBase = num;
+				currentNum = 0;
+				break;
+			}
+		}
+		if (num <= 3) {
+			for (var i=0; i<areas.length; i++) {
+				areas[i].interactive = (MAPDATA[WORLD].maps[MAPNUM].nodes[areas[i].letter].distance <= getLBASRange(CHDATA.ships['z'+currentBase]));
+			}
+			for (var i=0; i<crosshairs.length; i++) {
+				recycle(crosshairs[i]);
+			}
+			crosshairs = [];
+			messageG.visible = false;
+			messageCancel.visible = false;
+			messages[currentBase-1].visible = true;
+		} else {
+			for (var i=0; i<areas.length; i++) {
+				areas[i].interactive = false;
+				stage.removeChild(areas[i]);
+			}
+			for (var i=0; i<crosshairs.length; i++) {
+				recycle(crosshairs[i]);
+			}
+			for (var i=0; i<messages.length; i++) {
+				recycle(messages[i]);
+			}
+			mapPhase();
+			ecomplete = true;
+		}
+	}
+	
+	var afterCancel = function() {
+		for (var letter in CHDATA.sortie.lbasNodes) {
+			var arrNew = [];
+			for (var i=0; i<CHDATA.sortie.lbasNodes[letter].length; i++) {
+				if (CHDATA.sortie.lbasNodes[letter][i] != currentBase) {
+					arrNew.push(CHDATA.sortie.lbasNodes[letter][i]);
+				}
+			}
+			CHDATA.sortie.lbasNodes[letter] = arrNew;
+		}
+		for (var letter in CHDATA.sortie.lbasNodes) {
+			if (CHDATA.sortie.lbasNodes[letter].length <= 0) delete CHDATA.sortie.lbasNodes[letter];
+		}
+		currentNum = 0;
+	
+		for (var i=0; i<areas.length; i++) {
+			areas[i].interactive = (MAPDATA[WORLD].maps[MAPNUM].nodes[areas[i].letter].distance <= getLBASRange(CHDATA.ships['z'+currentBase]));
+		}
+		messageCancel.visible = false;
+		for (var i=0; i<crosshairs.length; i++) {
+			recycle(crosshairs[i]);
+		}
+		messageG.visible = false;
+		messages[currentBase-1].visible = true;
+	}
+	
+	for (var letter in MAPDATA[WORLD].maps[MAPNUM].nodes) {
+		var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
+		var area = new PIXI.Graphics();
+		area.beginFill(0);
+		area.drawCircle(10,10,10);
+		area.pivot.set(10);
+		area.alpha = 0;
+		area.buttonMode = true;
+		area.interactive = (MAPDATA[WORLD].maps[MAPNUM].nodes[letter].distance <= getLBASRange(CHDATA.ships['z'+currentBase]));
+		area.position.set(node.x+MAPOFFX,node.y+MAPOFFY);
+		area.letter = letter;
+		area.callback = afterSelect;
+		area.click = function(e) { nodeSelected = this.letter; this.callback(); }
+		areas.push(area);
+		stage.addChild(area);
+	}
+
+	for (var i=1; i<=3; i++) {
+		var message = getFromPool('lbmessage'+i,'assets/maps/lbmessage'+i+'.png');
+		message.interactive = message.buttonMode = true;
+		message.callback = afterContinue;
+		message.click = function(e) { this.callback(); }
+		message.position.set(10,10);
+		message.visible = (i==currentBase);
+		messages.push(message);
+		stage.addChild(message);
+	}
+	var messageG = getFromPool('lbmessageG','assets/maps/lbmessageG.png');
+	messageG.interactive = messageG.buttonMode = true;
+	messageG.callback = afterContinue;
+	messageG.click = function(e) { this.callback(); }
+	messageG.position.set(3,3);
+	messageG.visible = false;
+	messages.push(messageG);
+	stage.addChild(messageG);
+	var messageCancel = getFromPool('lbcancel','assets/maps/lbcancel.png');
+	messageCancel.interactive = messageCancel.buttonMode = true;
+	messageCancel.callback = afterCancel;
+	messageCancel.click = function(e) { this.callback(); }
+	messageCancel.position.set(190,2);
+	messageCancel.visible = false;
+	messages.push(messageCancel);
+	stage.addChild(messageCancel);
+	
+	var banner = getFromPool('lbbanner','assets/icons/LBAS1.png');
+	banner.x = 18;
+	banner.y = 45;
+	messages.push(banner);
+	stage.addChild(banner);
+	
+	messages[0].pivot.x = 300;
+	updates.push([function() {
+		messages[0].pivot.x -= 10;
+		for (var i=1; i<messages.length; i++) messages[i].pivot.x = messages[0].pivot.x;
+		return messages[0].pivot.x <= 0;
+	},[]]);
 }
 
 function selectNode(letters) {
@@ -1081,15 +1279,23 @@ function prepBattle(letter) {
 		}
 	}
 	var BAPI = {data:{},yasen:{},mvp:[],rating:'',node:letter.charCodeAt()-64};
-	var doNB = true; //always do, roll back later if not chosen
+	var doNB = !compd.bomb; //always do, roll back later if not chosen
 	var NBonly = compd.NB; //change to node level?
 	var aironly = compd.air;
 	var landbomb = compd.bomb;
 	var supportfleet = (MAPDATA[WORLD].maps[MAPNUM].nodes[letter].boss)? FLEETS1S[1] : FLEETS1S[0];
 	
+	var LBASwaves = null;
+	if (CHDATA.sortie.lbasNodes && CHDATA.sortie.lbasNodes[letter]) {
+		LBASwaves = [];
+		for (var i=0; i<CHDATA.sortie.lbasNodes[letter].length; i++) {
+			LBASwaves.push(LBAS[CHDATA.sortie.lbasNodes[letter][i]-1]);
+		}
+	}
+	
 	var res;
-	if (CHDATA.fleets.combined) res = simCombined(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,null,doNB,NBonly,aironly,landbomb,false,BAPI,true);
-	else res = sim(FLEETS1[0],FLEETS2[0],supportfleet,null,doNB,NBonly,aironly,landbomb,false,BAPI,true);
+	if (CHDATA.fleets.combined) res = simCombined(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
+	else res = sim(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
 	if (FLEETS2[0].ships[0].debuff) BAPI.data.api_boss_damaged = 1;
 	CHAPI.battles.push(BAPI);
 	$('#code').val(JSON.stringify(CHAPI)); //remove?
@@ -1097,6 +1303,10 @@ function prepBattle(letter) {
 	res.NBonly = NBonly;
 	res.landbomb = landbomb;
 	res.noammo = mapdata.subonly;
+	if (landbomb) {
+		res.rank = res.rankDay = getRankRaid(FLEETS1[0].ships,(CHDATA.fleets.combined)? FLEETS1[1].ships : null);
+		delete BAPI.data.api_hougeki1;
+	}
 	CHDATA.temp = res;
 	//update morale after NB select
 	
@@ -1226,7 +1436,7 @@ function shuttersPostbattle(noshutters) {
 		CHDATA.event.maps[MAPNUM].hp = bossbar.nowhp;
 		if (bossbar.nowhp <= 0) CHDATA.event.maps[MAPNUM].hp++;  //add 1 if -1 (sunk) or 0 (not sunk)
 	}
-	if (MAPDATA[WORLD].maps[MAPNUM].transport && CHDATA.event.reachedTransport && MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].boss) {
+	if (MAPDATA[WORLD].maps[MAPNUM].transport && CHDATA.sortie.reachedTransport && MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].boss) {
 		var rank = (!CHDATA.temp.NBonly && !NBSELECT)? CHDATA.temp.rankDay : CHDATA.temp.rank;
 		CHDATA.event.maps[MAPNUM].hp -= MAPDATA[WORLD].transportCalc(chGetShips(),rank);
 		if (CHDATA.event.maps[MAPNUM].hp < 0) CHDATA.event.maps[MAPNUM].hp = 0;
@@ -1236,7 +1446,7 @@ function shuttersPostbattle(noshutters) {
 	pushShipStatusToUI();
 	if (MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive) {
 		if (!CHDATA.event.maps[MAPNUM].debuff) CHDATA.event.maps[MAPNUM].debuff = {};
-				MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive(FLEETS2[0],FLEETS1);
+		MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].debuffGive(FLEETS2,FLEETS1);
 	}
 	FLEETS1[0].reset(true);
 	if (CHDATA.fleets.combined) FLEETS1[1].reset(true);
@@ -1661,12 +1871,12 @@ function shuttersSelect() {
 function rollBackNightBattle() {
 	for (var i=0; i<fleet1.length; i++) { //roll back HP to pre-NB
 		FLEETS1[0].ships[i].HP = fleet1[i].hp;
-		if (FLEETS1[0].ships[i].HP/FLEETS1[0].ships[i].HPmax > .25) FLEETS1[0].ships[i].protection = true;
+		if (FLEETS1[0].ships[i].HP/FLEETS1[0].ships[i].maxHP > .25) FLEETS1[0].ships[i].protection = true;
 		if (FLEETS1[0].ships[i].repairs) FLEETS1[0].ships[i].repairs = CHDATA.temp.repairsDay[i].slice();
 	}
 	for (var i=0; i<fleet1C.length; i++) {
 		FLEETS1[1].ships[i].HP = fleet1C[i].hp;
-		if (FLEETS1[1].ships[i].HP/FLEETS1[1].ships[i].HPmax > .25) FLEETS1[1].ships[i].protection = true;
+		if (FLEETS1[1].ships[i].HP/FLEETS1[1].ships[i].maxHP > .25) FLEETS1[1].ships[i].protection = true;
 		if (FLEETS1[1].ships[i].repairs) FLEETS1[1].ships[i].repairs = CHDATA.temp.repairsDayC[i].slice();
 	}
 }
@@ -1734,6 +1944,11 @@ function pushShipStatusToUI() {
 			chPushMorale(4,i+1,FLEETS1S[1].ships[i].morale);
 		}
 	}
+	for (var i=1; i<=3; i++) {
+		if (CHDATA.fleets['lbas'+i] && LBAS[i-1]) {
+			chPushResupply(5,i,0,0,LBAS[i-1].planecount);
+		}
+	}
 }
 
 function chUpdateMorale() {
@@ -1753,14 +1968,14 @@ function chUpdateMorale() {
 
 function chUpdateSupply() {
 	var results = CHDATA.temp;
-	var bomb = results.landbomb;
-	var base = (bomb)? .4 : 2;
+	var baseF = (results.landbomb)? .8 : 2;
+	var baseA = (results.landbomb)? .4 : 2;
 	var didNB = (results.rankDay && NBSELECT);
 	for (var i=0; i<FLEETS1[0].ships.length; i++) {
 		var ship = FLEETS1[0].ships[i];
 		if (ship.retreated) continue;
-		ship.fuelleft -= base
-		if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*didNB;
+		ship.fuelleft -= baseF;
+		if (!results.noammo) ship.ammoleft -= baseA + 1*didNB;
 		if (ship.fuelleft < 0) ship.fuelleft = 0;
 		if (ship.ammoleft < 0) ship.ammoleft = 0;
 	}
@@ -1768,8 +1983,8 @@ function chUpdateSupply() {
 		for (var i=0; i<FLEETS1[1].ships.length; i++) {
 			var ship = FLEETS1[1].ships[i];
 			if (ship.retreated) continue;
-			ship.fuelleft -= base;
-			if (!results.noammo) ship.ammoleft -= (bomb ? base * 2 : base) + 1*didNB;
+			ship.fuelleft -= baseF;
+			if (!results.noammo) ship.ammoleft -= baseA + 1*didNB;
 			if (ship.fuelleft < 0) ship.fuelleft = 0;
 			if (ship.ammoleft < 0) ship.ammoleft = 0;
 		}
@@ -1830,4 +2045,42 @@ function chGetShips() {
 		for (var i=0; i<CHDATA.fleets[2].length; i++) ships.push(CHDATA.ships[CHDATA.fleets[2][i]]);
 	}
 	return ships;
+}
+
+
+function getRankRaid(shipsF,shipsFC) {
+	let ships = (shipsFC)? shipsF.concat(shipsFC) : shipsF;
+	let hpNow = 0, hpPrev = 0;
+	for (let ship of ships) {
+		hpPrev += ship.HPprev;
+		hpNow += ship.HP;
+	}
+	if (hpNow == hpPrev) return 'S';
+	if (hpNow/hpPrev > .9) return 'A';
+	if (hpNow/hpPrev > .8) return 'B';
+	if (hpNow/hpPrev > .5) return 'C';
+	return 'D';
+}
+
+function getLBASRange(ship) {
+	if (MAPDATA[WORLD].lbasRangeMax) {
+		var rangeMax = 0;
+		for (var i=0; i<ship.items.length; i++) {
+			if (ship.items[i] <= -1) continue;
+			var eq = CHDATA.gears['x'+ship.items[i]];
+			if (LBASDATA[eq.masterId].distance > rangeMax) rangeMax = LBASDATA[eq.masterId].distance;
+		}
+		return rangeMax;
+	}
+	var rangeMin = 999, rangeScout = 0;
+	for (var i=0; i<ship.items.length; i++) {
+		if (ship.items[i] <= -1) continue;
+		var eq = CHDATA.gears['x'+ship.items[i]];
+		if (LBASDATA[eq.masterId].distance < rangeMin) rangeMin = LBASDATA[eq.masterId].distance;
+		if (EQDATA[eq.masterId].type == SEAPLANE || EQDATA[eq.masterId].type == CARRIERSCOUT || EQDATA[eq.masterId].type == FLYINGBOAT) {
+			rangeScout = Math.max(rangeScout,LBASDATA[eq.masterId].distance);
+		}
+	}
+	if (rangeScout > rangeMin) rangeMin += Math.round(Math.sqrt(rangeScout-rangeMin));
+	return rangeMin;
 }

@@ -17,6 +17,31 @@ var MECHANICDATES = {
 	shellingSoftCap: '2017-03-17',
 };
 
+SHIPDATA[5001] = {
+	name: 'Base 1',
+	image: 'LBAS1.png',
+	type: 'LandBase',
+	SLOTS: [18,18,18,18],
+	fuel: 0,
+	ammo: 0,
+}
+SHIPDATA[5002] = {
+	name: 'Base 2',
+	image: 'LBAS2.png',
+	type: 'LandBase',
+	SLOTS: [18,18,18,18],
+	fuel: 0,
+	ammo: 0,
+}
+SHIPDATA[5003] = {
+	name: 'Base 3',
+	image: 'LBAS3.png',
+	type: 'LandBase',
+	SLOTS: [18,18,18,18],
+	fuel: 0,
+	ammo: 0,
+}
+
 $('#shipselectdialog').dialog({autoOpen:false,width:400,height:600,modal:true,open:function() {$(this).scrollTop(0);}});
 $('#dialogselequip').dialog({autoOpen:false,width:400,height:600,modal:true,open:function() {$(this).scrollTop(0);} });
 
@@ -73,13 +98,43 @@ function chCreateFleetTable(root,num,name,noheader) {
 		divWrap.append(table);
 	}
 }
+function chCreateFleetTableLBAS(root,num) {
+	var divWrap = $('<div class="ftwrap"></div>');
+	$(root).append(divWrap);
+	for (var i=1; i<=6; i++) {
+		var table = $('<table class="t2" id="fleet'+num+i+'"></table>');
+		if (i >= 4) { divWrap.append(table); continue; }
+		table.append($('<tr class="t2show"><td colspan="4"><div style="text-align:center"><div class="t2name" id="fleetname'+num+i+'">Base '+i+'</div></div></td></tr>'));
+		table.append($('<tr class="t2show"><td colspan="4"><img src="assets/icons/LBAS'+i+'.png" class="t2portrait" id="fleetimg'+num+i+'"/></td></tr>'));
+		tr = $('<tr></tr>');
+		tr.append($('<td colspan="2"><div class="t2stat"><img src="assets/stats/rn.png"/><span id="fleetlbrn'+num+i+'"></span></div></td>'));
+		tr.append($('<td colspan="2"><div class="t2stat"><img src="assets/stats/ac.png"/><span id="fleetlbac'+num+i+'"></span></div></td>'));
+		table.append(tr);
+		for (var j=1; j<=4; j++) {
+			var tr = $('<tr></tr>');
+			var td = $('<td colspan="4" onclick="chDialogItem('+num+','+j+','+i+')"></td>');
+			var div = $('<div id="fleeteq'+num+j+i+'" class="t2equip"></div>');
+			div.append($('<img id="fleeteqi'+num+j+i+'"/>'));
+			div.append($('<span class="t2slotnum" id="fleeteqs'+num+j+i+'"></span>'));
+			div.append($('<span class="t2imprnum" id="fleeteqimpr'+num+j+i+'"></span>'));
+			div.append($('<span id="fleeteqn'+num+j+i+'"></span>'));
+			td.append(div); tr.append(td); table.append(tr);
+		}
+		tr = $('<tr class="t2supplyrow" onclick="chResupplyOne('+num+','+i+')" onmouseover="if ($(this).css(\'visibility\')!=\'hidden\') {chPreviewResupply('+num+','+i+');chShowHoverBox(\'hbResupply\',this)}" onmouseout="chHideHoverBox(\'hbResupply\')"></tr>');
+		tr.append($('<td colspan="4"><img src="assets/stats/baux.png"/></td>'));
+		table.append(tr);
+		divWrap.append(table);
+	}
+}
 chCreateFleetTable('#mainfleetspace',1,'Main Fleet');
 chCreateFleetTable('#escortfleetspace',2,'Escort Fleet',true);
 chCreateFleetTable('#supportfleetspace1',3,'Normal Support');
 chCreateFleetTable('#supportfleetspace2',4,'Boss Support');
+chCreateFleetTableLBAS('#lbasspace',5,'Land Base');
 
 $('#tabsupportN').attr('value',1);
 $('#tabsupportB').attr('value',1);
+$('#tabLBAS').attr('value',1);
 
 function chClickedTab(tab) {
 	var id = $(tab).attr('id');
@@ -101,6 +156,12 @@ function chClickedTab(tab) {
 		$('#supportfleetspace2wrap').hide();
 	} else {
 		$('#supportfleetspace2wrap').show();
+	}
+	if (id != 'tabLBAS') {
+		$('#tabLBAS').attr('value',1);
+		$('#lbasspacewrap').hide();
+	} else {
+		$('#lbasspacewrap').show();
 	}
 }
 
@@ -244,6 +305,7 @@ function chDialogShowItems(shipmid,types) {
 		var equip = EQDATA[eqid];
 		if (item.disabled) include = false;
 		if (include && types.indexOf(equip.type)==-1) include = false;
+		if (include && EQTDATA[equip.type].cannotequipS && EQTDATA[equip.type].cannotequipS.indexOf(shipmid) != -1) include = false;
 		if (include && EQTDATA[equip.type].canequip.indexOf(shiptype) == -1 && (!EQTDATA[equip.type].canequipS||EQTDATA[equip.type].canequipS.indexOf(shipmid) == -1)) include = false;
 		
 		if (include) {
@@ -290,6 +352,7 @@ function chDialogItem(fleet,eqnum,slot) {
 		case 'CL': case 'CLT': case 'CT': case 'CA': case 'CAV': defcat = 13; break;
 		case 'FBB': case 'BB': case 'BBV': defcat = 14; break;
 		case 'SS': case 'SSV': defcat = 3; break;
+		case 'LandBase': defcat = 6; break;
 		default: defcat = 1; break;
 	}
 	chDialogItemFilter(defcat);
@@ -305,8 +368,8 @@ function chDialogItemFilter(category,frombutton) {
 		case 2: types=[SECGUN,SECGUNAA]; break;
 		case 3: types=[TORPEDO,TORPEDOSS,MIDGETSUB]; break;
 		case 4: types=[SEAPLANE,SEAPLANEBOMBER,SEAPLANEFIGHTER,FLYINGBOAT]; break;
-		case 5: types=[FIGHTER]; break;
-		case 6: types=[DIVEBOMBER]; break;
+		case 5: types=[FIGHTER,INTERCEPTOR]; break;
+		case 6: types=[DIVEBOMBER,LANDBOMBER]; break;
 		case 7: types=[TORPBOMBER]; break;
 		case 8: types=[CARRIERSCOUT,AUTOGYRO,ASWPLANE,JETBOMBER]; break;
 		case 9: types=[RADARS,RADARL,RADARXL]; break;
@@ -345,6 +408,13 @@ function chSetEquip(itemid) {
 	
 	
 	$('#dialogselequip').dialog('close');
+	
+	if (item && DIALOGFLEETSEL == 5) { //LBAS only
+		var type = EQDATA[item.masterId].type;
+		var num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
+		CHDATA.event.resources.baux += num * LBASDATA[item.masterId].cost;
+		chUIUpdateResources();
+	}
 }
 
 function chShipEquipItem(shipid,itemid,slot) {
@@ -465,7 +535,7 @@ function chProcessKC3File2() {
 				for (var i=0; i<shipN.items.length; i++) {
 					if (shipN.items[i] == -1) continue;
 					var eqtype = EQDATA[CHDATA.gears['x'+shipN.items[i]].masterId].type;
-					if (EQTDATA[eqtype].canequip.indexOf(shiptype) == -1 && (!EQTDATA[eqtype].canequipS||EQTDATA[eqtype].canequipS.indexOf(shipN.masterId)==-1))
+					if ((EQTDATA[eqtype].canequip.indexOf(shiptype) == -1 && (!EQTDATA[eqtype].canequipS||EQTDATA[eqtype].canequipS.indexOf(shipN.masterId)==-1)) || (EQTDATA[eqtype].cannotequipS && EQTDATA[eqtype].cannotequipS.indexOf(shipN.masterId)!=-1))
 						chShipEquipItem(sid,-1,i);
 				}
 			}
@@ -491,7 +561,7 @@ function chProcessKC3File2() {
 			delete CHDATA.gears[eqid];
 			continue;
 		}
-		if (CHDATA.config.disableequips && eqd.added >= MAPDATA[CHDATA.event.world].date) {
+		if (CHDATA.config.disableequips && eqd.added > MAPDATA[CHDATA.event.world].date) {
 			var item = CHDATA.gears[eqid];
 			item.disabled = true;
 			if (item.heldBy) {
@@ -499,6 +569,23 @@ function chProcessKC3File2() {
 				chShipEquipItem(item.heldBy,-1,slot);
 			}
 		}
+		
+		if (CHDATA.gears[eqid].ace >= 1) CHDATA.gears[eqid].ace = 7;
+	}
+	
+	if (MAPDATA[CHDATA.event.world].allowLBAS) {
+		for (var i=1; i<=3; i++) {
+			var numPlanes = MAPDATA[CHDATA.event.world].lbasSlotCount || 18;
+			var lb = {
+				masterId: 5000+i,
+				HP: [200,200],
+				planes: [numPlanes,numPlanes,numPlanes,numPlanes],
+				items: [-1,-1,-1,-1],
+				disabled: true
+			};
+			CHDATA.ships['z'+i] = lb;
+		}
+		CHDATA.fleets[5] = ['z1','z2','z3'];
 	}
 	
 }
@@ -561,6 +648,7 @@ function chSave() {
 		chUIRemoveSunk();
 	}
 	delete CHDATA.temp;
+	delete CHDATA.sortie;
 	var basic = {}, data = {};
 	basic.event = CHDATA.event;
 	basic.config = CHDATA.config;
@@ -724,6 +812,30 @@ function chStart() {
 	if (CHDATA.fleets.supportB) chLoadSupportFleetB();
 	else FLEETS1S[1] = null;
 	
+	if (MAPDATA[CHDATA.event.world].allowLBAS) {
+		for (var i=1; i<=3; i++) {
+			if (i <= MAPDATA[CHDATA.event.world].maps[MAPNUM].lbas && CHDATA.fleets['lbas'+i]) {
+				chLoadLBAS(i);
+			} else {
+				LBAS[i-1] = null;
+				CHDATA.fleets['lbas'+i] = false;
+			}
+		}
+		var fuel = 0, ammo = 0;
+		for (var i=0; i<LBAS.length; i++) {
+			if (!LBAS[i]) continue;
+			for (var j=0; j<LBAS[i].equips.length; j++) {
+				var equip = LBAS[i].equips[j];
+				if (equip.type == LANDBOMBER || equip.type == INTERCEPTOR) { fuel += 27; ammo += 12; }
+				else if (equip.type == CARRIERSCOUT || equip.type == SEAPLANE || equip.type == FLYINGBOAT) { fuel += 4; ammo += 3; }
+				else { fuel += 18; ammo += 11; }
+			}
+		}
+		CHDATA.event.resources.fuel += fuel;
+		CHDATA.event.resources.ammo += ammo;
+		chUIUpdateResources();
+	}
+	
 	for (var mechanic in MECHANICS) {
 		MECHANICS[mechanic] = CHDATA.config.mechanics[mechanic];
 	}
@@ -736,8 +848,8 @@ function chStart() {
 	$('#battlespace').show();
 	$('#battlespace').css('animation','');
 	$('#battlespace').css('animation','fadein 0.25s linear');
-	chBlockFleetUI();
 	chClickedTab('#tabmain');
+	chBlockFleetUI();
 	chPlayerStart();
 }
 
@@ -809,6 +921,21 @@ function chGetSupportType(counts) {
 	return 2;
 }
 
+function chLoadLBAS(num) {
+	var base = CHDATA.ships['z'+num];
+	var equips = [], improvs = [0,0,0,0], profs = [0,0,0,0];
+	for (var j=0; j<base.items.length; j++) {
+		if (base.items[j] <= 0) { continue; }
+		var item = CHDATA.gears['x'+base.items[j]];
+		equips.push(item.masterId);
+		if (CHDATA.config.mechanics.improvement) improvs[j] = item.stars || 0;
+		if (CHDATA.config.mechanics.proficiency) profs[j] = Math.max(0,item.ace) || 0;
+	}
+	LBAS[num-1] = new LandBase(equips,improvs,profs);
+	LBAS[num-1].PLANESLOTS = base.planes.slice();
+	LBAS[num-1].planecount = base.planes.slice();
+}
+
 function chLoadFleet(sids,fleetnum) {
 	var simships = [];
 	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,CT:0,total:0,ids:[],aBB:0,aCV:0,speed:10};
@@ -876,6 +1003,12 @@ function chTableSetShip(sid,fleet,slot,noswap) {
 	$('#fleetlk'+fleet+slot).text(ship.LUK);
 	$('#fleetrn'+fleet+slot).text(['','Short','Medium','Long','V. Long'][ship.RNG]);
 	$('#fleetsp'+fleet+slot).text({0:'N/A',5:'Slow',10:'Fast'}[shipd.SPD]);
+	
+	if (fleet == 5) { //LBAS only
+		chLoadLBAS(slot);
+		$('#fleetlbac'+fleet+slot).text(LBAS[slot-1].fleetAirPower());
+		$('#fleetlbrn'+fleet+slot).text(getLBASRange(ship));
+	}
 	
 	if (ship.lock) $('#fleetlock'+fleet+slot).attr('src','assets/maps/lock'+ship.lock+'.png');
 	else $('#fleetlock'+fleet+slot).attr('src','');
@@ -1166,6 +1299,15 @@ function chLoadSortieInfo(mapnum) {
 		}
 	}
 	
+	var numLB = mapdata.lbas || 0;
+	for (var i=1; i<=3; i++) {
+		if (i <= numLB) {
+			$('#btnLBAS'+i).show();
+		} else {
+			$('#btnLBAS'+i).hide();
+		}
+	}
+	
 	MAPNUM = CHDATA.event.mapnum = mapnum;
 	if (MAPNUM <= 1) $('#srtLeft').hide();
 	else $('#srtLeft').show();
@@ -1277,6 +1419,16 @@ function chAddSupportB() {
 	}
 }
 
+function chAddLBAS(num) {
+	if (!CHDATA.fleets['lbas'+num]) {
+		CHDATA.fleets['lbas'+num] = true;
+		$('#btnLBAS'+num).css('opacity',1);
+	} else {
+		CHDATA.fleets['lbas'+num] = false;
+		$('#btnLBAS'+num).css('opacity',.5);
+	}
+}
+
 
 function chFleetSetHP(fleetnum,shipnum,hp) {
 	var maxhp = CHDATA.ships[CHDATA.fleets[fleetnum][shipnum-1]].HP[1];
@@ -1359,6 +1511,7 @@ function chResupplyAll() {
 	if (CHDATA.fleets.combined) fleets.push(2);
 	fleets.push(3);
 	fleets.push(4);
+	if (MAPDATA[WORLD].allowLBAS) fleets.push(5);
 	for (var i=0; i<fleets.length; i++) {
 		for (var j=0; j<CHDATA.fleets[fleets[i]].length; j++) chResupplyOne(fleets[i],j+1);
 	}
@@ -1431,6 +1584,7 @@ function chPreviewResupply(fleetnum,shipnum) {
 		if (CHDATA.fleets.combined) ships.push.apply(ships,CHDATA.fleets[2]);
 		ships.push.apply(ships,CHDATA.fleets[3]);
 		ships.push.apply(ships,CHDATA.fleets[4]);
+		if (MAPDATA[WORLD].allowLBAS) ships.push.apply(ships,CHDATA.fleets[5]);
 	}
 	for (var i=0; i<ships.length; i++) {
 		var ship = CHDATA.ships[ships[i]];
@@ -1450,17 +1604,26 @@ function chGetSupplyCost(ship) {
 	var shipd = SHIPDATA[ship.masterId];
 	var baux = 0;
 	for (var j=0; j<ship.planes.length; j++) baux += 5*(shipd.SLOTS[j]-ship.planes[j]);
-	return {
+	var costs = {
 		fuel: Math.floor((10-ship.fuel)*shipd.fuel/10),
 		ammo: Math.floor((10-ship.ammo)*shipd.ammo/10),
 		baux: baux,
 	};
+	if (ship.masterId > 5000) {
+		for (var j=0; j<ship.planes.length; j++) costs.fuel += 3*(shipd.SLOTS[j]-ship.planes[j]);
+	}
+	return costs;
 }
 
 function chClickMorale(fleetnum,shipnum) {
 	var ship = CHDATA.ships[CHDATA.fleets[fleetnum][shipnum-1]];
 	ship.morale = Math.min(85,ship.morale+12);
 	chFleetSetMorale(fleetnum,shipnum,ship.morale);
+	var fuel = Math.floor(SHIPDATA[ship.masterId].fuel * .4);
+	var ammo = Math.floor(SHIPDATA[ship.masterId].ammo * .4);
+	CHDATA.event.resources.fuel += fuel;
+	CHDATA.event.resources.ammo += ammo;
+	chUIUpdateResources();
 }
 
 function chBlockFleetUI() {

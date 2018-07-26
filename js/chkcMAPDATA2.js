@@ -1424,6 +1424,9 @@ var MAPDATA = {
 					1: 400,
 				},
 				checkLock: ['AL','MI'],
+				reward: {
+					'ships': [167],
+				},
 				nodes: {
 					'Start': {
 						type: 1,
@@ -2714,6 +2717,9 @@ var MAPDATA = {
 				debuffCheck: function(debuff) {
 					return (debuff.C && debuff.X && debuff.Y);
 				},
+				reward: {
+					'ships': [422],
+				},
 				nodes: {
 					'Start': {
 						type: 0,
@@ -2760,8 +2766,8 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2'],
 						},
 						end: true,
-						debuffGive: function(efleet) {
-							var ships = efleet.ships;
+						debuffGive: function(fleetsE,fleetsF) {
+							let ships = fleetsE[0].ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if ([1513,1536,1558].indexOf(ships[i].mid) != -1 && ships[i].HP > 0) found = false;
@@ -2913,8 +2919,8 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2'],
 						},
 						route: 'D',
-						debuffGive: function(efleet) {
-							var ships = efleet.ships;
+						debuffGive: function(fleetsE,fleetsF) {
+							let ships = fleetsE[0].ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if ([1513,1536,1558].indexOf(ships[i].mid) != -1 && ships[i].HP > 0) found = false;
@@ -2935,8 +2941,8 @@ var MAPDATA = {
 							if (ships.escort.CLT) return 'O';
 							return 'L';
 						},
-						debuffGive: function(efleet) {
-							const ships = efleet.ships;
+						debuffGive: function(fleetsE,fleetsF) {
+							let ships = fleetsE[0].ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if ([1513,1536,1558].indexOf(ships[i].mid) != -1 && ships[i].HP > 0) found = false;
@@ -3588,8 +3594,8 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1','Easy 2','Easy 3'],
 						},
-						debuffGive: function(ships) {
-							if (ships[0].HP <= 0) CHDATA.event.maps[4].debuff.J = true;
+						debuffGive: function(fleetsE,fleetsF) {
+							if (fleetsE[0].ships[0].HP <= 0) CHDATA.event.maps[4].debuff.J = true;
 						},
 						route: 'K'
 					},
@@ -3614,8 +3620,8 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2','Medium 3'],
 							1: ['Easy 1','Easy 2','Easy 3'],
 						},
-						debuffGive: function(ships) {
-							if (ships[0].HP <= 0) CHDATA.event.maps[4].debuff.M = true;
+						debuffGive: function(fleetsE,fleetsF) {
+							if (fleetsE[0].ships[0].HP <= 0) CHDATA.event.maps[4].debuff.M = true;
 						},
 						end: true
 					},
@@ -3792,10 +3798,10 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4'],
 							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
 						},
-						debuffGive: function(ships) {
+						debuffGive: function(fleetsE,fleetsF) {
 							if (CHDATA.event.maps[5].part != 2) return;
 							let num = 0;
-							for (var ship of ships) {
+							for (var ship of fleetsE[0].ships) {
 								if (ship.isPT && ship.HP <= 0) num++;
 							}
 							CHDATA.event.maps[5].debuff.imp = (CHDATA.event.maps[5].debuff.imp || 0) + num;
@@ -3828,8 +3834,7 @@ var MAPDATA = {
 						type: 2,
 						x: 606,
 						y: 267,
-						resource: 1,
-						amount: [0],
+						resource: 0,
 						route: 'L'
 					},
 					'L': {
@@ -3841,10 +3846,10 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4'],
 							1: ['Easy 1','Easy 2','Easy 3'],
 						},
-						debuffGive: function(ships) {
+						debuffGive: function(fleetsE,fleetsF) {
 							if (CHDATA.event.maps[5].part != 2) return;
 							let num = 0;
-							for (var ship of ships) {
+							for (var ship of fleetsE[0].ships) {
 								if (ship.isPT && ship.HP <= 0) num++;
 							}
 							CHDATA.event.maps[5].debuff.imp = (CHDATA.event.maps[5].debuff.imp || 0) + num;
@@ -3872,10 +3877,10 @@ var MAPDATA = {
 							2: ['Medium F'],
 							1: ['Easy F'],
 						},
-						debuffGive: function(ships) {
+						debuffGive: function(fleetsE,fleetsF) {
 							if (CHDATA.event.maps[5].part != 2) return;
 							let num = 0;
-							for (var ship of ships) {
+							for (var ship of fleetsE[0].ships) {
 								if (ship.isPT && ship.HP <= 0) num++;
 							}
 							CHDATA.event.maps[5].debuff.imp = (CHDATA.event.maps[5].debuff.imp || 0) + num;
@@ -3893,13 +3898,18 @@ var MAPDATA = {
 		diffMode: 2,
 		allowDiffs: [3,2,1],
 		allowFleets: [0,1,2,3],
-		bannerImg: 'http://i.imgur.com/2qArUXu.png',
-		bannerImgAlt: 'https://i.imgur.com/6zdOwyN.png',
+		allowLBAS: true,
+		lbasSlotCount: 12,
+		lbasRangeMax: true,
+		bannerImg: 'http://i.imgur.com/6zdOwyN.png',
+		bannerImgAlt: 'http://i.imgur.com/8Di99lM.png',
+		ptImpSpecial: 1,
+		transportCalc: transportCalcStandard,
 		maps: {
 			1: {
 				name: 'E-1',
 				nameT: 'Secure the Frontline Naval Superiority!',
-				fleetTypes: [0],
+				fleetTypes: [1,2,3],
 				bgmMap: 2034,
 				bgmDN: 61,
 				bgmNN: 61,
@@ -4645,7 +4655,7 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2','Easy 3']
 						},
 						debuffGive: function(efleet) {
-							var ships = efleet.ships;
+							var ships = efleet[0].ships;
 							let found = true;
 							for (var i=0; i<ships.length; i++) {
 								if (ships[i].HP > 0) found = false;
@@ -4756,10 +4766,43 @@ function isShipInList(ships,basemid) {
 	}
 	return false;
 }
-
 function mapChangePart(worldnum,mapnum,part) {
 	if (!MAPDATA[worldnum].maps[mapnum].parts) return;
 	for (var key in MAPDATA[worldnum].maps[mapnum].parts[part]) {
 		MAPDATA[worldnum].maps[mapnum][key] = MAPDATA[worldnum].maps[mapnum].parts[part][key];
 	}
+}
+
+function transportCalcStandard(ships,rank) {
+	rank = rank || 'S';
+	let tp = 0;
+	const tpObj = {
+		"DD": 5,
+		"CL": 2,
+		"CT": 6,
+		"CAV": 4,
+		"BBV": 7,
+		"AV": 9,
+		"LHA": 12,
+		"AO": 15,
+		"AS": 7,
+	};
+	for (let ship of ships) {
+		if (!ship) continue;
+		const stype = SHIPDATA[ship.masterId].type;
+		if (tpObj[stype]) tp += tpObj[stype];
+		for (let item of ship.items) {
+			if (item <= 0) continue;
+			let eq = CHDATA.gears['x'+item];
+			let eqd = EQDATA[eq.masterId];
+			if (eqd.type == DRUM) tp += 5;
+			if (eqd.type == LANDINGCRAFT) tp += 8;
+			if (eqd.type == RATION) tp += 1;
+			if (eqd.type == LANDINGTANK) tp += 2;
+		}
+	}
+	tp = Math.floor(tp);
+	if (rank == 'A') tp *= 0.7;
+	if (rank != 'S' && rank != 'A') return 0;
+	return Math.floor(tp);
 }

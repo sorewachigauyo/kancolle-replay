@@ -923,7 +923,8 @@ function AADefenceBombersAndAirstrike(carriers,targets,defenders,APIkouku,issupp
 			if ((e.istorpbomber || e.isdivebomber) && ship.planecount[j]>0 && (!isjetphase||e.isjet)) {
 				bombers[i].push(j);
 				hasbomber = true;
-				if (C && APIkouku.api_plane_from[ship.side].indexOf(ship.apiID2)==-1) APIkouku.api_plane_from[ship.side].push(ship.apiID2);
+				var side = (ship.side == 3)? 0 : ship.side;
+				if (C && APIkouku.api_plane_from[side].indexOf(ship.apiID2)==-1) APIkouku.api_plane_from[side].push(ship.apiID2);
 			}
 		}
 	}
@@ -1046,7 +1047,7 @@ function supportPhase(shipsS,alive2,subsalive2,suptype,BAPI,isboss) {
 			else
 				BAPI.data.api_support_info.api_support_hourai = { api_cl_list:[-1,0,0,0,0,0,0], api_damage:[-1,0,0,0,0,0,0], api_deck_id:3};
 		} else if (suptype==1) {
-			BAPI.data.api_support_info.api_support_airatack = {api_plane_from:[[-1]],api_stage1:null,api_stage2:null,api_stage3:null};
+			BAPI.data.api_support_info.api_support_airatack = {api_plane_from:[[-1],[-1]],api_stage1:null,api_stage2:null,api_stage3:null};
 			BAPI.data.api_support_info.api_support_airatack.api_stage1 = {api_e_count:0,api_e_lostcount:0,api_f_count:0,api_f_lostcount:0};
 			BAPI.data.api_support_info.api_support_airatack.api_stage2 = {api_f_count:0,api_f_lostcount:0};
 			BAPI.data.api_support_info.api_support_airatack.api_stage3 = {api_ebak_flag:[-1,0,0,0,0,0,0],api_edam:[-1,0,0,0,0,0,0],api_erai_flag:[-1,0,0,0,0,0,0],api_ecl_flag:[-1,0,0,0,0,0,0]};
@@ -1356,10 +1357,11 @@ function sim(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,no
 	//lbas
 	if (LBASwaves && LBASwaves.length && !NBonly) {
 		if (C) BAPI.data.api_air_base_attack = [];
+		for (var i=0; i<LBASwaves.length; i++) LBASwaves[i]._currentSlots = LBASwaves[i].planecount.slice();
 		for (var i=0; i<LBASwaves.length; i++) {
 			if (LBASwaves[i].equips.length <= 0) continue;
 			if (alive1.length+subsalive1.length > 0 && alive2.length+subsalive2.length > 0) {
-				LBASwaves[i].planecount = LBASwaves[i].PLANESLOTS.slice();
+				LBASwaves[i].planecount = LBASwaves[i]._currentSlots.slice();
 				compareAP(LBASwaves[i],F2);
 				var LBAPI = {api_plane_from:[[-1],[-1]],api_stage1:null,api_stage2:null,api_stage3:null};
 				LBASPhase(LBASwaves[i],alive2,subsalive2,false,(C)?LBAPI:undefined);
