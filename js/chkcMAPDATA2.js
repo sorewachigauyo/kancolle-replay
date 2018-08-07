@@ -7236,6 +7236,9 @@ var MAPDATA = {
 				historicalList: [80, 176, 140, 433],
 				extraCheck: [1,2,3],
 				extraLock: 4,
+				reward: {
+					ships: [433]
+				},
 				maphp: {
 					3: { 1: 4800 },
 					2: { 1: 4200 },
