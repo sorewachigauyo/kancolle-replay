@@ -99,6 +99,8 @@ var MECHANICS = {
 	AACI: true,
 	fitGun: true,
 	morale: true,
+/* 	CVCI: true,
+	rocketBarrage: true, */
 };
 var NERFPTIMPS = false;
 var BREAKPTIMPS = false;
@@ -683,6 +685,7 @@ function airstrike(ship,target,slot,contactMod,issupport) {
 		var postMod = 1;
 		if (equip.isdivebomber) postMod *= target.divebombWeak || 1;
 		dmg = damage(ship,target,base+Math.sqrt(ship.planecount[slot])*planebase,preMod,res*contactMod*postMod,150);
+		// if (MECHANICS.rocketBarrage && target.rocketBarrage) dmg = target.rocketBarrage() ? 0 : dmg;
 		realdmg = takeDamage(target,dmg);
 	}
 	ship.fleet.giveCredit(ship,realdmg);
@@ -759,6 +762,7 @@ function damage(ship,target,base,preMod,postMod,cap) {
 	if (target.installtype == 3) { //supply depot type installations
 		dmg *= (ship.supplyPostMult||1);
 	}
+	if (ship.buff) dmg *= ship.buff || 1;
 	if (C) console.log('	before def: '+dmg);
 	var ar = target.AR + (target.improves.AR || 0);
 	dmg -= .7*ar+.6*Math.floor(Math.random()*ar) - (target.debuff||0);
@@ -780,12 +784,15 @@ function softCap(num,cap) {
 	return (num > cap)? cap+Math.sqrt(num-cap) : num;
 }
 
-function compareAP(fleet1,fleet2,isjetphase,includeEscort) {
+function compareAP(fleet1,fleet2,isjetphase,includeEscort,isLBRaid) {
 	var ap1 = fleet1.fleetAirPower(isjetphase), ap2 = fleet2.fleetAirPower(isjetphase);
 	if (includeEscort) {
 		if (fleet1.combinedWith) ap1 += fleet1.combinedWith.fleetAirPower(isjetphase);
 		if (fleet2.combinedWith) ap2 += fleet2.combinedWith.fleetAirPower(isjetphase);
 	}
+	if (isLBRaid) ap1 = fleet1.ships.reduce((acc, base) => {
+		return acc + base.active ? base.AirPowerDefend() : 0;
+	});
 	if (ap1 == 0 && ap2 == 0) { fleet1.AS = fleet2.AS = 0; }
 	else if (ap1 >= ap2*3) { fleet1.AS = 2; fleet2.AS = -2; }
 	else if (ap1 >= ap2*1.5) { fleet1.AS = 1; fleet2.AS = -1; }
@@ -1188,7 +1195,7 @@ function LBASPhase(lbas,alive2,subsalive2,isjetphase,APIkouku) {
 function airstrikeLBAS(lbas,target,slot,contactMod) {
 	if (!contactMod) contactMod = 1;
 	var equip = lbas.equips[slot];
-	var acc = .95;
+	var acc = .95 + 12*Math.sqrt(equip.ACC || 0);
 	var critdmgbonus = 1, critratebonus = 0, ACCplane = 0;
 	if (equip.type != LANDBOMBER) {
 		ACCplane = Math.sqrt(equip.exp*.1);
@@ -1233,7 +1240,68 @@ function airstrikeLBAS(lbas,target,slot,contactMod) {
 	}
 	return realdmg;
 }
+/* 
+function LBASAirRaid(F1,F2,BAPI){
+	var bases = F1.ships, ships2 = F2.ships;
 
+	var r = Math.random();
+	if (r < .45) ENGAGEMENT = 1;
+	else if (r < .6) ENGAGEMENT = 1.2;
+	else if (r < .9 || F1.noRedT || F2.noRedT) ENGAGEMENT = .8;
+	else ENGAGEMENT = .6;
+	
+	F1.AS = F2.AS = 0;
+
+	var APIkouku = {api_plane_from:[[-1],[-1]],api_stage1:null,api_stage2:null,api_stage3:null,api_map_squadron_plane:[]};
+
+	if (C) {
+		console.log('ENGAGEMENT: '+ENGAGEMENT);
+		var dataroot = BAPI.data;
+		dataroot.api_formation = [F1.formation.id,F2.formation.id,{1:1,.8:2,1.2:3,.6:4}[ENGAGEMENT]];
+		dataroot.api_deck_id = 1;
+		dataroot.api_maxhps = [-1];
+		dataroot.api_nowhps = [-1];
+		for (var i=0; i<6; i++) {
+			dataroot.api_nowhps.push((i<bases.length)? bases[i].HP : -1);
+			dataroot.api_maxhps.push((i<bases.length)? bases[i].maxHP : -1);
+		}
+		dataroot.api_ship_ke = [];
+		dataroot.api_eSlot = [];
+		for (var i=0; i<6; i++) {
+			dataroot.api_ship_ke.push((i<ships2.length)? ships2[i].mid : -1);
+			dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+			dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			dataroot.api_eSlot.push([]);
+			for (var j=0; j<5; j++)
+				dataroot.api_eSlot[i].push((i<ships2.length && j<ships2[i].equips.length)? ships2[i].equips[j].mid : -1);	
+		}
+		
+	}
+	if (C) console.log(API);
+
+	compareAP(F1,F2,false,false,true);
+	var dummy = new LandBase();
+	var shotdown = dummy.slotShotdown(F1.AS);
+	var minShotdownSlots = shotdown.minShotdownSlots;
+	var maxShotdownSlots = shotdown.maxShotdownSlots;
+
+	const index = 0;
+	bases.forEach( (base,basenum) => {
+		if (base.active){
+			var nshotdown = base.slotShotdown(F1.AS);
+			nshotdown.minShotdownSlots.forEach((minShotdown,idx) => {
+				if (minShotdown > minShotdownSlots[idx]){
+					minShotdownSlots[idx] = minShotdown
+					maxShotdownSlots[idx] = nshotdown.maxShotdownSlots[idx];
+				}
+			});
+			APIkouku.api_plane_from[0][index]= basenum+1;
+		}
+	});
+
+	BAPI.data.api_air_base_attack = APIkouku;
+}
+ */
 function orderByRange(ships,order,includeSubs) {
 	var ranges = []; //fleet 1
 	for (var i=0; i<ships.length; i++) {

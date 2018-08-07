@@ -672,6 +672,8 @@ function processAPI(root) {
 				for (var i=0; i<fleet1.length; i++) if (!fleet1[i].issub) allsub = false;
 				if (allsub) { bgm = 999; isboss = false; orel = true; }
 			}
+			var isLB = root.battles[b].airRaid;
+			if (isLB) bgm = MAPDATA[root.world].bgmLB;
 		} catch(e) { var bgm = (NBonly)?2:1, orel = false, isboss = false, map = {bgmNB:2,bgmDB:2,bgmNN:2,bgmDN:1}; }
 		if (b>0) {
 			eventqueue.push([wait,[3000,(isboss||(NBonly && map.bgmDN!=map.bgmNN))]]);

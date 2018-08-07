@@ -4,8 +4,12 @@ function InitUI() {
 	MAPNUM = CHDATA.event.mapnum;
 	
 	for (var mapnum in CHDATA.event.maps) {
-		if (!CHDATA.event.maps[mapnum].part) continue;
-		mapChangePart(WORLD,mapnum,CHDATA.event.maps[mapnum].part);
+		if (CHDATA.event.maps[mapnum].part){
+			mapChangePart(WORLD,mapnum,CHDATA.event.maps[mapnum].part);
+		}
+		if (CHDATA.event.maps[mapnum].hardLock){
+			mapChangeLock(CHDATA.event.maps[mapnum].diff,WORLD,MAPNUM);
+		}
 	}
 
 	$('#equipfilters').html('');
@@ -837,11 +841,12 @@ function chPlayerStart() {
 }
 
 function chLoadMap(mapnum) {
+	var mapnumber = MAPNUM;
 	stage.removeChild(map);
 	if (MAPDATA[WORLD].maps[MAPNUM].hiddenNodes) {
-		mapnum += MAPDATA[WORLD].maps[MAPNUM].currentState();
+		 mapnumber += MAPDATA[WORLD].maps[MAPNUM].currentState();
 	}
-	map = PIXI.Sprite.fromImage('assets/maps/'+CHDATA.event.world+'/'+mapnum+'.png');
+	map = PIXI.Sprite.fromImage('assets/maps/'+CHDATA.event.world+'/'+mapnumber+'.png');
 	stage.addChildAt(map,stage.getChildIndex(mapShutterBottom)+1);
 
 	for (var letter in mapnodes) { stage.removeChild(mapnodes[letter]); }
@@ -915,7 +920,7 @@ function mapPhase2(nextletter) {
 	}
 
 	eventqueue.push([mapMoveShip,[mapship,nextnode.x+MAPOFFX,nextnode.y+MAPOFFY]]);
-	
+
 	switch (nextnode.type) {
 		case 1: //battle
 			eventqueue.push([mapBattleNode,[mapship,nextletter]]);
@@ -1204,28 +1209,50 @@ function prepBattle(letter) {
 		var sid = compd.c[i];
 		enemies.push(createDefaultShip(sid));
 	}
-	FLEETS2[0] = new Fleet(1);
-	FLEETS2[0].loadShips(enemies);
-	FLEETS2[0].formation = ALLFORMATIONS[compd.f];
+	var emain = FLEETS2[0] = new Fleet(1);
+	emain.loadShips(enemies);
+	if (compd.ce){
+		
+		var eescort = new Fleet(1,emain)
+		var enemies2 = [];
+		for (var i=0; i<compd.c.length; i++) {
+			var sid = compd.ce[i];
+			enemies2.push(createDefaultShip(sid));
+		}
+
+		eescort.loadShips(enemies2);
+		eescort.formation = ALLFORMATIONS[compd.f+'E'];
+	}
+	emain.formation = ALLFORMATIONS[compd.f];
 	
 	if (mapdata.debuffAmount) {
 		var debuffCheck = MAPDATA[WORLD].maps[MAPNUM].debuffCheck;
 		if (debuffCheck && debuffCheck(CHDATA.event.maps[MAPNUM].debuff)) {
-			switch (WORLD) {
-				case 31:
-					FLEETS2[0].ships[0].debuff = mapdata.debuffAmount;
-					break;
-				
-				case 35:
-					FLEETS2[0].ships.forEach((ship, idx) => {
-						if ([1696,1697,1698,1702,1703,1704].includes(ship.mid)) { FLEETS2[0].ships[idx].debuff = mapdata.debuffAmount; }
-						if ([1705,1706,1707].includes(ship.mid)) { FLEETS2[0].ships[idx].debuff = mapdata.debuffAmount * 2; }
-					});
-					break;
-					}
-
+			if (typeof mapdata.debuffAmount === 'object') {
+				for (var i=0; i<FLEETS2[0].ships.length; i++) {
+					var ship = FLEETS2[0].ships[i];
+					if (mapdata.debuffAmount[ship.mid]) ship.debuff = mapdata.debuffAmount[ship.mid];
+				}
+				console.log('debuff applied by mid');
+			} else if (mapdata.debuffAmount) {
+				FLEETS2[0].ships[0].debuff = mapdata.debuffAmount;
+				console.log('debuff applied to flag');
 			}
-			console.log('debuff applied');
+		}
+	}
+	if (mapdata.historicalBuff) {
+		for (var i=0; i<FLEETS1[0].ships.length; i++) {
+			var ship = FLEETS1[0].ships[i];
+			var baseid = getBaseId(ship.mid);
+			if (mapdata.historicalBuff[baseid]) ship.buff = mapdata.historicalBuff[baseid];
+		}
+		if (CHDATA.fleets.combined) {
+			for (var i=0; i<FLEETS1[1].ships.length; i++) {
+				var ship = FLEETS1[1].ships[i];
+				var baseid = getBaseId(ship.mid);
+				if (mapdata.historicalBuff[baseid]) ship.buff = mapdata.historicalBuff[baseid];
+			}
+		}
 	}
 	
 	if (CHDATA.fleets.combined) {
@@ -1294,7 +1321,13 @@ function prepBattle(letter) {
 	}
 	
 	var res;
-	if (CHDATA.fleets.combined) res = simCombined(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
+	// 12 vs 6
+	if (CHDATA.fleets.combined && !compd.ce) res = simCombined(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
+	// 12 vs 12
+	else if (CHDATA.fleets.combined && compd.ce) res = sim12vs12(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
+	// 6 vs 12
+	else if (compd.ce) res = sim6vs12(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
+	// 6 vs 6
 	else res = sim(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true);
 	if (FLEETS2[0].ships[0].debuff) BAPI.data.api_boss_damaged = 1;
 	CHAPI.battles.push(BAPI);
@@ -1402,6 +1435,14 @@ function endMap() {
 			if (MAPDATA[WORLD].maps[MAPNUM].debuffCheck(CHDATA.event.maps[MAPNUM].debuff)) {
 				CHDATA.event.maps[MAPNUM].debuffed = true;
 				alert('DEBUFF');
+			}
+		}
+
+		if (MAPDATA[WORLD].maps[MAPNUM].hiddenNodes && !CHDATA.event.maps[MAPNUM].unlocked) {
+			if (!CHDATA.event.maps[MAPNUM].debuff) CHDATA.event.maps[MAPNUM].debuff = {};
+			if (MAPDATA[WORLD].maps[MAPNUM].unlockCheck(CHDATA.event.maps[MAPNUM].debuff)) {
+				CHDATA.event.maps[MAPNUM].unlocked = true;
+				alert('Unlocked');
 			}
 		}
 		
@@ -1995,11 +2036,13 @@ function chReturnSortie() {
 	for (var i=0; i<FLEETS1[0].ships.length; i++) {
 		if (!FLEETS1[0].supportType) FLEETS1[0].ships[i].morale -= 15;
 		if (FLEETS1[0].ships[i].morale < 49) FLEETS1[0].ships[i].morale = 49;
+		delete FLEETS1[0].ships[i].buff;
 	}
 	if (CHDATA.fleets.combined && FLEETS1[1]) {
 		for (var i=0; i<FLEETS1[1].ships.length; i++) {
 			if (!FLEETS1[1].supportType) FLEETS1[1].ships[i].morale -= 15;
 			if (FLEETS1[1].ships[i].morale < 49) FLEETS1[1].ships[i].morale = 49;
+			delete FLEETS1[1].ships[i].buff;
 		}
 	}
 	if (CHDATA.fleets.supportN && FLEETS1S[0]) {

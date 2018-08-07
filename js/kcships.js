@@ -653,7 +653,6 @@ Ship.prototype.numBombers = function () {
 	}
 	return planes;
 }
-
 //------------------
 
 function DD(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {
@@ -732,7 +731,16 @@ function CV(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {
 CV.prototype = Object.create(Ship.prototype);
 CV.prototype.canTorp = function() { return false; }
 CV.prototype.canNB = function() { return (this.nightattack && this.HP/this.maxHP > .25 && !this.retreated); }
-CV.prototype.canAS = function() { return false; }
+CV.prototype.canAS = function() { 
+	let DBflag = false;
+	let TBflag = false;
+	for (var i=0; i<this.equips.length; i++) {
+		var equip = this.equips[i];
+		if (equip.type == DIVEBOMBER && this.planecount[i] > 0) DBflag = true;
+		if (equip.type == TORPBOMBER && this.planecount[i] > 0) TBflag = true;
+	}
+	return DBflag && TBflag ? 7 : false;
+ }
 CV.prototype.APweak = true;
 CV.prototype.canShell = function() {
 	if (this.HP <= 0) return false;
@@ -936,6 +944,41 @@ LandBase.prototype.getCost = function() {
 		cost[2] += (this.PLANESLOTS[i] - this.planecount[i])*5;
 	}
 	return cost;
+}
+LandBase.prototype.slotShotdown = function(airState) {
+	const airStateMod = [1, 4, 6, 8, 10][airState + 2] || 6;
+	const minShotdownSlots = [],
+		maxShotdownSlots = [];
+	// Slot-based matching
+	this.equips.forEach(plane => {
+		let minShotdown = 0,
+			maxShotdown = 0;
+		if(plane.type == INTERCEPTOR){
+			const interceptStat = plane.ACC || 0,
+				antiBombingStat = plane.EV || 0;
+			minShotdown = 6.5 * airStateMod +
+				3.5 * (antiBombingStat + airStateMod * Math.min(interceptStat, 1));
+			// Exclusive to the upper bound
+			maxShotdown = minShotdown + 3.5 * (airStateMod + antiBombingStat - 1);
+		} else {
+			// If there is no plane, then shotdown depends on air state only,
+			// same formula is still applied, without bonus from stats.
+			minShotdown = 6.5 * airStateMod;
+			maxShotdown = minShotdown + 3.5 * (airStateMod - 1);
+		}
+		minShotdownSlots.push(minShotdown);
+		maxShotdownSlots.push(maxShotdown);
+	});
+	if (minShotdownSlots.length < 4){
+		for (var i=minShotdownSlots.length; i<4; i++){
+			minShotdownSlots.push(6.5 * airStateMod);
+			maxShotdownSlots.push(6.5 * airStateMod + 3.5 * (airStateMod - 1));
+		}
+	}
+	return {
+		minShotdownSlots,
+		maxShotdownSlots,
+	};
 }
 LandBase.createJetLandBase = function(landbases) {
 	var equips = [], planecounts = [];

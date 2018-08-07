@@ -1362,10 +1362,16 @@ function chSortieChangeDiff(diff) {
 		mapChangePart(WORLD,MAPNUM,1);
 		CHDATA.event.maps[CHDATA.event.mapnum].part = 1;
 	}
+	if (MAPDATA[WORLD].maps[MAPNUM].extraLock){
+		mapChangeLock(diff,WORLD,MAPNUM);
+	}
+	if (CHDATA.event.maps[CHDATA.event.mapnum].diff < diff && WORLD >= 35){
+		delete CHDATA.event.maps[CHDATA.event.mapnum].debuff;
+		delete CHDATA.event.maps[CHDATA.event.mapnum].debuffed;
+		delete CHDATA.event.maps[CHDATA.event.mapnum].unlocked;
+	}
 	CHDATA.event.maps[CHDATA.event.mapnum].diff = diff;
 	CHDATA.event.maps[CHDATA.event.mapnum].hp = getMapHP(WORLD,CHDATA.event.mapnum,diff);
-	delete CHDATA.event.maps[CHDATA.event.mapnum].debuff;
-	delete CHDATA.event.maps[CHDATA.event.mapnum].debuffed;
 }
 
 var SORTIEERRORS = {
