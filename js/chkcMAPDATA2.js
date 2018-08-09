@@ -6297,7 +6297,7 @@ var MAPDATA = {
 						type: 1,
 						x: 651,
 						y: 201,
-						route: 'H',
+						route: 'L',
 						compDiff: {
 							3:['Hard 1','Hard 2','Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3'],
