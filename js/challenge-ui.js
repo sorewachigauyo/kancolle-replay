@@ -801,12 +801,13 @@ function chDoStartChecks() {
 	
 	chDoStartChecksFleet(1,errors);
 	
-	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,LHA:0,AS:0,AR:0,AO:0,CT:0,DE:0,total:0,ids:[]};
+	var counts = {DD:0,CL:0,CLT:0,CA:0,CAV:0,BB:0,FBB:0,BBV:0,AV:0,SS:0,SSV:0,CVL:0,CV:0,CVB:0,CVE:0,LHA:0,AS:0,AR:0,AO:0,CT:0,DE:0,total:0,ids:[]};
 	var flag = null
 	for (var i=0; i<CHDATA.fleets[1].length; i++) {
 		if (!CHDATA.fleets[1][i]) continue;
 		if (!flag) flag = CHDATA.fleets[1][i];
 		counts[SHIPDATA[CHDATA.ships[CHDATA.fleets[1][i]].masterId].type]++;
+		if (SHIPDATA[CHDATA.ships[CHDATA.fleets[1][i]].masterId].ASW > 0 && SHIPDATA[CHDATA.ships[CHDATA.fleets[1][i]].masterId].type === 'CVL') counts['CVE']++;
 		counts.ids.push(CHDATA.ships[CHDATA.fleets[1][i]].masterId);
 		counts.total++;
 	}
@@ -842,7 +843,7 @@ function chDoStartChecks() {
 			if (counts.CLT) errors.push('Main Fleet: CLT not allowed');
 			if (counts.CA) errors.push('Main Fleet: CA not allowed');
 			if (counts.FBB + counts.BB) errors.push('Main Fleet: (F)BB not allowed');
-			if (counts.CV+counts.CVB+counts.CVL) errors.push('Main Fleet: CV(L) not allowed');
+			if (counts.CV+counts.CVB+counts.CVL !== counts.CVE) errors.push('Main Fleet: CV(L) not allowed');
 			if (counts.SS+counts.SSV) errors.push('Main Fleet: SS(V) not allowed');
 			if (counts.AR) errors.push('Main Fleet: AR not allowed');
 		}
@@ -1306,6 +1307,7 @@ function chUpdateFleetInfo(fleetnum) {
 	if (MAPDATA[CHDATA.event.world].transportCalc && WORLD != 20) {
 		let tp = MAPDATA[CHDATA.event.world].transportCalc(ships);
 		$('#fleettransport'+fleetnum).text(tp);
+		$('#fleettransport'+fleetnum).attr('title', 'S : '+tp+' / A : '+MAPDATA[CHDATA.event.world].transportCalc(ships, 'A'));
 		$('#fleettransport'+fleetnum).parent().show();
 	} else {
 		$('#fleettransport'+fleetnum).parent().hide();
