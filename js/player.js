@@ -863,7 +863,7 @@ function processAPI(root) {
 						var attacker = (i>=6)? f1[i-6] : f1[i];
 						var crit = (rai.api_fcl[i+1] == 2);
 						shots.push([attacker,target,rai.api_fydam[i+1],crit]);
-						target.hpTrack -= Math.floor(rai.api_edam[i+1]);
+						target.hpTrack -= Math.floor(rai.api_fydam[i+1]);
 					}
 					if (rai.api_erai[i+1] > 0) {
 						var target;
@@ -872,7 +872,7 @@ function processAPI(root) {
 						var attacker = (ecombined)? f2c[i-6] : f2[i];
 						var crit = (rai.api_ecl[i+1] == 2);
 						shots.push([attacker,target,rai.api_eydam[i+1],crit]);
-						target.hpTrack -= Math.floor(rai.api_fdam[i+1]);
+						target.hpTrack -= Math.floor(rai.api_eydam[i+1]);
 					}
 				} else {
 					if (rai.api_frai[i] > -1) {
