@@ -193,6 +193,7 @@ function chAddDragEquip(fleetnum,shipslot,eqslot) {
 			let eqid1 = CHDATA.ships[sid].items[DIALOGITEMSEL-1];
 			let eqid2 = CHDATA.ships[sid].items[eqslot-1];
 			chTableSetEquip(eqid1,DIALOGFLEETSEL,DIALOGSLOTSEL,eqslot);
+			chShipEquipItem(sid,-1,DIALOGITEMSEL-1);
 			chShipEquipItem(sid,eqid1,eqslot-1);
 			chTableSetEquip(eqid2,DIALOGFLEETSEL,DIALOGSLOTSEL,DIALOGITEMSEL);
 			chShipEquipItem(sid,eqid2,DIALOGITEMSEL-1);
@@ -861,7 +862,7 @@ function chDoStartChecks() {
 			if (countsE.AV > 1) errors.push('Escort Fleet: Max 1 AV');
 			if (['SS','SSV'].indexOf(SHIPDATA[CHDATA.ships[flagE].masterId].type) != -1) errors.push('Escort Fleet: Flagship cannot be SS(V)');
 		} else if (CHDATA.fleets.combined == 3) {
-			if (['CL','CT'].indexOf(SHIPDATA[CHDATA.ships[flag].masterId].type) != -1) errors.push('Escort Fleet: Flagship must be CL/CT');
+			if (['CL','CT'].indexOf(SHIPDATA[CHDATA.ships[flagE].masterId].type) == -1) errors.push('Escort Fleet: Flagship must be CL/CT');
 			if (countsE.CL + countsE.CT < 1) errors.push('Escort Fleet: Min 1 CL/CT');
 			if (countsE.CL + countsE.CT > 2) errors.push('Escort Fleet: Max 2 CL/CT');
 			if (countsE.DD < 3) errors.push('Escort Fleet: Min 3 DD');

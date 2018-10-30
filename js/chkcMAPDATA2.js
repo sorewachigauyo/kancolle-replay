@@ -21956,10 +21956,21 @@ var MAPDATA = {
 						x: 619,
 						y: 267,
 						distance: 8,
+						setupSpecial: function() {
+							if (!CHDATA.event.maps[7].debuffed) return;
+							for (let ship of FLEETS2[0].ships) {
+								ship.EV *= .5;
+							}
+						},
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3'],
 							1: ['Easy 1','Easy 2','Easy 3'],
+						},
+						compDiffF: {
+							3: ['Hard 2','Hard 3'],
+							2: ['Medium 1','Medium 3'],
+							1: ['Easy 1','Easy 3'],
 						},
 						routeL: { 45: 'U', 42: 'V' }
 					},
