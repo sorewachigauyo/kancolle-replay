@@ -47,33 +47,55 @@ function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombi
 		var dataroot = (NBonly)? BAPI.yasen : BAPI.data;
 		dataroot.api_formation = [F1.formation.id,F2.formation.id,{1:1,.8:2,1.2:3,.6:4}[ENGAGEMENT]];
 		dataroot.api_dock_id = 1;
-		dataroot.api_maxhps = [-1];
-		dataroot.api_nowhps = [-1];
 		var retreatlist = [];
 		for (var i=0; i<ships1.length; i++) if (ships1[i].retreated) retreatlist.push(i+1);
 		if (retreatlist.length) dataroot.api_escape_idx = retreatlist;
 		var retreatlistC = [];
 		for (var i=0; i<ships1C.length; i++) if (ships1C[i].retreated) retreatlistC.push(i+1);
 		if (retreatlistC.length) dataroot.api_escape_idx_combined = retreatlistC;
-		for (var i=0; i<6; i++) {
-			dataroot.api_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
-			dataroot.api_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+		if (NEWFORMAT) {
+			dataroot.api_f_maxhps = []; dataroot.api_f_nowhps = [];
+			dataroot.api_e_maxhps = []; dataroot.api_e_nowhps = [];
+			for (var i=0; i<6; i++) {
+				dataroot.api_f_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
+				dataroot.api_f_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+			}
+		} else {
+			dataroot.api_maxhps = [-1];
+			dataroot.api_nowhps = [-1];
+			for (var i=0; i<6; i++) {
+				dataroot.api_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
+				dataroot.api_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+			}
 		}
 		dataroot.api_ship_ke = [];
 		dataroot.api_eSlot = [];
 		for (var i=0; i<6; i++) {
 			dataroot.api_ship_ke.push((i<ships2.length)? ships2[i].mid : -1);
-			dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
-			dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			if (NEWFORMAT) {
+				dataroot.api_e_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+				dataroot.api_e_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			} else {
+				dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+				dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			}
 			dataroot.api_eSlot.push([]);
 			for (var j=0; j<5; j++)
 				dataroot.api_eSlot[i].push((i<ships2.length && j<ships2[i].equips.length)? ships2[i].equips[j].mid : -1);
 		}
-		dataroot.api_nowhps_combined = [-1];
-		dataroot.api_maxhps_combined = [-1];
-		for (var i=0; i<6; i++) {
-			dataroot.api_nowhps_combined.push((i<ships1C.length)? ships1C[i].HP : -1);
-			dataroot.api_maxhps_combined.push((i<ships1C.length)? ships1C[i].maxHP : -1);
+		if (NEWFORMAT) {
+			dataroot.api_f_maxhps_combined = []; dataroot.api_f_nowhps_combined = [];
+			for (var i=0; i<6; i++) {
+				dataroot.api_f_nowhps_combined.push((i<ships1C.length)? ships1C[i].HP : -1);
+				dataroot.api_f_maxhps_combined.push((i<ships1C.length)? ships1C[i].maxHP : -1);
+			}
+		} else {
+			dataroot.api_nowhps_combined = [-1];
+			dataroot.api_maxhps_combined = [-1];
+			for (var i=0; i<6; i++) {
+				dataroot.api_nowhps_combined.push((i<ships1C.length)? ships1C[i].HP : -1);
+				dataroot.api_maxhps_combined.push((i<ships1C.length)? ships1C[i].maxHP : -1);
+			}
 		}
 		var escape = [];
 		for (var i=0; i<ships1.length; i++) {
@@ -140,10 +162,11 @@ function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombi
 	//lbas
 	if (LBASwaves && LBASwaves.length && !NBonly) {
 		if (C) BAPI.data.api_air_base_attack = [];
+		for (var i=0; i<LBASwaves.length; i++) LBASwaves[i]._currentSlots = LBASwaves[i].planecount.slice();
 		for (var i=0; i<LBASwaves.length; i++) {
 			if (LBASwaves[i].equips.length <= 0) continue;
 			if (alive1.length+subsalive1.length > 0 && alive2.length+subsalive2.length > 0) {
-				LBASwaves[i].planecount = LBASwaves[i].PLANESLOTS.slice();
+				LBASwaves[i].planecount = LBASwaves[i]._currentSlots.slice();
 				compareAP(LBASwaves[i],F2);
 				var LBAPI = {api_plane_from:[[-1],[-1]],api_stage1:null,api_stage2:null,api_stage3:null};
 				LBASPhase(LBASwaves[i],alive2,subsalive2,false,(C)?LBAPI:undefined);
@@ -379,12 +402,17 @@ function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombi
 		for (var i=0; i<ships1.length; i++) {
 			if (ships1[i].HP <= 0) continue;
 			if (ships1[i].retreated) continue;
+			var fuel = ships1[i].fuel || 20;
+			var ammo = ships1[i].ammo || 20;
 			if (bombing) {
-				ships1[i].fuelleft -= .5;
-				ships1[i].ammoleft -= .5;
+				ships1[i].fuelleft -= 10*Math.floor(.08*fuel)/fuel;
+				ships1[i].ammoleft -= 10*Math.floor(.04*ammo)/ammo;
 			} else {
-				ships1[i].fuelleft -= 2;
-				if (!noammo) ships1[i].ammoleft -= (didNB)? 3 : 2;
+				ships1[i].fuelleft -= 10*Math.floor(.2*fuel)/fuel;
+				if (!noammo) {
+					ships1[i].ammoleft -= 10*Math.floor(.2*ammo)/ammo;
+					if (didNB) ships1[i].ammoleft -= 10*Math.ceil(.1*ammo)/ammo;
+				}
 			}
 			if (ships1[i].fuelleft < 0) ships1[i].fuelleft = 0;
 			if (ships1[i].ammoleft < 0) ships1[i].ammoleft = 0;
@@ -393,12 +421,17 @@ function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombi
 		for (var i=0; i<ships1C.length; i++) {
 			if (ships1C[i].HP <= 0) continue;
 			if (ships1C[i].retreated) continue;
+			var fuel = ships1C[i].fuel || 20;
+			var ammo = ships1C[i].ammo || 20;
 			if (bombing) {
-				ships1C[i].fuelleft -= .5;
-				ships1C[i].ammoleft -= .5;
+				ships1C[i].fuelleft -= 10*Math.floor(.08*fuel)/fuel;
+				ships1C[i].ammoleft -= 10*Math.floor(.04*ammo)/ammo;
 			} else {
-				ships1C[i].fuelleft -= 2;
-				if (!noammo) ships1C[i].ammoleft -= (didNB)? 3 : 2;
+				ships1C[i].fuelleft -= 10*Math.floor(.2*fuel)/fuel;
+				if (!noammo) {
+					ships1C[i].ammoleft -= 10*Math.floor(.2*ammo)/ammo;
+					if (didNB) ships1C[i].ammoleft -= 10*Math.ceil(.1*ammo)/ammo;
+				}
 			}
 			if (ships1C[i].fuelleft < 0) ships1C[i].fuelleft = 0;
 			if (ships1C[i].ammoleft < 0) ships1C[i].ammoleft = 0;
@@ -632,15 +665,25 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 		var dataroot = (NBonly)? BAPI.yasen : BAPI.data;
 		dataroot.api_formation = [F1.formation.id,F2.formation.id,{1:1,.8:2,1.2:3,.6:4}[ENGAGEMENT]];
 		dataroot.api_dock_id = 1;
-		dataroot.api_maxhps = [-1];
-		dataroot.api_maxhps_combined = [-1];
-		dataroot.api_nowhps = [-1];
-		dataroot.api_nowhps_combined = [-1];
-		for (var i=0; i<6; i++) {
-			dataroot.api_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
-			dataroot.api_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
-			dataroot.api_nowhps_combined.push(-1);
-			dataroot.api_maxhps_combined.push(-1);
+		if (NEWFORMAT) {
+			dataroot.api_f_maxhps = []; dataroot.api_f_nowhps = [];
+			dataroot.api_e_maxhps = []; dataroot.api_e_nowhps = [];
+			dataroot.api_e_maxhps_combined = []; dataroot.api_e_nowhps_combined = [];
+			for (let ship of ships1) {
+				dataroot.api_f_nowhps.push(ship.HP);
+				dataroot.api_f_maxhps.push(ship.maxHP);
+			}
+		} else {
+			dataroot.api_maxhps = [-1];
+			dataroot.api_maxhps_combined = [-1];
+			dataroot.api_nowhps = [-1];
+			dataroot.api_nowhps_combined = [-1];
+			for (var i=0; i<6; i++) {
+				dataroot.api_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
+				dataroot.api_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+				dataroot.api_nowhps_combined.push(-1);
+				dataroot.api_maxhps_combined.push(-1);
+			}
 		}
 		dataroot.api_ship_ke = [];
 		dataroot.api_ship_ke_combined = [];
@@ -648,16 +691,26 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 		dataroot.api_eSlot_combined = [];
 		for (var i=0; i<6; i++) {
 			dataroot.api_ship_ke.push((i<ships2.length)? ships2[i].mid : -1);
-			dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
-			dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			if (NEWFORMAT) {
+				dataroot.api_e_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+				dataroot.api_e_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			} else {
+				dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+				dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			}
 			dataroot.api_eSlot.push([]);
 			for (var j=0; j<5; j++)
 				dataroot.api_eSlot[i].push((i<ships2.length && j<ships2[i].equips.length)? ships2[i].equips[j].mid : -1);
 		}
 		for (var i=0; i<6; i++) {
 			dataroot.api_ship_ke_combined.push((i<ships2C.length)? ships2C[i].mid : -1);
-			dataroot.api_nowhps_combined.push((i<ships2C.length)? ships2C[i].HP : -1);
-			dataroot.api_maxhps_combined.push((i<ships2C.length)? ships2C[i].maxHP : -1);
+			if (NEWFORMAT) {
+				dataroot.api_e_nowhps_combined.push((i<ships2C.length)? ships2C[i].HP : -1);
+				dataroot.api_e_maxhps_combined.push((i<ships2C.length)? ships2C[i].maxHP : -1);
+			} else {
+				dataroot.api_nowhps_combined.push((i<ships2C.length)? ships2C[i].HP : -1);
+				dataroot.api_maxhps_combined.push((i<ships2C.length)? ships2C[i].maxHP : -1);
+			}
 			dataroot.api_eSlot_combined.push([]);
 			for (var j=0; j<5; j++)
 				dataroot.api_eSlot_combined[i].push((i<ships2C.length && j<ships2C[i].equips.length)? ships2C[i].equips[j].mid : -1);
@@ -712,10 +765,11 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 	//lbas
 	if (LBASwaves && LBASwaves.length && !NBonly) {
 		if (C) BAPI.data.api_air_base_attack = [];
+		for (var i=0; i<LBASwaves.length; i++) LBASwaves[i]._currentSlots = LBASwaves[i].planecount.slice();
 		for (var i=0; i<LBASwaves.length; i++) {
 			if (LBASwaves[i].equips.length <= 0) continue;
 			if (alive1.length+subsalive1.length > 0 && alive2.length+subsalive2.length+alive2C.length+subsalive2C.length > 0) {
-				LBASwaves[i].planecount = LBASwaves[i].PLANESLOTS.slice();
+				LBASwaves[i].planecount = LBASwaves[i]._currentSlots.slice();
 				compareAP(LBASwaves[i],F2,false,true);
 				var LBAPI = {api_plane_from:[[-1],[-1]],api_stage1:null,api_stage2:null,api_stage3:null};
 				LBASPhase(LBASwaves[i],alive2.concat(alive2C),subsalive2.concat(subsalive2C),false,(C)?LBAPI:undefined);
@@ -922,13 +976,17 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 		for (var i=0; i<ships1.length; i++) {
 			if (ships1[i].HP <= 0) continue;
 			if (ships1[i].retreated) continue;
+			var fuel = ships1[i].fuel || 20;
+			var ammo = ships1[i].ammo || 20;
 			if (bombing) {
-				ships1[i].fuelleft -= .5;
-				ships1[i].ammoleft -= .5;
+				ships1[i].fuelleft -= 10*Math.floor(.08*fuel)/fuel;
+				ships1[i].ammoleft -= 10*Math.floor(.04*ammo)/ammo;
 			} else {
-				ships1[i].fuelleft -= 2;
-				if (!noammo) ships1[i].ammoleft -= (didNB)? 3 : 2;
-				else if (didNB) ships1[i].ammoleft -= 1;
+				ships1[i].fuelleft -= 10*Math.floor(.2*fuel)/fuel;
+				if (!noammo) {
+					ships1[i].ammoleft -= 10*Math.floor(.2*ammo)/ammo;
+					if (didNB) ships1[i].ammoleft -= 10*Math.ceil(.1*ammo)/ammo;
+				}
 			}
 			if (ships1[i].fuelleft < 0) ships1[i].fuelleft = 0;
 			if (ships1[i].ammoleft < 0) ships1[i].ammoleft = 0;
@@ -1023,40 +1081,68 @@ function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing
 		var dataroot = (NBonly)? BAPI.yasen : BAPI.data;
 		dataroot.api_formation = [F1.formation.id,F2.formation.id,{1:1,.8:2,1.2:3,.6:4}[ENGAGEMENT]];
 		dataroot.api_dock_id = 1;
-		dataroot.api_maxhps = [-1];
-		dataroot.api_nowhps = [-1];
 		var retreatlist = [];
 		for (var i=0; i<ships1.length; i++) if (ships1[i].retreated) retreatlist.push(i+1);
 		if (retreatlist.length) dataroot.api_escape_idx = retreatlist;
 		var retreatlistC = [];
 		for (var i=0; i<ships1C.length; i++) if (ships1C[i].retreated) retreatlistC.push(i+1);
 		if (retreatlistC.length) dataroot.api_escape_idx_combined = retreatlistC;
-		for (var i=0; i<6; i++) {
-			dataroot.api_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
-			dataroot.api_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+		if (NEWFORMAT) {
+			dataroot.api_f_maxhps = []; dataroot.api_f_nowhps = [];
+			dataroot.api_e_maxhps = []; dataroot.api_e_nowhps = [];
+			for (var i=0; i<6; i++) {
+				dataroot.api_f_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
+				dataroot.api_f_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+			}
+		} else {
+			dataroot.api_maxhps = [-1];
+			dataroot.api_nowhps = [-1];
+			for (var i=0; i<6; i++) {
+				dataroot.api_nowhps.push((i<ships1.length)? ships1[i].HP : -1);
+				dataroot.api_maxhps.push((i<ships1.length)? ships1[i].maxHP : -1);
+			}
 		}
 		dataroot.api_ship_ke = [];
 		dataroot.api_eSlot = [];
 		for (var i=0; i<6; i++) {
 			dataroot.api_ship_ke.push((i<ships2.length)? ships2[i].mid : -1);
-			dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
-			dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			if (NEWFORMAT) {
+				dataroot.api_e_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+				dataroot.api_e_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			} else {
+				dataroot.api_nowhps.push((i<ships2.length)? ships2[i].HP : -1);
+				dataroot.api_maxhps.push((i<ships2.length)? ships2[i].maxHP : -1);
+			}
 			dataroot.api_eSlot.push([]);
 			for (var j=0; j<5; j++)
 				dataroot.api_eSlot[i].push((i<ships2.length && j<ships2[i].equips.length)? ships2[i].equips[j].mid : -1);
 		}
-		dataroot.api_nowhps_combined = [-1];
-		dataroot.api_maxhps_combined = [-1];
 		dataroot.api_ship_ke_combined = [];
 		dataroot.api_eSlot_combined = [];
-		for (var i=0; i<6; i++) {
-			dataroot.api_nowhps_combined.push((i<ships1C.length)? ships1C[i].HP : -1);
-			dataroot.api_maxhps_combined.push((i<ships1C.length)? ships1C[i].maxHP : -1);
+		if (NEWFORMAT) {
+			dataroot.api_f_maxhps_combined = []; dataroot.api_f_nowhps_combined = [];
+			dataroot.api_e_maxhps_combined = []; dataroot.api_e_nowhps_combined = [];
+			for (var i=0; i<6; i++) {
+				dataroot.api_f_nowhps_combined.push((i<ships1C.length)? ships1C[i].HP : -1);
+				dataroot.api_f_maxhps_combined.push((i<ships1C.length)? ships1C[i].maxHP : -1);
+			}
+		} else {
+			dataroot.api_nowhps_combined = [-1];
+			dataroot.api_maxhps_combined = [-1];
+			for (var i=0; i<6; i++) {
+				dataroot.api_nowhps_combined.push((i<ships1C.length)? ships1C[i].HP : -1);
+				dataroot.api_maxhps_combined.push((i<ships1C.length)? ships1C[i].maxHP : -1);
+			}
 		}
 		for (var i=0; i<6; i++) {
 			dataroot.api_ship_ke_combined.push((i<ships2C.length)? ships2C[i].mid : -1);
-			dataroot.api_nowhps_combined.push((i<ships2C.length)? ships2C[i].HP : -1);
-			dataroot.api_maxhps_combined.push((i<ships2C.length)? ships2C[i].maxHP : -1);
+			if (NEWFORMAT) {
+				dataroot.api_e_nowhps_combined.push((i<ships2C.length)? ships2C[i].HP : -1);
+				dataroot.api_e_maxhps_combined.push((i<ships2C.length)? ships2C[i].maxHP : -1);
+			} else {
+				dataroot.api_nowhps_combined.push((i<ships2C.length)? ships2C[i].HP : -1);
+				dataroot.api_maxhps_combined.push((i<ships2C.length)? ships2C[i].maxHP : -1);
+			}
 			dataroot.api_eSlot_combined.push([]);
 			for (var j=0; j<5; j++)
 				dataroot.api_eSlot_combined[i].push((i<ships2C.length && j<ships2C[i].equips.length)? ships2C[i].equips[j].mid : -1);
@@ -1120,10 +1206,11 @@ function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing
 	//lbas
 	if (LBASwaves && LBASwaves.length && !NBonly) {
 		if (C) BAPI.data.api_air_base_attack = [];
+		for (var i=0; i<LBASwaves.length; i++) LBASwaves[i]._currentSlots = LBASwaves[i].planecount.slice();
 		for (var i=0; i<LBASwaves.length; i++) {
 			if (LBASwaves[i].equips.length <= 0) continue;
 			if (alive1.length+subsalive1.length > 0 && alive2.length+subsalive2.length+alive2C.length+subsalive2C.length > 0) {
-				LBASwaves[i].planecount = LBASwaves[i].PLANESLOTS.slice();
+				LBASwaves[i].planecount = LBASwaves[i]._currentSlots.slice();
 				compareAP(LBASwaves[i],F2,false,true);
 				var LBAPI = {api_plane_from:[[-1],[-1]],api_stage1:null,api_stage2:null,api_stage3:null};
 				LBASPhase(LBASwaves[i],alive2.concat(alive2C),subsalive2.concat(subsalive2C),false,(C)?LBAPI:undefined);
@@ -1408,12 +1495,17 @@ function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing
 		for (var i=0; i<ships1.length; i++) {
 			if (ships1[i].HP <= 0) continue;
 			if (ships1[i].retreated) continue;
+			var fuel = ships1[i].fuel || 20;
+			var ammo = ships1[i].ammo || 20;
 			if (bombing) {
-				ships1[i].fuelleft -= .5;
-				ships1[i].ammoleft -= .5;
+				ships1[i].fuelleft -= 10*Math.floor(.08*fuel)/fuel;
+				ships1[i].ammoleft -= 10*Math.floor(.04*ammo)/ammo;
 			} else {
-				ships1[i].fuelleft -= 2;
-				if (!noammo) ships1[i].ammoleft -= (didNB)? 3 : 2;
+				ships1[i].fuelleft -= 10*Math.floor(.2*fuel)/fuel;
+				if (!noammo) {
+					ships1[i].ammoleft -= 10*Math.floor(.2*ammo)/ammo;
+					if (didNB) ships1[i].ammoleft -= 10*Math.ceil(.1*ammo)/ammo;
+				}
 			}
 			if (ships1[i].fuelleft < 0) ships1[i].fuelleft = 0;
 			if (ships1[i].ammoleft < 0) ships1[i].ammoleft = 0;
@@ -1422,12 +1514,17 @@ function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing
 		for (var i=0; i<ships1C.length; i++) {
 			if (ships1C[i].HP <= 0) continue;
 			if (ships1C[i].retreated) continue;
+			var fuel = ships1C[i].fuel || 20;
+			var ammo = ships1C[i].ammo || 20;
 			if (bombing) {
-				ships1C[i].fuelleft -= .5;
-				ships1C[i].ammoleft -= .5;
+				ships1C[i].fuelleft -= 10*Math.floor(.08*fuel)/fuel;
+				ships1C[i].ammoleft -= 10*Math.floor(.04*ammo)/ammo;
 			} else {
-				ships1C[i].fuelleft -= 2;
-				if (!noammo) ships1C[i].ammoleft -= (didNB)? 3 : 2;
+				ships1C[i].fuelleft -= 10*Math.floor(.2*fuel)/fuel;
+				if (!noammo) {
+					ships1C[i].ammoleft -= 10*Math.floor(.2*ammo)/ammo;
+					if (didNB) ships1C[i].ammoleft -= 10*Math.ceil(.1*ammo)/ammo;
+				}
 			}
 			if (ships1C[i].fuelleft < 0) ships1C[i].fuelleft = 0;
 			if (ships1C[i].ammoleft < 0) ships1C[i].ammoleft = 0;
