@@ -22055,6 +22055,7 @@ var MAPDATA = {
 				name: 'E-1',
 				nameT: '2nd Striking Force, Set Sail!',
 				fleetTypes: [0],
+				allowVanguard: true,
 				bgmMap: 103,
 				bgmDN: 104,
 				bgmNN: 104,
