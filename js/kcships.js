@@ -209,7 +209,7 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 		if (eq.isnightscout) this.hasNightScout = true;
 		if (eq.type == PICKET) this.hasLookout = true;
 		if (eq.type == DIVEBOMBER || eq.type == JETBOMBER) this.hasDivebomber = true;
-		if (eq.type == FCF) this.hasFCF = true;
+		if (eq.type == FCF) this.hasFCF = equips[i];
 		if (eq.type == SUBRADAR) this.hasSubRadar = true;
 		if (eq.specialCutIn) this.numSpecialTorp = this.numSpecialTorp+1 || 1;
 		if (eq.type == REPAIR) {
@@ -364,6 +364,12 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 	if (this.equiptypes[SEAPLANEBOMBER]) this.ptAccMod *= 2;
 	
 	if (this.repairs) this.repairsOrig = this.repairs.slice();
+}
+Ship.prototype.getFormation = function() {
+	if (!this.fleet || !this.fleet.formation) return null;
+	if (this.fleet.formation.id != 6) return this.fleet.formation;
+	let threshold = Math.floor(this.fleet.ships.length/2);
+	return (this.num <= threshold)? VANGUARD1 : VANGUARD2;
 }
 
 Ship.prototype.canShell = function() { return (this.HP > 0); }
@@ -777,7 +783,10 @@ function CAV(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {
 CAV.prototype = Object.create(Ship.prototype);
 CAV.prototype.APweak = true;
 CAV.prototype.canASW = function() {
-	for (var i=0; i<this.equips.length; i++) { if (this.equips[i].isdivebomber || this.equips[i].istorpbomber) return true; }
+	for (var i=0; i<this.equips.length; i++) {
+		if (this.planecount[i] <= 0) continue;
+		if (this.equips[i].isdivebomber || this.equips[i].istorpbomber) return true;
+	}
 	return false;
 }
 CAV.prototype.rocketBarrageChance = function() {
@@ -797,10 +806,7 @@ BBV.prototype = Object.create(Ship.prototype);
 BBV.prototype.APweak = true;
 BBV.prototype.enableSecondShelling = true;
 BBV.prototype.canTorp = function() { return false; }
-BBV.prototype.canASW = function() {
-	for (var i=0; i<this.equips.length; i++) { if (this.equips[i].isdivebomber || this.equips[i].istorpbomber) return true; }
-	return false;
-}
+BBV.prototype.canASW = CAV.prototype.canASW;
 BBV.prototype.rocketBarrageChance = CAV.prototype.rocketBarrageChance;
 
 function BBVT(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {
@@ -928,10 +934,7 @@ function AV(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {
 	Ship.call(this,id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots);
 };
 AV.prototype = Object.create(Ship.prototype);
-AV.prototype.canASW = function() {
-	for (var i=0; i<this.equips.length; i++) { if (this.equips[i].isdivebomber || this.equips[i].istorpbomber) return true; }
-	return false;
-}
+AV.prototype.canASW = CAV.prototype.canASW;
 AV.prototype.rocketBarrageChance = CAV.prototype.rocketBarrageChance;
 
 function AO(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {

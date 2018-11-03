@@ -32,12 +32,18 @@ var SOUNDNAMES = {
 	'jet': { path: 'assets/sounds/182_res.sounds.battle.SE_battle_jet.mp3', voldef: .5 },
 	'siren': { path: 'assets/sounds/75_res.sounds.siren.mp3', voldef: .5 },
 	'done': { path: 'assets/sounds/41_res.sounds.SE_correct_answer3.mp3', voldef: .5 },
+	'ooyodoClear': { path: 'assets/voice/425.mp3', voldef: .5 },
 }
 SoundManager.prototype = {
 	play: function(name,vol,loop) {
 		//if (this._mute) return undefined;
 		this._sounds[name].play();
 		return this._sounds[name];
+	},
+	playNew: function(path,vol) {
+		vol = vol || .5;
+		let sound = new Howl({src:[path],volume:vol*this._volume});
+		sound.play();
 	},
 	playBGM: function(num,vol,noloop) {
 		this.stopBGM();
@@ -71,11 +77,19 @@ SoundManager.prototype = {
 		// if (slot > 10) return; //want non boss voices?
 		if (type=='nbattack' && !VOICES[shipid].nbattack) type = 'attack';
 		if (!VOICES[shipid][type]) return;
-		if (!this._sounds['V'+type+shipid]) this._sounds['V'+type+shipid] = new Howl({
-			src:[VOICES[shipid][type]],
-			volume:.4*this._volume,
-			html5:true
+		let path = VOICES[shipid][type];
+		if (window['MAPDATA'] && window['WORLD'] && MAPDATA[WORLD] && MAPDATA[WORLD].voiceSpecial) {
+			if (MAPDATA[WORLD].voiceSpecial[shipid]) {
+				path = MAPDATA[WORLD].voiceSpecial[shipid][type] || path;
+			}
+		}
+		if (!this._sounds['V'+type+shipid] || this._sounds['V'+type+shipid]._src != path) {
+			this._sounds['V'+type+shipid] = new Howl({
+				src:[path],
+				volume:.4*this._volume,
+				html5:true
 			});
+		}
 		if (this._voices[slot] && isPlayable(shipid)) {
 			this._voices[slot].stop();
 		}
@@ -173,15 +187,19 @@ var BGMLIST = {
 	95: {url:'assets/music/Sound_b_bgm_95.ogg',voldef:.5},
 	96: {url:'assets/music/Sound_b_bgm_96.ogg'},
 	97: {url:'assets/music/Sound_b_bgm_97.ogg'},
-	98: {url:'assets/music/Sound_b_bgm_98.ogg'},
+	98: {url:'assets/music/Sound_b_bgm_98.ogg',voldef:.5},
 	99: {url:'assets/music/Sound_b_bgm_99.ogg'},
 	100: {url:'assets/music/1_res.sounds.battle.BGM_100.mp3'},
 	103: {url:'assets/music/Sound_b_bgm_103.ogg'},
-	107: {url:'assets/music/107b.ogg'},
+	104: {url:'assets/music/Sound_b_bgm_104.ogg'},
+	105: {url:'assets/music/Sound_b_bgm_105.ogg'},
+	106: {url:'assets/music/Sound_b_bgm_106.ogg'},
+	107: {url:'assets/music/Sound_b_bgm_107.ogg'},
 	116: {url:'assets/music/Sound_b_bgm_116.oga'},
 	117: {url:'assets/music/Sound_b_bgm_117.oga'},
 	998: {url:'assets/music/savior of song.mp3',voldef:.25},
 	999: {url:'assets/music/Orel Cruising & LSC Song [ENG Sub].mp3',voldef:.3},
+	1107: {url:'assets/music/107b.ogg'},
 	2001: {url:'assets/music/103v.ogg', voldef:.7},
 	2027: {url:'assets/music/Sound_bgm_almi.ogg'},
 	2030: {url:'assets/music/121h.ogg'},

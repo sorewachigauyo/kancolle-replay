@@ -5018,6 +5018,57 @@ var VOICES = {
 		damage: "assets/voice/European_Princess_Broken_Form_Damaged.ogg",
 		sunk: "assets/voice/European_Princess_Sunk.ogg",
 	},
+	1767: {
+		start: "assets/voice/Night_Strait_Princesses_Intro.ogg",
+		attack: "assets/voice/Night_Strait_Princesses_Attack.ogg",
+		damage: "assets/voice/Night_Strait_Princesses_Damaged.ogg",
+	},
+	1768: {
+		start: "assets/voice/Night_Strait_Princesses_Intro.ogg",
+		attack: "assets/voice/Night_Strait_Princesses_Attack.ogg",
+		damage: "assets/voice/Night_Strait_Princesses_Damaged.ogg",
+	},
+	1769: {
+		start: "assets/voice/Night_Strait_Princesses_Intro.ogg",
+		attack: "assets/voice/Night_Strait_Princesses_Attack.ogg",
+		damage: "assets/voice/Night_Strait_Princesses_Damaged.ogg",
+	},
+	1770: {
+		start: "assets/voice/Night_Strait_Princesses_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Night_Strait_Princesses_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Night_Strait_Princesses_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Night_Strait_Princesses_Broken_Form_Sunk.ogg",
+	},
+	1771: {
+		start: "assets/voice/Night_Strait_Princesses_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Night_Strait_Princesses_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Night_Strait_Princesses_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Night_Strait_Princesses_Broken_Form_Sunk.ogg",
+	},
+	1772: {
+		start: "assets/voice/Night_Strait_Princesses_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Night_Strait_Princesses_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Night_Strait_Princesses_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Night_Strait_Princesses_Broken_Form_Sunk.ogg",
+	},
+	1773: {
+		start: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Intro.ogg",
+		attack: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Attack.ogg",
+		damage: "assets/voice/Entombed_Ant-Air_Guardian_PrincessDamaged.ogg",
+		sunk: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Debuffed_Sunk.ogg",
+	},
+	1774: {
+		start: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Intro.ogg",
+		attack: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Attack.ogg",
+		damage: "assets/voice/Entombed_Ant-Air_Guardian_PrincessDamaged.ogg",
+		sunk: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Debuffed_Sunk.ogg",
+	},
+	1775: {
+		start: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Intro.ogg",
+		attack: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Attack.ogg",
+		damage: "assets/voice/Entombed_Ant-Air_Guardian_PrincessDamaged.ogg",
+		sunk: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Debuffed_Sunk.ogg",
+	},
 	2001: {
 		start: "assets/voice/Iona_fog_-Battle_Start.ogg",
 		attack: "assets/voice/Iona_fog_-Attack.ogg",

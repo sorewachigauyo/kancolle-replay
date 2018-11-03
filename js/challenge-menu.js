@@ -1,6 +1,6 @@
 $('#dialogmainmenu').dialog({
 	autoOpen:false,
-	width:800,
+	width:815,
 	height:600,
 	draggable: false,
 	resizable: false,
@@ -98,11 +98,10 @@ function chMenuShowFiles() {
 				maxhp = getMapHP(data.event.world,mapnum,data.event.maps[mapnum].diff) || 0;
 			}
 			if (!maxhp) continue;
-			if (num == '23') console.log(progress + ' ' + maxhp + ' ' + nowhp + ' ' + total);
 			progress += (maxhp-nowhp)/maxhp/total;
 			if (nowhp <= 0) {
 				var type;
-				if (data.event.world == 20) type = 2;
+				if (data.event.world == 20) type = 0;
 				else if (data.config.diffmode == 2) type = data.event.maps[mapnum].diff;
 				else {
 					if (data.player.level >= 80) type = 3;
@@ -113,13 +112,14 @@ function chMenuShowFiles() {
 			}
 		}
 		if (medals.length >= Object.keys(mdata.maps).length && progress >= .9999) progress = 1; //fix JS float rounding
+		if (progress >= 1 && data.event.world == 40) { medals.push(null); medals.push(40); }
 		var divMedal = $('<div style="height:50px"></div>');
 		var divBar = $('<div style="width:420px;height:20px;float:left"></div>');
 		var height = (medals.length > 10)? 23 : 50;
 		for (var i=0; i<medals.length; i++) {
 			var div = $('<div style="width:'+height+'px;height:'+height+'px;float:left"></div>');
 			divMedal.append(div);
-			if (!medals[i]) continue;
+			if (medals[i] == null) continue;
 			div.append($('<img src="assets/maps/medal'+medals[i]+'.png" style="height:'+(height*.8)+'px;margin-top:8px" />'));
 		}
 		divMain.append(divMedal);
@@ -262,7 +262,7 @@ function chAddReward(data,forceNew) {
 				for (let sid in CHDATA.ships) {
 					let shipC = CHDATA.ships[sid];
 					if (!shipC.disabled) continue;
-					if (shipC.masterId == data.ships[i] && (!shipExisting || shipC.LVL > shipExisting.LVL)) {
+					if (getBaseId(shipC.masterId) == data.ships[i] && (!shipExisting || shipC.LVL > shipExisting.LVL)) {
 						shipExisting = shipC;
 					}
 				}
@@ -350,13 +350,21 @@ function chShowReward(data,tracker) {
 		if (tracker < numShips) {
 			$('#rewardship').attr('src','assets/icons/'+SHIPDATA[data.ships[tracker]].image);
 		} else {
+			let imageSpecial = {
+				56: 'assets/maps/22/Shinden_Kai_056_Card.png',
+				175: 'assets/maps/36/Raiden_175_Card.png',
+				176: 'assets/maps/36/Type_3_Fighter_Hien_176_Card.png',
+				185: 'assets/maps/36/Type_3_Fighter_Hien_Model_1D_185_Card.png',
+				209: 'assets/maps/37/Saiun_(Disassembled_for_Transport)_209_Card.png',
+				218: 'assets/maps/40/Type_4_Fighter_Hayate_218_Card.png',
+				269: 'assets/maps/40/Prototype_Toukai_269_Card.png',
+				270: 'assets/maps/40/Toukai_(901_Air_Group)_270_Card.png',
+				272: 'assets/maps/40/Striking_Force_Fleet_Command_Facility_272_Card.png',
+			};
 			var ind = tracker-numShips;
-			if (data.items[ind] == 56) { //shinden kai use image
+			if (imageSpecial[data.items[ind]]) {
 				$('#rewardship').css('margin-top','70px');
-				$('#rewardship').attr('src','assets/maps/22/Shinden_Kai_056_Card.png');
-			} else if (data.items[ind] == 209) {
-				$('#rewardship').css('margin-top','70px');
-				$('#rewardship').attr('src','assets/maps/37/Saiun_(Disassembled_for_Transport)_209_Card.png');
+				$('#rewardship').attr('src',imageSpecial[data.items[ind]]);
 			} else if (data.items[ind] == 'apology') {
 				$('#rewardship').css('margin-top','40px');
 				$('#rewardship').attr('src','assets/maps/Apology_scroll.png');
