@@ -18356,7 +18356,7 @@ var MAPDATA = {
 		historical: {
 			fifth1: [63,64,100,101,114,15,16,18,49],
 			fifth2: [63,101,100,114,16,18,41,49],
-			russian: [147,511],
+			russian: [35,511],
 		},
 		maps: {
 			1: {
@@ -22771,6 +22771,9 @@ var MAPDATA = {
 							compDiff: {
 								3: ['Hard 1','Hard 2','Hard 3'],
 								2: ['Medium 1','Medium 2','Medium 3'],
+							},
+							debuffGive: function(airState,totalHPLost) {
+								if (totalHPLost <= 0) CHDATA.event.maps[3].debuff.AB = 1;
 							}
 						}
 					}
@@ -23178,8 +23181,6 @@ var MAPDATA = {
 				nameT: 'Ahead of that Strait',
 				fleetTypes: [0,1,2,3,7],
 				allowVanguard: true,
-				lowCostSubs: true,
-				lowCostRaids: true,
 				bgmMap: 106,
 				bgmDN: 105,
 				bgmNN: 105,
