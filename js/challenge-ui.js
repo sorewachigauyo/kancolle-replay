@@ -725,7 +725,7 @@ function chProcessKC3File2() {
 			for (let key in bonusStats) shipN[key] += bonusStats[key];
 		}
 		
-		let disableMore = MAPDATA[WORLD].disableMore && MAPDATA[WORLD].disableMore.ships && MAPDATA[WORLD].disableMore.ships.indexOf(getBaseId(shipN.masterId)) != -1;
+		let disableMore = MAPDATA[EVENTNUM].disableMore && MAPDATA[EVENTNUM].disableMore.ships && MAPDATA[EVENTNUM].disableMore.ships.indexOf(getBaseId(shipN.masterId)) != -1;
 		if (CHDATA.config.disableships && (shipd.added > MAPDATA[CHDATA.event.world].date || disableMore)) {
 			for (var i=0; i<shipN.items.length; i++) {
 				if (shipN.items[i] <= 0) continue;
