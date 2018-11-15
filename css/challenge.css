@@ -403,6 +403,9 @@ table.dialog4 img {
 #menusettings {
 	font-size: 14px;
 }
+#menusettings select {
+	margin: 5px 0;
+}
 .eventbutton {
 	background-repeat:no-repeat;
 }

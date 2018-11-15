@@ -131,6 +131,7 @@
 					<input id="srtDiffHard" type="button" value="HARD" style="background-color:#FF6666;display:none" onclick="chSortieChangeDiff(3);chSortieEndChangeDiff()"/>
 					<input id="srtDiffMed" type="button" value="NORMAL" style="background-color:#FFFF66;display:none" onclick="chSortieChangeDiff(2);chSortieEndChangeDiff()"/>
 					<input id="srtDiffEasy" type="button" value="EASY" style="background-color:#66FF66;display:none" onclick="chSortieChangeDiff(1);chSortieEndChangeDiff()"/>
+					<input id="srtDiffCasual" type="button" value="CASUAL" style="background-color:#6666FF;display:none;width:65px" onclick="chSortieChangeDiff(4);chSortieEndChangeDiff()"/>
 					<input id="srtDiffBack" type="button" value="Back" style="margin-left:5px;display:none" onclick="chSortieEndChangeDiff()"/>
 				</div>
 				<div style="height:40px;margin-left:10px">
@@ -145,6 +146,7 @@
 					<div id="srtLock">
 					<span style="vertical-align:middle;color:white">Lock: </span>
 					<div style="display:inline-block;width:40px"><img id="srtLockImg" style="height:40px;vertical-align:middle" src="assets/maps/lock1.png" /></div>
+					<span id="srtGiveLockMult" style="display:none"></span>
 					<span id="srtNoLock" style="margin-left:40px;text-decoration:line-through;color:red"></span>
 					</div>
 				</div>
@@ -208,11 +210,13 @@
 		</div>
 		
 		<div id="dialogmainmenu">
-			<span>KanColle Event Simulator</span><span style="margin-left:20px;color:red;font-size:12px">Beta</span>
+			<span>KanColle Event Simulator</span><span style="margin-left:20px;color:red;font-size:12px"></span>
 			<br><br><br>
 			<div id="menufileselect">
+				<span style="font-size:10px;color:red"><span id="menustorage"></span>/<span id="menustoragemax"></span> MB used</span>
+				<span style="font-size:10px;color:red;margin-left:20px" id="menustoragewarn">Please delete a file or use a new browser profile.</span>
 				<table id="tfileselect">
-					<tr class="chfile" onclick="$('#menufileselect').hide();$('#menuevents').show();"><td>
+					<tr class="chfile" onclick="chMenuClickedNewFile()"><td>
 						<span style="margin-left:340px">New File</span>
 					</td></tr>
 				</table>
@@ -241,6 +245,7 @@
 				<div class="eventbutton" style="background-image:url(http://i.imgur.com/J9DVNwf.png)"><img src="http://i.imgur.com/ztzHSkE.png" alt="Spring 2017" title="Spring 2017" onclick="chMenuSelectedEvent(38)"/></div>
 				<div class="eventbutton" style="background-image:url(http://i.imgur.com/DVZX6RR.png)"><img src="http://i.imgur.com/nOkdjn2.png" alt="Summer 2017" title="Summer 2017" onclick="chMenuSelectedEvent(39)"/></div>
 				<div class="eventbutton" style="background-image:url(http://i.imgur.com/Kvt6ikS.png)"><img src="http://i.imgur.com/xWMGYCa.png" alt="Fall 2017" title="Fall 2017" onclick="chMenuSelectedEvent(40)"/></div>
+				<div class="eventbutton" style="background-image:url(http://i.imgur.com/Oj9Svb7.png)"><img src="http://i.imgur.com/fRKQ4tM.png" alt="Winter 2018" title="Winter 2018" onclick="chMenuSelectedEvent(41)"/></div>
 				<div class="eventbutton" style="background-image:url(assets/maps/20/banner1.png)"><img src="assets/maps/20/banner2.png" alt="Phase 1 Classic" title="Phase 1 Classic" onclick="chMenuSelectedEvent(20)"/></div>
 			</div>
 			<div id="menuloadfile">
@@ -257,13 +262,15 @@
 				<span style="font-weight:bold">Settings</span><br>
 				<input type="checkbox" id="menusships" /><label for="menusships">Disable unreleased ships?</label><br>
 				<input type="checkbox" id="menusequips" /><label for="menusequips">Disable unreleased equipment?</label><br>
-				<br>
 				<label for="menusmechanics">Mechanics: </label>
 				<select id="menusmechanics">
 					<option value="2013-04-23">2013-04-23: Initial</option>
+					<option value="2013-08-25">2013-08-25: Flagship Protection</option>
+					<option value="2014-02-26">2014-02-26: ASW Synergy</option>
 					<option value="2014-04-23">2014-04-23: Artillery Spotting</option>
 					<option value="2014-07-28">2014-07-28: Fit Gun</option>
-					<option value="2014-10-14">2014-10-24: Improvement</option>
+					<option value="2014-10-10">2014-10-10: AP Shell Bonus</option>
+					<option value="2014-10-24">2014-10-24: Improvement</option>
 					<option value="2014-11-14">2014-11-14: Anti-Air Cut-In</option>
 					<option value="2015-08-10">2015-08-10: Aircraft Proficiency</option>
 					<option value="2016-06-30">2016-06-30: Opening ASW</option>
@@ -273,19 +280,20 @@
 					<option value="2017-10-25">2017-10-25: Destroyer Night Cut-In</option>
 					<option value="2017-11-10">2017-11-10: ASW Soft-Cap = 150</option>
 					<option value="2017-11-17">2017-11-17: LBAS/Support Revamp</option>
+					<option value="2017-12-22">2017-12-22: Equipment Bonus</option>
 				</select><br>
-				<br>
 				<label for="menusdiff">Difficulty Selection: </label>
 				<select id="menusdiff">
 					<option value="1">Automatic By HQ Level</option>
 					<option value="2">By Choice</option>
-				</select><br><br>
+				</select><br>
 				<!--<label for="menustime">Enable Time-based Mechanics: </label>
 				<input type="checkbox" id="menustime" disabled />
 				<span style="font-size:9px">(Morale is instantly restored, sparkling is free, map HP regen and debuff reset are disabled.)</span>
 				<br><br>-->
 				<input type="checkbox" id="menuslock" /><label for="menuslock">Disable Ship Locking?</label><br>
-				<input type="checkbox" id="menusraidreq" /><label for="menusraidreq">Disable LBAS Raid Gimmick Requirements?</label><br><br>
+				<input type="checkbox" id="menusraidreq" /><label for="menusraidreq">Disable LBAS Raid Gimmick Requirements?</label><br>
+				<input type="checkbox" id="menusunlock" /><label for="menusunlock">Start with all maps unlocked?</label><br><br>
 				<input type="button" value="Restore Defaults" onclick="chMenuDefaultSettings()" />
 				<input type="button" value="Done" id="menusdone" onclick="chMenuDone()" disabled />
 			</div>

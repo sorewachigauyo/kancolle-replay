@@ -158,6 +158,8 @@ var VOICES = {
 		damage1: "assets/voice/Ayanami-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Ayanami-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Ayanami-Major_Damage.ogg",
+		friend141: "assets/voice/Ayanami-FriendFleet.mp3",
+		friend241: "assets/voice/Ayanami-FriendFleet2.mp3",
 	},
 	13: {
 		start: "assets/voice/Ayanami-Battle_Start.ogg",
@@ -182,6 +184,8 @@ var VOICES = {
 		damage1: "assets/voice/Shikinami-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Shikinami-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Shikinami-Major_Damage.ogg",
+		friend141: "assets/voice/Shikinami-FriendFleet.mp3",
+		friend241: "assets/voice/Shikinami-FriendFleet2.mp3",
 	},
 	14: {
 		start: "assets/voice/Shikinami-Battle_Start.ogg",
@@ -790,6 +794,8 @@ var VOICES = {
 		damage1: "assets/voice/Shigure-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Shigure-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Shigure-Major_Damage.ogg",
+		friend141: "assets/voice/Shigure-FriendFleet.mp3",
+		friend241: "assets/voice/Shigure-FriendFleet2.mp3",
 	},
 	43: {
 		start: "assets/voice/Shigure-Battle_Start.ogg",
@@ -1262,6 +1268,7 @@ var VOICES = {
 		damage1: "assets/voice/Takao-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Takao-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Takao-Major_Damage.ogg",
+		friend141: "assets/voice/Takao-FriendFleet.mp3",
 	},
 	66: {
 		start: "assets/voice/Takao-Battle_Start.ogg",
@@ -1302,6 +1309,7 @@ var VOICES = {
 		damage1: "assets/voice/Maya-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Maya-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Maya-Major_Damage.ogg",
+		friend141: "assets/voice/Maya-FriendFleet.mp3",
 	},
 	271: {
 		start: "assets/voice/Maya-Battle_Start.ogg",
@@ -1334,6 +1342,7 @@ var VOICES = {
 		damage1: "assets/voice/ChoukaiKai2-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Choukai-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Choukai-Major_Damage.ogg",
+		friend141: "assets/voice/Choukai-FriendFleet.mp3",
 	},
 	73: {
 		start: "assets/voice/MogamiKai-Battle_Start.ogg",
@@ -1390,6 +1399,7 @@ var VOICES = {
 		damage1: "assets/voice/Chikuma-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Chikuma-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Chikuma-Major_Damage.ogg",
+		friend141: "assets/voice/Chikuma_FriendFleet.mp3",
 	},
 	72: {
 		start: "assets/voice/Chikuma-Battle_Start.ogg",
@@ -1495,6 +1505,7 @@ var VOICES = {
 		damage1: "assets/voice/Kongou-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Kongou-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Kongou-Major_Damage.ogg",
+		friend141: "assets/voice/Kongou_FriendFleet.mp3",
 	},
 	151: {
 		start: "assets/voice/Haruna-Battle_Start.ogg",
@@ -1503,6 +1514,7 @@ var VOICES = {
 		damage1: "assets/voice/Haruna-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Haruna-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Haruna-Major_Damage.ogg",
+		friend141: "assets/voice/Haruna_FriendFleet.mp3",
 	},
 	211: {
 		start: "assets/voice/Haruna-Battle_Start.ogg",
@@ -1543,6 +1555,7 @@ var VOICES = {
 		damage1: "assets/voice/Nagato-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Nagato-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Nagato-Major_Damage.ogg",
+		friend141: "assets/voice/Nagato_FriendFleet.mp3",
 	},
 	81: {
 		start: "assets/voice/Mutsu-Battle_Start.ogg",
@@ -1595,6 +1608,8 @@ var VOICES = {
 		damage1: "assets/voice/Kirishima-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Kirishima-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Kirishima-Major_Damage.ogg",
+		friend141: "assets/voice/Kirishima-FriendFleet.mp3",
+		friend241: "assets/voice/Kirishima-FriendFleet2.mp3",
 	},
 	212: {
 		start: "assets/voice/Kirishima-Battle_Start.ogg",
@@ -1619,6 +1634,8 @@ var VOICES = {
 		damage1: "assets/voice/Hiei-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Hiei-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Hiei-Major_Damage.ogg",
+		friend141: "assets/voice/Hiei-FriendFleet.mp3",
+		friend241: "assets/voice/Hiei-FriendFleet2.mp3",
 	},
 	86: {
 		start: "assets/voice/Hiei-Battle_Start.ogg",
@@ -1640,7 +1657,7 @@ var VOICES = {
 		start: "assets/voice/HyuugaKai-Battle_Start.ogg",
 		attack: "assets/voice/HyuugaKai-Attack.ogg",
 		nbattack: "assets/voice/HyuugaKai-Night_Attack.ogg",
-		damage1: "hhttp://vignette3.wikia.nocookie.net/kancolle/images/1/17/HyuugaKai-Minor_Damage_1.ogg",
+		damage1: "assets/voice/HyuugaKai-Minor_Damage_1.ogg",
 		damage2: "assets/voice/HyuugaKai-Minor_Damage_2.ogg",
 		damage3: "assets/voice/HyuugaKai-Major_Damage.ogg",
 	},
@@ -2334,6 +2351,7 @@ var VOICES = {
 		damage1: "assets/voice/Yamato-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Yamato-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Yamato-Major_Damage.ogg",
+		friend141: "assets/voice/Yamato_FriendFleet.mp3",
 	},
 	136: {
 		start: "assets/voice/YamatoKai-Battle_Start.ogg",
@@ -2454,6 +2472,8 @@ var VOICES = {
 		damage1: "assets/voice/Noshiro-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Noshiro-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Noshiro-Major_Damage.ogg",
+		friend141: "assets/voice/Noshiro_FriendFleet.mp3",
+		friend241: "assets/voice/Noshiro_FriendFleet2.mp3",
 	},
 	139: {
 		start: "assets/voice/Yahagi-Battle_Start.ogg",
@@ -2470,6 +2490,7 @@ var VOICES = {
 		damage1: "assets/voice/Yahagi-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Yahagi-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Yahagi-Major_Damage.ogg",
+		friend141: "assets/voice/Yahagi_FriendFleet.mp3",
 	},
 	140: {
 		start: "assets/voice/Sakawa-Battle_Start.ogg",
@@ -3172,6 +3193,7 @@ var VOICES = {
 		damage1: "assets/voice/Iowa-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Iowa-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Iowa-Major_Damage.ogg",
+		friend141: "assets/voice/Iowa-FriendFleet.mp3",
 	},
 	360: {
 		start: "assets/voice/Iowa-Battle_Start.ogg",
@@ -3516,6 +3538,7 @@ var VOICES = {
 		damage1: "assets/voice/Warspite-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Warspite-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Warspite-Major_Damage.ogg",
+		friend141: "assets/voice/Warspite-FriendFleet.mp3",
 	},
 	444: {
 		start: "assets/voice/Aquila-Battle_Start.ogg",
@@ -3734,6 +3757,8 @@ var VOICES = {
         damage1: "assets/voice/Richelieu-Minor_Damage_1.ogg",
         damage2: "assets/voice/Richelieu-Minor_Damage_2.ogg",
         damage3: "assets/voice/Richelieu-Major_Damage.ogg",
+		friend141: "assets/voice/Richelieu-FriendFleet.mp3",
+		friend241: "assets/voice/Richelieu-FriendFleet2.mp3",
     },
     493:{
         start: "assets/voice/I-400-Battle_Start.ogg",
@@ -3814,6 +3839,7 @@ var VOICES = {
         damage1: "assets/voice/Tashkent-Minor_Damage_1.ogg",
         damage2: "assets/voice/Tashkent-Minor_Damage_2.ogg",
         damage3: "assets/voice/Tashkent-Major_Damage.ogg",
+		friend141: "assets/voice/Tashkent-FriendFleet.mp3",
     },
     395: {
         start: "assets/voice/Tashkent-Battle_Start.ogg",
@@ -3894,6 +3920,7 @@ var VOICES = {
 		damage1: "assets/voice/Gangut-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Gangut-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Gangut-Major_Damage.ogg",
+		friend141: "assets/voice/Gangut-FriendFleet.mp3",
 	},
     515: {
 		start: "assets/voice/Ark_Royal-Battle_Start.ogg",
@@ -5068,6 +5095,138 @@ var VOICES = {
 		attack: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Attack.ogg",
 		damage: "assets/voice/Entombed_Ant-Air_Guardian_PrincessDamaged.ogg",
 		sunk: "assets/voice/Entombed_Ant-Air_Guardian_Princess_Debuffed_Sunk.ogg",
+	},
+	1781: {
+		start: "assets/voice/CV_Hime_Intro.ogg",
+		attack: "assets/voice/CV_Hime_Attack_1.ogg",
+		damage: "assets/voice/CV_Hime_Attack_2.ogg",
+		sunk: "assets/voice/CV_Hime_Sunk.ogg",
+	},
+	1782: {
+		start: "assets/voice/CV_Hime_Intro.ogg",
+		attack: "assets/voice/CV_Hime_Attack_1.ogg",
+		damage: "assets/voice/CV_Hime_Attack_2.ogg",
+		sunk: "assets/voice/CV_Hime_Sunk.ogg",
+	},
+	1783: {
+		start: "assets/voice/Escort_Water_Princess_Intro.ogg",
+		attack: "assets/voice/Escort_Water_Princess_Attack.ogg",
+		damage: "assets/voice/Escort_Water_Princess_Damaged.ogg",
+	},
+	1784: {
+		start: "assets/voice/Escort_Water_Princess_Intro.ogg",
+		attack: "assets/voice/Escort_Water_Princess_Attack.ogg",
+		damage: "assets/voice/Escort_Water_Princess_Damaged.ogg",
+	},
+	1785: {
+		start: "assets/voice/Escort_Water_Princess_Intro.ogg",
+		attack: "assets/voice/Escort_Water_Princess_Attack.ogg",
+		damage: "assets/voice/Escort_Water_Princess_Damaged.ogg",
+	},
+	1786: {
+		start: "assets/voice/Escort_Water_Princess_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Escort_Water_Princess_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Escort_Water_Princess_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Escort_Water_Princess_Broken_Form_Sunk.ogg",
+	},
+	1787: {
+		start: "assets/voice/Escort_Water_Princess_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Escort_Water_Princess_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Escort_Water_Princess_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Escort_Water_Princess_Broken_Form_Sunk.ogg",
+	},
+	1788: {
+		start: "assets/voice/Escort_Water_Princess_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Escort_Water_Princess_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Escort_Water_Princess_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Escort_Water_Princess_Broken_Form_Sunk.ogg",
+	},
+	1790: {
+		start: "assets/voice/BB_Hime_Attack_2.ogg",
+		attack: "assets/voice/BB_Hime_Attack_1.ogg",
+		damage: "assets/voice/BB_Hime_Damaged_2.ogg",
+		sunk: "assets/voice/BB_Hime_Sunk_2.ogg",
+	},
+	1791: {
+		start: "assets/voice/BB_Hime_Attack_2.ogg",
+		attack: "assets/voice/BB_Hime_Attack_1.ogg",
+		damage: "assets/voice/BB_Hime_Damaged_2.ogg",
+		sunk: "assets/voice/BB_Hime_Sunk_2.ogg",
+	},
+	1792: {
+		start: "assets/voice/BB_Hime_Attack_2.ogg",
+		attack: "assets/voice/BB_Hime_Attack_1.ogg",
+		damage: "assets/voice/BB_Hime_Damaged_2.ogg",
+		sunk: "assets/voice/BB_Hime_Sunk_2.ogg",
+	},
+	1793: {
+		start: "assets/voice/BB_Water_Demon_Intro.ogg",
+		attack: "assets/voice/BB_Water_Demon_Attack.ogg",
+		damage: "assets/voice/BB_Water_Demon_Damaged.ogg",
+		sunk: "assets/voice/BB_Water_Demon_Sunk.ogg",
+	},
+	1794: {
+		start: "assets/voice/BB_Water_Demon_Intro.ogg",
+		attack: "assets/voice/BB_Water_Demon_Attack.ogg",
+		damage: "assets/voice/BB_Water_Demon_Damaged.ogg",
+		sunk: "assets/voice/BB_Water_Demon_Sunk.ogg",
+	},
+	1795: {
+		start: "assets/voice/BB_Water_Demon_Intro.ogg",
+		attack: "assets/voice/BB_Water_Demon_Attack.ogg",
+		damage: "assets/voice/BB_Water_Demon_Damaged.ogg",
+		sunk: "assets/voice/BB_Water_Demon_Sunk.ogg",
+	},
+	1796: {
+		start: "assets/voice/BB_Water_Demon_Intro.ogg",
+		attack: "assets/voice/BB_Water_Demon_Attack.ogg",
+		damage: "assets/voice/BB_Water_Demon_Damaged.ogg",
+		sunk: "assets/voice/BB_Water_Demon_Sunk.ogg",
+	},
+	1797: {
+		start: "assets/voice/BB_Water_Demon_Intro.ogg",
+		attack: "assets/voice/BB_Water_Demon_Attack.ogg",
+		damage: "assets/voice/BB_Water_Demon_Damaged.ogg",
+		sunk: "assets/voice/BB_Water_Demon_Sunk.ogg",
+	},
+	1798: {
+		start: "assets/voice/BB_Water_Demon_Intro.ogg",
+		attack: "assets/voice/BB_Water_Demon_Attack.ogg",
+		damage: "assets/voice/BB_Water_Demon_Damaged.ogg",
+		sunk: "assets/voice/BB_Water_Demon_Sunk.ogg",
+	},
+	1799: {
+		start: "assets/voice/Abyssal_Crane_Princss_Intro.ogg",
+		attack: "assets/voice/Abyssal_Crane_Princss_Attack.ogg",
+		damage: "assets/voice/Abyssal_Crane_Princss_Damaged.ogg",
+	},
+	1800: {
+		start: "assets/voice/Abyssal_Crane_Princss_Intro.ogg",
+		attack: "assets/voice/Abyssal_Crane_Princss_Attack.ogg",
+		damage: "assets/voice/Abyssal_Crane_Princss_Damaged.ogg",
+	},
+	1801: {
+		start: "assets/voice/Abyssal_Crane_Princss_Intro.ogg",
+		attack: "assets/voice/Abyssal_Crane_Princss_Attack.ogg",
+		damage: "assets/voice/Abyssal_Crane_Princss_Damaged.ogg",
+	},
+	1802: {
+		start: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Sunk.ogg",
+	},
+	1803: {
+		start: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Sunk.ogg",
+	},
+	1804: {
+		start: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Intro.ogg",
+		attack: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Attack.ogg",
+		damage: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/Abyssal_Crane_Princss_Broken_Form_Sunk.ogg",
 	},
 	2001: {
 		start: "assets/voice/Iona_fog_-Battle_Start.ogg",

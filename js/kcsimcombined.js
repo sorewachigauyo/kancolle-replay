@@ -1,4 +1,4 @@
-function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,noupdate) {
+function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,noupdate,friendFleet) {
 	var ships1 = F1.ships, ships2 = F2.ships, ships1C = F1C.ships;
 	var alive1 = [], alive1C = [], alive2 = [], subsalive1 = [], subsalive1C = [], subsalive2 = [];
 	var hasInstall1 = false, hasInstall2 = false, hasInstall1C = false;
@@ -368,6 +368,12 @@ function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombi
 		}
 	}
 	
+	//friend fleet
+	if (friendFleet && alive2.length+subsalive2.length > 0) {
+		friendFleetPhase(friendFleet,F2,alive2,subsalive2,BAPI);
+		removeSunk(alive2); removeSunk(subsalive2);
+	}
+	
 	//night battle
 	var didNB = false;
 	if ((doNB||NBonly) && alive1C.length+subsalive1C.length > 0 && alive2.length+subsalive2.length > 0) {
@@ -383,6 +389,10 @@ function simCombined(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombi
 		if (C) {
 			if (!BAPI.yasen) BAPI.yasen = {};
 			BAPI.yasen.api_hougeki = {api_at_list:[-1],api_damage:[-1],api_df_list:[-1],api_sp_list:[-1],api_cl_list:[-1],api_n_mother_list:[-1]};
+			if (NEWFORMAT) {
+				formatRemovePadding(BAPI.yasen.api_hougeki);
+				BAPI.yasen.api_hougeki.api_at_eflag = [];
+			}
 			BAPI.yasen.api_flare_pos = [-1,-1];
 			BAPI.yasen.api_touch_plane = [-1,-1];
 			if (NBonly && BAPI.data.api_support_flag) {
@@ -616,7 +626,7 @@ function simStatsCombined(numsims,type,foptions) {
 
 
 //-------------------------------
-function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,noupdate) {
+function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,noupdate,friendFleet) {
 	var F2C = F2.combinedWith;
 	var ships1 = F1.ships, ships2 = F2.ships, ships2C = F2C.ships;
 	var alive1 = [], alive2 = [], alive2C = [], subsalive1 = [], subsalive2 = [], subsalive2C = [];
@@ -665,6 +675,9 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 		var dataroot = (NBonly)? BAPI.yasen : BAPI.data;
 		dataroot.api_formation = [F1.formation.id,F2.formation.id,{1:1,.8:2,1.2:3,.6:4}[ENGAGEMENT]];
 		dataroot.api_dock_id = 1;
+		var retreatlist = [];
+		for (var i=0; i<ships1.length; i++) if (ships1[i].retreated) retreatlist.push(i+1);
+		if (retreatlist.length) dataroot.api_escape_idx = retreatlist;
 		if (NEWFORMAT) {
 			dataroot.api_f_maxhps = []; dataroot.api_f_nowhps = [];
 			dataroot.api_e_maxhps = []; dataroot.api_e_nowhps = [];
@@ -932,6 +945,13 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 		}
 	}
 	
+	//friend fleet
+	if (friendFleet && alive2.length+subsalive2.length+alive2C.length+subsalive2C.length > 0) {
+		friendFleetPhase(friendFleet,F2,alive2.concat(alive2C),subsalive2.concat(subsalive2C),BAPI);
+		removeSunk(alive2); removeSunk(subsalive2);
+		removeSunk(alive2C); removeSunk(subsalive2C);
+	}
+	
 	//night battle
 	var didNB = false;
 	if ((doNB||NBonly) && alive1.length+subsalive1.length > 0 && alive2.length+subsalive2.length+alive2C.length+subsalive2C.length > 0) {
@@ -961,6 +981,10 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 		if (C) {
 			if (!BAPI.yasen) BAPI.yasen = {};
 			BAPI.yasen.api_hougeki = {api_at_list:[-1],api_damage:[-1],api_df_list:[-1],api_sp_list:[-1],api_cl_list:[-1],api_n_mother_list:[-1]};
+			if (NEWFORMAT) {
+				formatRemovePadding(BAPI.yasen.api_hougeki);
+				BAPI.yasen.api_hougeki.api_at_eflag = [];
+			}
 			BAPI.yasen.api_flare_pos = [-1,-1];
 			BAPI.yasen.api_touch_plane = [-1,-1];
 			let n = (fightescort)? 2 : 1;
@@ -1024,7 +1048,7 @@ function sim6vs12(F1,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BA
 }
 
 //------------------
-function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,noupdate) {
+function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing,noammo,BAPI,noupdate,friendFleet) {
 	var F2C = F2.combinedWith;
 	var ships1 = F1.ships, ships2 = F2.ships, ships1C = F1C.ships, ships2C = F2C.ships;
 	var alive1 = [], alive1C = [], alive2 = [], alive2C = [], subsalive1 = [], subsalive1C = [], subsalive2 = [], subsalive2C = [];
@@ -1449,6 +1473,13 @@ function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing
 		}
 	}
 	
+	//friend fleet
+	if (friendFleet && alive2.length+subsalive2.length+alive2C.length+subsalive2C.length > 0) {
+		friendFleetPhase(friendFleet,F2,alive2.concat(alive2C),subsalive2.concat(subsalive2C),BAPI);
+		removeSunk(alive2); removeSunk(subsalive2);
+		removeSunk(alive2C); removeSunk(subsalive2C);
+	}
+	
 	//night battle
 	var didNB = false;
 	if ((doNB||NBonly) && alive1C.length+subsalive1C.length > 0 && alive2.length+subsalive2.length+alive2C.length+subsalive2C.length > 0) {
@@ -1478,6 +1509,10 @@ function sim12vs12(type,F1,F1C,F2,Fsupport,LBASwaves,doNB,NBonly,aironly,bombing
 		if (C) {
 			if (!BAPI.yasen) BAPI.yasen = {};
 			BAPI.yasen.api_hougeki = {api_at_list:[-1],api_damage:[-1],api_df_list:[-1],api_sp_list:[-1],api_cl_list:[-1],api_n_mother_list:[-1]};
+			if (NEWFORMAT) {
+				formatRemovePadding(BAPI.yasen.api_hougeki);
+				BAPI.yasen.api_hougeki.api_at_eflag = [];
+			}
 			BAPI.yasen.api_flare_pos = [-1,-1];
 			BAPI.yasen.api_touch_plane = [-1,-1];
 			let n = (fightescort)? 2 : 1;

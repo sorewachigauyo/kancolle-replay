@@ -1242,7 +1242,7 @@ function processAPI(root) {
 					}
 				}
 			
-				eventqueue.push([friendStart,[data.api_nowhps,bgm],null]);
+				eventqueue.push([friendStart,[data.api_nowhps,bgm,data.api_voice_id,data.api_voice_p_no],null]);
 				var fleet1Temp = fleet1, f1Temp = f1;
 				f1 = fleet1 = fleetFriend;
 				eventqueue.push([NBstart,[yasen.api_friendly_battle.api_flare_pos,yasen.api_friendly_battle.api_touch_plane,bgm,null,true]]);
@@ -3066,10 +3066,19 @@ function shipMoveToV(ship,target,speed) {
 }
 
 
-function friendStart(hps,bgm) {
+function friendStart(hps,bgm,voiceId,voiceNo) {
 	if (bgm != SM.BGMnum) {
 		SM.stopBGM();
 		SM.playBGM(bgm);
+	}
+	
+	let delay = 0;
+	if (voiceId && voiceNo) {
+		let ind = voiceNo.indexOf(1);
+		if (ind != -1) {
+			delay = 2000;
+			SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind);
+		}
 	}
 
 	for (var i=0; i<fleetFriend.length; i++) {
@@ -3118,7 +3127,7 @@ function friendStart(hps,bgm) {
 	
 	addTimeout(function() {
 		ecomplete = true;
-	}, 2000);
+	}, 2000+delay);
 }
 
 function friendExit() {
