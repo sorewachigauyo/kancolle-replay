@@ -570,10 +570,13 @@ Ship.prototype.ASWPower = function() {
 		if (this.equips[i].btype == B_DEPTHCHARGE2) hasdc2 = true;
 	}
 	var bonus = (this.improves.Pasw)? Math.floor(this.improves.Pasw) : 0;
-	var mod2 = 1;
-	if (hassonar && hasdc2) mod2 += .15;
-	if (hasdc && hasdc2) mod2 += .1;
-	this._aswpower = (2*Math.sqrt(this.ASW-equipASW)+1.5*equipASW+((this.planeasw)? 8 : 13)+bonus) * ((hassonar && hasdc)? 1.15 : 1) * mod2;
+	var mod2 = 1, synergyMod = 1;
+	if (MECHANICS.aswSynergy) {
+		if (hassonar && hasdc2) mod2 += .15;
+		if (hasdc && hasdc2) mod2 += .1;
+		synergyMod = (hassonar && hasdc)? 1.15 : 1;
+	}
+	this._aswpower = (2*Math.sqrt(this.ASW-equipASW)+1.5*equipASW+((this.planeasw)? 8 : 13)+bonus) * synergyMod * mod2;
 	return this._aswpower;
 }
 
@@ -1008,7 +1011,7 @@ function LandBase(equips,levels,profs) {
 	this.HP = 200;
 	this.AR = 0;
 	this.PLANESLOTS = [18,18,18,18];
-	this.planecount = [];
+	this.planecount = this.PLANESLOTS.slice();
 	this.equips = [];
 	for (var i=0; i<equips.length; i++) this.equips.push(new Equip(equips[i],levels[i],profs[i]));
 	this.AS = 0;

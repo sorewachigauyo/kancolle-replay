@@ -79,8 +79,9 @@ SoundManager.prototype = {
 		if (!VOICES[shipid][type]) return;
 		let path = VOICES[shipid][type];
 		if (window['MAPDATA'] && window['WORLD'] && MAPDATA[WORLD] && MAPDATA[WORLD].voiceSpecial) {
-			if (MAPDATA[WORLD].voiceSpecial[shipid]) {
-				path = MAPDATA[WORLD].voiceSpecial[shipid][type] || path;
+			let baseId = getBaseId(shipid);
+			if (MAPDATA[WORLD].voiceSpecial[baseId]) {
+				path = MAPDATA[WORLD].voiceSpecial[baseId][type] || path;
 			}
 		}
 		if (!this._sounds['V'+type+shipid] || this._sounds['V'+type+shipid]._src != path) {
@@ -195,6 +196,13 @@ var BGMLIST = {
 	105: {url:'assets/music/Sound_b_bgm_105.ogg'},
 	106: {url:'assets/music/Sound_b_bgm_106.ogg'},
 	107: {url:'assets/music/Sound_b_bgm_107.ogg'},
+	109: {url:'assets/music/1_res.sounds.battle.BGM_109.mp3'},
+	110: {url:'assets/music/1_res.sounds.battle.BGM_110.mp3'},
+	111: {url:'assets/music/1_res.sounds.battle.BGM_111.mp3'},
+	112: {url:'assets/music/1_res.sounds.battle.BGM_112.mp3'},
+	113: {url:'assets/music/1_res.sounds.battle.BGM_113.mp3'},
+	114: {url:'assets/music/1_res.sounds.battle.BGM_114.mp3'},
+	115: {url:'assets/music/1_res.sounds.battle.BGM_115.mp3'},
 	116: {url:'assets/music/Sound_b_bgm_116.oga'},
 	117: {url:'assets/music/Sound_b_bgm_117.oga'},
 	998: {url:'assets/music/savior of song.mp3',voldef:.25},

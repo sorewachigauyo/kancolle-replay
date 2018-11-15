@@ -36,6 +36,7 @@ function chOpenMenu(allowclose) {
 	} else {
 		chMenuShowFiles();
 		$('#menufileselect').show();
+		chMenuUpdateStorageSize();
 		$('#menuevents').hide();
 	}
 	$('#menuloadfile').hide();
@@ -113,6 +114,7 @@ function chMenuShowFiles() {
 		}
 		if (medals.length >= Object.keys(mdata.maps).length && progress >= .9999) progress = 1; //fix JS float rounding
 		if (progress >= 1 && data.event.world == 40) { medals.push(null); medals.push(40); }
+		if (progress >= 1 && data.event.world == 41) { medals.push(null); medals.push(41); }
 		var divMedal = $('<div style="height:50px"></div>');
 		var divBar = $('<div style="width:420px;height:20px;float:left"></div>');
 		var height = (medals.length > 10)? 23 : 50;
@@ -157,6 +159,17 @@ function chMenuDeleteFile() {
 	delete localStorage['ch_data'+DELETEFILE];
 	$('#chfile'+DELETEFILE).remove();
 	$('#menufiledeleteprompt').hide();
+	chMenuUpdateStorageSize();
+}
+
+function chMenuClickedNewFile() {
+	if (!localStorage.max) chMenuUpdateStorageSize();
+	if (localStorage.max - chGetStorageUsed()/1024/1024 < .5) {
+		$('#menustoragewarn').show();
+		return;
+	}
+	$('#menufileselect').hide();
+	$('#menuevents').show();
 }
 
 function chMenuSelectedEvent(eventnum) {
@@ -193,6 +206,7 @@ function chMenuDefaultSettings() {
 	
 	$('#menuslock').prop('checked',false);
 	$('#menusraidreq').prop('checked',false);
+	$('#menusunlock').prop('checked',false);
 }
 
 function chMenuExtractSettings() {
@@ -203,6 +217,7 @@ function chMenuExtractSettings() {
 	CHDATA.config.diffmode = parseInt($('#menusdiff').val());
 	CHDATA.config.disablelock = $('#menuslock').prop('checked');
 	CHDATA.config.disableRaidReq = $('#menusraidreq').prop('checked');
+	CHDATA.config.unlockAll = $('#menusunlock').prop('checked');
 }
 
 function chMenuDone() {
@@ -231,7 +246,7 @@ function chRestrictReward(data) {
 		for (let ship of data.ships) {
 			let found = false;
 			for (let sid in CHDATA.ships) {
-				if (!CHDATA.ships[sid].disabled && CHDATA.ships[sid].masterId == ship) {
+				if (!CHDATA.ships[sid].disabled && getBaseId(CHDATA.ships[sid].masterId) == ship) {
 					found = true; break;
 				}
 			}
@@ -385,4 +400,42 @@ function chShowReward(data,tracker) {
 			});
 		}
 	}
+}
+
+
+function chMenuUpdateStorageSize() {
+	let size = chGetStorageUsed()/1024/1024;
+	let max = localStorage.max || (localStorage.max = Math.round(size + chGetStorageLeft()/1024/1024));
+	let maxText = (max > 100)? '100+' : max;
+	$('#menustorage').text(size.toFixed(2));
+	$('#menustoragemax').text(maxText);
+	$('#menustoragewarn').hide();
+}
+
+function chGetStorageUsed() {
+	let size = 0;
+	for (let key in localStorage) {
+		if (typeof localStorage[key] !== 'string') continue;
+		size += localStorage[key].length + key.length;
+	}
+	return size*2;
+}
+
+function chGetStorageLeft() {
+	let MB = 1024*1024;
+	let steps = [MB, MB/10, MB/100];
+	let left = 0;
+	for (let step of steps) {
+		let chars = step;
+		for (; chars <= step*50; chars += step) {
+			try {
+				localStorage['a'] = 'a'.repeat(left + chars);
+			} catch (e) {
+				break;
+			}
+		}
+		left += chars - step;
+	}
+	delete localStorage['a'];
+	return 2*left;
 }

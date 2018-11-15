@@ -1920,8 +1920,7 @@ var EQDATA = {
 		AA: 1,
 		LOS: 2,
 		EV: 3,
-		ACC: 2,
-		// LUK: 20
+		ACC: 2
 	},
 	130: {
 		name: '12.7cm Twin High-angle Mount + Type 94 Anti-Aircraft Fire Director',
@@ -3413,7 +3412,7 @@ var EQDATA = {
 		AA: 11,
 		AR: 2,
 		ACC: 2,
-		EV: 3,
+		EV: 4,
 	},
 	266: {
 		name: '12.7cm Twin Gun Mount Model C Kai 2',
@@ -3727,7 +3726,7 @@ var EQDATA = {
 		name: '12.7cm Twin Gun Mount Model A Kai 3 (Wartime Modification) + Anti-Aircraft Fire Director',
 		nameJP: '12.7cm連装砲A型改三(戦時改修)+高射装置',
 		added: '2018-07-17',
-		type: MAINGUNS,
+		type: MAINGUNSAA,
 		FP: 2,
 		AA: 8,
 		AR: 1,
@@ -3738,7 +3737,7 @@ var EQDATA = {
 		name: '12.7cm Twin Gun Mount Model B Kai 4 (Wartime Modification) + Anti-Aircraft Fire Director',
 		nameJP: '12.7cm連装砲B型改四(戦時改修)+高射装置',
 		added: '2018-07-17',
-		type: MAINGUNS,
+		type: MAINGUNSAA,
 		FP: 3,
 		AA: 9,
 		AR: 1,
@@ -4870,4 +4869,402 @@ var EXPANSIONSLOTDATA = {
 			275: [136,148,546,153,156,183,321],
 		}
 	}
+};
+
+var EQUIPBONUSDATA = {
+	15: [ //61cm quad oxy
+		{ bonus: { TP: 2 }, num: 1, shipS: [566,567,568] },
+		{ bonus: { TP: 2 }, num: 2, shipS: [566,567,568] },
+	],
+	24: [ { bonus: { FP: 2 }, shipS: [553] } ],
+	57: [ { bonus: { FP: 2 }, shipS: [553] } ],
+	58: [ //61cm quint
+		{ bonus: { TP: 1 }, shipClass: [22,54], shipS: [118,119] },
+	],
+	61: [ { bonus: { FP: 3, AR: 1, EV: 2, RNG: 1 }, shipS: [553] } ],
+	63: [ //12.7 B
+		{ bonus: { AA: 1 }, shipClass: [1,5,10] },
+		{ bonus: { FP: 1, TP: 1, AA: 1, EV: 2 }, shipS: [144] },
+		{ bonus: { FP: 1 }, shipS: [145] },
+		{ bonus: { EV: 1 }, shipS: [242,497,498] },
+		{ bonus: { EV: 2 }, shipS: [469] },
+	],
+	67: [ //53cm bow oxy (sub torp)
+		{ bonus: { TP: -5 }, shipType: ['DD','CL','CLT','CT','CA','CAV','FBB'] },
+	],
+	79: [ //zuiun 634
+		{ bonus: { FP: 2 }, shipS: [82,88,411,412] },
+		{ bonus: { FP: 3 }, shipS: [553] },
+	],
+	81: [ //zuiun 12 634
+		{ bonus: { FP: 2 }, shipS: [82,88,411,412] },
+		{ bonus: { FP: 3 }, shipS: [553] },
+	],
+	82: [ //T97 TB 931
+		{ bonus: { ASW: 1, EV: 1 }, shipClass: [76] },
+	],
+	100: [ { bonus: { FP: 4 }, shipS: [553] } ],
+	104: [ //dazzle
+		{ bonus: { FP: 2, AA: 1, EV: 2 }, shipS: [151] },
+		{ bonus: { FP: 2 }, shipS: [149] },
+		{ bonus: { FP: 1 }, shipS: [150,152] },
+	],
+	111: [ { bonus: { FP: 2 }, shipS: [553] } ],
+	179: [ //61cm sext
+		{ bonus: { TP: 1 }, shipClass: [54] },
+	],
+	229: [ //12.7 single HA LM
+		{ bonus: { FP: 1, AA: 1 }, bonusSR: { FP: 1, EV: 4 }, shipClass: [74,77] },
+		{ bonus: { FP: 1, AA: 1 }, bonusSR: { FP: 2, EV: 3 }, shipClass: [28,66] },
+		{ bonus: { FP: 2, AA: 3 }, bonusSR: { FP: 3, EV: 2 }, shipS: [488] },
+	],
+	237: [ //zuiun 634 skilled
+		{ bonus: { FP: 3, EV: 1 }, shipS: [82,88] },
+		{ bonus: { FP: 4, EV: 2 }, shipS: [553] },
+		{ bonus: { FP: 2 }, shipS: [411,412] },
+	],
+	266: [ //12.7 C
+		{ bonus: { FP: 1 }, bonusSR: { FP: 2, TP: 3, EV: 1 }, shipClass: [30] },
+		{ bonus: { FP: 1 }, bonusSR: { FP: 1, TP: 3, EV: 1 }, shipClass: [18,23] },
+		{ bonus: { EV: 1 }, shipS: [145,228,557] },
+		{ bonus: { FP: 1 }, num: 1, shipS: [566,567,568] },
+		{ bonus: { FP: 2 }, num: 2, shipS: [566,567,568] },
+	],
+	267: [ //12.7 D
+		{ bonus: { FP: 1, EV: 1 }, shipClass: [30] },
+		{ bonus: { FP: 1 }, num: 1, shipS: [566,567,568] },
+		{ bonus: { FP: 2, EV: 1 }, bonusSR: { FP: 2, TP: 3, EV: 1 }, shipClass: [38] },
+		{ bonus: { FP: 1 }, bonusSR: { FP: 1, TP: 1, EV: 2 }, shipS: [542,543] },
+		{ bonus: { FP: 2, EV: 1 }, bonusSR: { FP: 1, TP: 3, EV: 2 }, shipS: [229] },
+	],
+	268: [ //arctic camo
+		{ bonus: { EV: 7, AR: 2 }, shipS: [146,216,217,547] },
+	],
+	285: [ //61cm trip LM
+		{ bonus: { TP: 2, EV: 1 }, shipClass: [1,5,10,12] },
+		// { bonus: { FP: 1 }, improve: 10, shipClass: [1,5,10,12] },
+	],
+	286: [ //61cm quad LM
+		{ bonus: { TP: 2, EV: 1 }, shipClass: [18,23,30,38] },
+		// { bonus: { FP: 1 }, improve: 10, shipClass: [18,23,30,38] },
+		// { bonus: { TP: 1 }, improve: 5, shipClass: [30] },
+	],
+	289: [ //dazzle kai
+		{ bonus: { FP: 2, AA: 2, EV: 2 }, bonusSR: { FP: 2, EV: 2 }, shipS: [151] },
+		{ bonus: { FP: 2, AA: 1 }, bonusSR: { FP: 2, EV: 2 }, shipS: [149] },
+		{ bonus: { FP: 1 }, shipS: [150,152] },
+	],
+	290: [ //41cm kai ni
+		{ bonus: { FP: 2, AA: 2, EV: 1 }, bonusSR: { AA: 2, EV: 3 }, shipS: [82,88] },
+		{ bonus: { FP: 3, AA: 2, EV: 1 }, bonusSR: { AA: 2, EV: 3 }, shipS: [553] },
+		{ bonus: { FP: 1 }, shipS: [411,412] },
+	],
+	291: [ { bonus: { FP: 6, EV: 1 }, shipS: [553] } ],
+	292: [ { bonus: { FP: 8, AA: 1, EV: 2 }, shipS: [553] } ],
+	293: [ //12cm kai ni
+		{ bonus: { FP: 1, AA: 1, EV: 2 }, bonusSR: { FP: 2, ASW: 1, EV: 3 }, shipClass: [74,77] },
+		{ bonus: { FP: 2, AA: 1, EV: 3 }, bonusSR: { FP: 2, TP: 1, EV: 3 }, shipClass: [28,66] },
+		{ bonus: { FP: 2, TP: 4 }, shipClass: [28,66], requires: [174], requiresNum: 1 },
+		{ bonus: { FP: 1, TP: 3 }, shipClass: [28,66], requires: [174], requiresNum: 2 },
+	],
+	294: [ //12.7 A kai ni
+		{ bonus: { FP: 1 }, bonusSR: { FP: 3, TP: 1, EV: 2 }, shipClass: [1,5,12] },
+		{ bonus: { FP: 1, TP: 3 }, shipClass: [1,5,12], requires: [13,125,285], requiresNum: 1 },
+		{ bonus: { FP: 1, TP: 2 }, shipClass: [1,5,12], requires: [13,125,285], requiresNum: 2 },
+		{ bonus: { TP: 1 }, shipClass: [1,5,12], requires: [285] },
+	],
+	295: [ //12.7 A + AAFD
+		{ bonus: { FP: 2, AA: 2 }, bonusSR: { FP: 3, TP: 1, EV: 2 }, bonusAR: { AA: 6 }, shipClass: [1,5,12] },
+		{ bonus: { FP: 1, TP: 3 }, shipClass: [1,5,12], requires: [13,125,285], requiresNum: 1 },
+		{ bonus: { FP: 1, TP: 2 }, shipClass: [1,5,12], requires: [13,125,285], requiresNum: 2 },
+		{ bonus: { TP: 1 }, shipClass: [1,5,12], requires: [285] },
+	],
+	296: [ //12.7 B + AAFD
+		{ bonus: { FP: 1 }, bonusSR: { FP: 1, TP: 2, EV: 2 }, bonusAR: { AA: 5 }, shipClass: [1,5,10,23] },
+		{ bonus: { EV: 1 }, shipClass: [10] },
+		{ bonus: { FP: 1, TP: 1, EV: 1 }, bonusSR: { TP: 1 }, bonusAR: { AA: 1 }, shipS: [144] },
+		{ bonus: { FP: 1, AA: 1, EV: 1 }, bonusSR: { TP: 1 }, bonusAR: { AA: 1 }, shipS: [145] },
+		{ bonus: { EV: 2 }, bonusSR: { TP: 1 }, bonusAR: { AA: 1 }, shipS: [469] },
+		{ bonus: { FP: 1, EV: 2 }, bonusSR: { TP: 1 }, bonusAR: { AA: 1 }, shipS: [497] },
+		{ bonus: { AA: 1, EV: 2 }, bonusSR: { TP: 1 }, bonusAR: { AA: 1 }, shipS: [498] },
+		{ bonus: { FP: 1, TP: 3 }, shipClass: [1,5,10], requires: [125,285] },
+		{ bonus: { FP: 1, TP: 3 }, shipClass: [23], requires: [15,286] },
+	],
+	297: [ //12.7 A
+		{ bonus: { EV: 2 }, shipClass: [12] },
+		{ bonus: { EV: 1 }, shipClass: [1,5] },
+	],
+	301: [
+		{ bonus: { AA: 2, AR: 1, EV: 1 }, shipClass: [67,78,82,88] },
+	],
+	302: [ //T97 TB 931 skilled
+		{ bonus: { ASW: 1, EV: 1 }, shipClass: [76] },
+	],
+	303: [ //bofors 1930
+		{ bonus: { FP: 1, AA: 2, EV: 1 }, shipClass: [89] },
+		{ bonus: { FP: 1, AA: 1 }, shipClass: [4,16,20,41] },
+	],
+	304: [ //osprey
+		{ bonus: { FP: 1, ASW: 2, EV: 2 }, shipClass: [89] },
+		{ bonus: { FP: 1, ASW: 1, EV: 1 }, shipClass: [4,16,20,41] },
+	],
+	305: [ //ju 87C KMX
+		{ bonus: { FP: 1, EV: 1 }, shipClass: [63,68] },
+		{ bonus: { ASW: 1, EV: 1 }, shipClass: [76] },
+		{ bonus: { ASW: 2, EV: 1 }, shipS: [381,534,536] },
+	],
+	306: [ //ju 87C KMX skilled
+		{ bonus: { FP: 1, EV: 1 }, shipClass: [63,68] },
+		{ bonus: { ASW: 1, EV: 1 }, shipClass: [76] },
+		{ bonus: { ASW: 2, EV: 1 }, shipS: [381,534,536] },
+	],
+	307: [ //GFCS
+		{ bonus: { FP: 1, AA: 1, EV: 1 }, shipClass: [65,69,83,84,87] },
+	],
+	308: [ //5inch Mk.30 + GFCS
+		{ bonus: { FP: 1 }, shipType: ['DD'] },
+		{ bonus: { AA: 1, EV: 1 }, shipType: ['DE'] },
+		{ bonus: { FP: 1, AA: 1, EV: 1 }, shipClass: [87] },
+	],
+};
+
+function getBonusStats(mid,eqids) {
+	let sdata = SHIPDATA[mid];
+	let result = {};
+	let eqCounts = {}, hasSR = false, hasAR = false;
+	for (let eqid of eqids) {
+		if (!eqid || eqid < 0) continue;
+		eqCounts[eqid] = eqCounts[eqid] + 1 || 1;
+		let eqdata = EQDATA[eqid];
+		if (EQTDATA[eqdata.type].btype == B_RADAR) {
+			if (eqdata.LOS >= 5) hasSR = true;
+			if (eqdata.AA >= 2) hasAR = true;
+		}
+	}
+	for (let eqid in eqCounts) {
+		if (!EQUIPBONUSDATA[eqid]) continue;
+		for (let bonusData of EQUIPBONUSDATA[eqid]) {
+			if (bonusData.shipClass && bonusData.shipClass.indexOf(sdata.sclass) == -1) continue;
+			if (bonusData.shipS && bonusData.shipS.indexOf(mid) == -1) continue;
+			if (bonusData.shipType && bonusData.shipType.indexOf(sdata.type) == -1) continue;
+			if (bonusData.num && bonusData.num > eqCounts[eqid]) continue;
+			if (bonusData.requires) {
+				let count = 0, reqNum = bonusData.requiresNum || 1;
+				for (let id of bonusData.requires) count += eqCounts[id] || 0;
+				if (count < reqNum) continue;
+			}
+			for (let key in bonusData.bonus) {
+				if (!result[key]) result[key] = 0;
+				let amt = bonusData.bonus[key];
+				if (!bonusData.num && !bonusData.requires) amt *= eqCounts[eqid];
+				result[key] += amt;
+			}
+			if (hasSR && bonusData.bonusSR) {
+				for (let key in bonusData.bonusSR) {
+					if (!result[key]) result[key] = 0;
+					result[key] += bonusData.bonusSR[key];
+				}
+			}
+			if (hasAR && bonusData.bonusAR) {
+				for (let key in bonusData.bonusAR) {
+					if (!result[key]) result[key] = 0;
+					result[key] += bonusData.bonusAR[key];
+				}
+			}
+		}
+	}
+	return result;
+}
+
+var EQDATAHISTORY = {
+	'': {
+		4: { FP: 1, ACC: 0 },
+		5: { FP: 5, AA: 3, ACC: 0 },
+		6: { FP: 7, CANBbonus: 0 },
+		7: { FP: 14 },
+		11: { FP: 1 },
+		26: { ASW: 1 },
+		37: { AA: 1, EV: 0 },
+		38: { AA: 2, EV: 0 },
+		39: { AA: 4, EV: 0 },
+		40: { AA: 5, EV: 0 },
+		44: { ASW: 4 },
+		45: { ASW: 6 },
+		46: { ASW: 4, ACC: 0 },
+		47: { ASW: 6, ACC: 0 },
+		48: { AA: 0 },
+		50: { FP: 9, ACC: 0, CANBbonus: 0 },
+		51: { AA: 6 },
+		55: { EV: 0 },
+		65: { FP: 3, ACC: 2 },
+		66: { AA: 5, ACC: 1 },
+		76: { FP: 15 },
+		77: { AA: 1 },
+		84: { AA: 6 },
+		85: { AA: 7 },
+		90: { FP: 8, CANBbonus: 0 },
+		92: { AA: 5 },
+		96: { EV: 0 },
+		104: { FP: 14 },
+		119: { FP: 3 },
+		139: { FP: 5 },
+		149: { AR: 0 },
+		234: { AA: 4, ACC: 3 },
+		235: { AA: 4, ACC: 2 },
+		267: { AA: 3 },
+	},
+	'2013-09-18': {
+		6: { CANBbonus: 10 },
+		50: { CANBbonus: 15 },
+	},
+	'2013-11-01': {
+		26: { ASW: 2 },
+		44: { ASW: 5 },
+		45: { ASW: 8 },
+		46: { ASW: 6, ACC: 1 },
+		47: { ASW: 10, ACC: 1 },
+	},
+	'2013-12-24': {
+		26: { ASW: 4 },
+	},
+	'2014-05-23': {
+		48: { AA: 2 },
+	},
+	'2014-08-08': {
+		96: { EV: 2 },
+	},
+	'2014-09-12': {
+		37: { AA: 2, EV: 1 },
+		38: { AA: 3, EV: 1 },
+		39: { AA: 5, EV: 1 },
+		40: { AA: 6, EV: 1 },
+		48: { AA: 3 },
+		51: { AA: 8 },
+		66: { AA: 6 },
+		84: { AA: 7 },
+		85: { AA: 8 },
+		92: { AA: 6 },
+	},
+	'2014-10-24': {
+		4: { FP: 2, ACC: 1 },
+		5: { FP: 7, AA: 4, ACC: 1 },
+		6: { FP: 8 },
+		7: { FP: 15 },
+		11: { FP: 2 },
+		50: { FP: 10 },
+		65: { FP: 4, ACC: 3 },
+		66: { ACC: 2 },
+		76: { FP: 16 },
+		77: { AA: 2 },
+		90: { FP: 9 },
+		104: { FP: 15 },
+	},
+	'2015-10-30': {
+		55: { EV: 3 },
+	},
+	'2017-09-29': {
+		149: { AR: 1 },
+	},
+	'2017-10-25': {
+		50: { ACC: 1 },
+		65: { FP: 5 },
+		90: { CANBbonus: 10 },
+		119: { FP: 4 },
+		139: { FP: 6 },
+		234: { AA: 5, ACC: 4 },
+		235: { AA: 5, ACC: 3 },
+	},
+	'2018-06-29': {
+		267: { AA: 4 },
+	},
+};
+
+var EQTDATAHISTORY = {
+	'2013-06-12': {
+		5: { canequip: ['CAV'] },
+		12: { canequip: ['CVL','CV','CVB'] },
+		13: { canequip: ['CVL','CV','CVB'] },
+		14: { canequip: ['CLT'] },
+		15: { canequip: ['CLT'] },
+		18: { canequip: ['CA','CAV'] },
+	},
+	'2014-07-28': {
+		19: { canequip: ['FBB'] },
+	},
+	'2014-12-01': {
+		29: { canequip: ['BB','BBV'] },
+	},
+	'2015-11-21': {
+		29: { canequipS: [343,356] },
+	},
+	'2016-02-29': {
+		24: { canequipS: [147] },
+		27: { canequipS: [147] },
+		46: { canequipS: [147] },
+	},
+	'2016-03-19': {
+		24: { canequipS: [352] },
+		46: { canequipS: [352] },
+	},
+	'2016-04-01': {
+		24: { canequipS: [434,435] },
+	},
+	'2017-11-29': {
+		27: { canequipS: [146,216,217] },
+	},
+	'2018-04-06': {
+		11: { canequipS: [305,306,307,314] },
+		27: { canequipS: [305,306,307,314] },
+	},
+};
+
+function setEquipDataDate(dateSet) {
+	for (let date of Object.keys(EQDATAHISTORY).sort()) {
+		if (dateSet < date) break;
+		for (let mid in EQDATAHISTORY[date]) {
+			for (let key in EQDATAHISTORY[date][mid]) {
+				if (EQDATAHISTORY[date][mid][key] == 0) delete EQDATA[mid][key];
+				else EQDATA[mid][key] = EQDATAHISTORY[date][mid][key];
+			}
+		}
+	}
+	for (let date of Object.keys(EQTDATAHISTORY).sort()) {
+		for (let eqType in EQTDATAHISTORY[date]) {
+			for (let key in EQTDATAHISTORY[date][eqType]) {
+				for (let eqid of EQTDATAHISTORY[date][eqType][key]) {
+					let ind = EQTDATA[eqType][key].indexOf(eqid);
+					if (date <= dateSet && ind == -1) {
+						EQTDATA[eqType][key].push(eqid);
+					} else if (date > dateSet && ind != -1) {
+						EQTDATA[eqType][key].splice(ind,1);
+					}
+				}
+			}
+		}
+	}
+}
+
+var IMPROVEMENTHISTORY = {
+	'2014-12-01': [8],
+	'2014-12-12': [5],
+	'2015-01-09': [13,46,47,125],
+	'2015-01-23': [36,116],
+	'2015-05-18': [11,128],
+	'2015-06-12': [27,30,89,106],
+	'2015-06-26': [28,88],
+	'2015-07-17': [31,141],
+	'2016-02-29': [59,103,104,105,163],
+	'2016-03-11': [25,49],
+	'2016-04-22': [102],
+	'2016-06-30': [19,20,21,96,109,152,161,179,181,182,183, 110,153,154,155,156,157],
+	'2016-07-15': [60],
+	'2016-10-05': [192],
+	'2016-11-04': [131,193],
+	'2016-12-09': [197,198],
+	'2016-12-22': [73,204],
+	'2017-02-28': [72,162,203,210],
+	'2017-09-12': [206,247],
+	'2017-10-25': [226,266],
+	'2017-12-11': [201,221,222],
+	'2018-01-17': [174],
 };
