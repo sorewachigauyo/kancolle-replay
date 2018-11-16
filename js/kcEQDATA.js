@@ -3848,6 +3848,31 @@ var EQDATA = {
 		LOS: 2,
 		RNG: 3,
 	},
+	307: {
+		name: 'GFCS Mk.37',
+		nameJP: 'GFCS Mk.37',
+		added: '2018-09-28',
+		type: RADARS,
+		FP: 2,
+		AA: 7,
+		AR: 1,
+		ACC: 9,
+		EV: 2,
+		LOS: 6,
+		RNG: 2,
+	},
+	308: {
+		name: '5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37',
+		nameJP: '5inch単装砲 Mk.30改+GFCS Mk.37',
+		type: MAINGUNSAA,
+		FP: 3,
+		AA: 11,
+		AR: 1,
+		ACC: 6,
+		EV: 2,
+		LOS: 3,
+		RNG: 2,
+	},
 	501: {
 		name: '5inch Single Cannon',
 		nameJP: '5inch単装砲',
@@ -5036,6 +5061,7 @@ function getBonusStats(mid,eqids) {
 		if (!eqid || eqid < 0) continue;
 		eqCounts[eqid] = eqCounts[eqid] + 1 || 1;
 		let eqdata = EQDATA[eqid];
+		if (!eqdata) continue;
 		if (EQTDATA[eqdata.type].btype == B_RADAR) {
 			if (eqdata.LOS >= 5) hasSR = true;
 			if (eqdata.AA >= 2) hasAR = true;
