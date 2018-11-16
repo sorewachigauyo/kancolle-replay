@@ -700,7 +700,11 @@ function chProcessKC3File2() {
 			for (let item of shipN.items) {
 				if (item <= 0) continue;
 				let eqdata = EQDATA[CHDATA.gears['x'+item].masterId];
-				if (!eqdata) continue;
+				if (!eqdata) {
+					CHDATA.gears['x'+item].heldBy = null;
+					shipN.items[shipN.items.indexOf(item)] = -1;
+					continue;
+				}
 				num -= eqdata[stat] || 0;
 			}
 			let numC;
@@ -711,10 +715,10 @@ function chProcessKC3File2() {
 			if (num != numC) {
 				if (num > numC) console.log(stat + ' ' + num + ' ' + numC + ' ' + shipd.name);
 				shipN[stat] = Math.min(num,numC) + (shipN[stat]-num);
-				if (stat == 'ASW' && dataDate >= MECHANICDATESOTHER.hpMod && num - numC > 0 && num - numC <= 9) {
-					shipN[stat] += num - numC;
-					console.log('guess ASW modded' + ' ' + (num-numC));
-				}
+				// if (stat == 'ASW' && dataDate >= MECHANICDATESOTHER.hpMod && num - numC > 0 && num - numC <= 9) {
+					// shipN[stat] += num - numC;
+					// console.log('guess ASW modded' + ' ' + (num-numC));
+				// }
 			}
 		}
 		
@@ -748,7 +752,9 @@ function chProcessKC3File2() {
 		for (var i=0; i<shipN.items.length; i++) {
 			if (shipN.items[i] <= 0) continue;
 			// unequip items no longer equipable
-			var eqtype = EQDATA[CHDATA.gears['x'+shipN.items[i]].masterId].type;
+			let eqdata = EQDATA[CHDATA.gears['x'+shipN.items[i]].masterId];
+			if (!eqdata) continue;
+			var eqtype = eqdata.type;
 			if ((EQTDATA[eqtype].canequip.indexOf(shiptype) == -1 && (!EQTDATA[eqtype].canequipS||EQTDATA[eqtype].canequipS.indexOf(shipN.masterId)==-1)) || (EQTDATA[eqtype].cannotequipS && EQTDATA[eqtype].cannotequipS.indexOf(shipN.masterId)!=-1)) {
 				chShipEquipItem(sid,-1,i);
 				continue;
@@ -799,6 +805,7 @@ function chProcessKC3File2() {
 }
 
 function chEmergencyResetStats(shipN,shipO) {
+	if (!shipN || !shipO) return;
 	for (var i=0; i<shipN.items.length; i++) shipN.items[i] = -1;
 	shipN.FP = shipO.fp[1];
 	shipN.TP = shipO.tp[1];
