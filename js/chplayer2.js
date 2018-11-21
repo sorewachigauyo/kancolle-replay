@@ -1137,17 +1137,20 @@ function lbSelectPhase() {
 			messages[currentBase-1].visible = true;
 		} else {
 			for (var i=0; i<areas.length; i++) {
-				areas[i].interactive = false;
-				stage.removeChild(areas[i]);
+				areas[i].interactive = areas[i].buttonMode = false;
 			}
 			for (var i=0; i<crosshairs.length; i++) {
 				recycle(crosshairs[i]);
 			}
 			for (var i=0; i<messages.length; i++) {
-				recycle(messages[i]);
+				messages[i].interactive = messages[i].buttonMode = false;
 			}
-			mapPhase();
-			ecomplete = true;
+			addTimeout(function() {
+				for (let area of areas) stage.removeChild(area);
+				for (let message of messages) recycle(message);
+				mapPhase();
+				ecomplete = true;
+			}, 1);
 		}
 	}
 	
@@ -1177,6 +1180,7 @@ function lbSelectPhase() {
 		messages[currentBase-1].visible = true;
 	}
 	
+	let found = false;
 	for (var letter in MAPDATA[WORLD].maps[MAPNUM].nodes) {
 		var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
 		if (node.hidden && (!CHDATA.event.maps[MAPNUM].routes || CHDATA.event.maps[MAPNUM].routes.indexOf(node.hidden) == -1)) continue;
@@ -1189,19 +1193,26 @@ function lbSelectPhase() {
 		area.alpha = 0;
 		area.buttonMode = true;
 		area.interactive = (MAPDATA[WORLD].maps[MAPNUM].nodes[letter].distance <= getLBASRange(CHDATA.ships['z'+currentBase]));
+		found = found || area.interactive;
 		area.position.set(node.x+MAPOFFX,node.y+MAPOFFY);
 		area.letter = letter;
 		area.callback = afterSelect;
 		area.click = function(e) { nodeSelected = this.letter; this.callback(); }
 		areas.push(area);
+	}
+	if (!found) {
+		addTimeout(function() { mapPhase(); ecomplete = true; }, 1);
+		return;
+	}
+	for (let area of areas) {
 		stage.addChild(area);
 	}
 
 	for (var i=1; i<=3; i++) {
 		var message = getFromPool('lbmessage'+i,'assets/maps/lbmessage'+i+'.png');
-		message.interactive = message.buttonMode = true;
-		message.callback = afterContinue;
-		message.click = function(e) { this.callback(); }
+		// message.interactive = message.buttonMode = true;
+		// message.callback = afterContinue;
+		// message.click = function(e) { this.callback(); }
 		message.position.set(10,10);
 		message.visible = (i==currentBase);
 		messages.push(message);
@@ -1683,14 +1694,16 @@ function showRouteUnlock(route,routeId) {
 		if (skip.indexOf(letter) != -1) continue;
 		var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
 		if (node.replacedBy && MAPDATA[WORLD].maps[MAPNUM].nodes[node.replacedBy].hidden == routeId) {
-			sprsRemove.push(mapnodes[letter]);
 			let ind = CHDATA.event.maps[MAPNUM].visited.indexOf(letter);
 			if (ind != -1) {
 				if (CHDATA.event.maps[MAPNUM].visited.indexOf(node.replacedBy) == -1) CHDATA.event.maps[MAPNUM].visited[ind] = node.replacedBy;
 				else CHDATA.event.maps[MAPNUM].visited.splice(ind,1);
 			}
 			addMapNode(node.replacedBy);
-			stage.removeChild(mapnodes[letter]); stage.addChildAt(mapnodes[letter],stage.getChildIndex(mapship));
+			if (mapnodes[letter]) {
+				stage.removeChild(mapnodes[letter]); stage.addChildAt(mapnodes[letter],stage.getChildIndex(mapship));
+				sprsRemove.push(mapnodes[letter]);
+			}
 			skip.push(node.replacedBy);
 			continue;
 		}
