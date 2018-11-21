@@ -17498,8 +17498,9 @@ var MAPDATA = {
 				hiddenRoutes: {
 					1: {
 						images: [
+							{ name: '1_3.png', x: 594, y: 69 },
 							{ name: '1_1.png', x: 240, y: 248 },
-							{ name: '1_2.png', x: 573, y: 105 },
+							{ name: '1_2.png', x: 563, y: 105 },
 						],
 						unlock: function(debuff) {
 							if (CHDATA.event.maps[1].part == 2) {
@@ -17667,6 +17668,14 @@ var MAPDATA = {
 						y: 142,
 						resource: 0,
 						dropoff: true,
+						replacedBy: 'K*',
+						end: true
+					},
+					'K*': {
+						type: 3,
+						x: -100,
+						y: -100,
+						hidden: 1,
 						end: true
 					},
 					'L': {
