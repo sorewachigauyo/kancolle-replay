@@ -24116,7 +24116,23 @@ var MAPDATA = {
 		newResupplyCosts: true,
 		bannerImg: 'http://i.imgur.com/Oj9Svb7.png',
 		bannerImgAlt: 'http://i.imgur.com/fRKQ4tM.png',
-		transportCalc: transportCalcStandard,
+		transportCalc: function(ships,rank) {
+			rank = rank || 'S';
+			let tp = transportCalcStandard(ships,'S');
+			for (let ship of ships) {
+				if (!ship) continue;
+				for (let item of ship.items) {
+					if (item <= 0) continue;
+					let eq = CHDATA.gears['x'+item];
+					let eqd = EQDATA[eq.masterId];
+					if (eqd.type == LANDINGTANK) tp += 18;
+				}
+			}
+			tp = Math.floor(tp);
+			if (rank == 'A') tp *= 0.7;
+			if (rank != 'S' && rank != 'A') return 0;
+			return Math.floor(tp);
+		},
 		voiceSpecial: {
 			24: { 'attack': 'assets/voice/Ooi_Kantai_Kessen_2018_Atk.mp3' },
 			25: { 'attack': 'assets/voice/Kitakami_Kantai_Kessen_2018_Atk.mp3' },
@@ -26816,6 +26832,15 @@ var MAPDATA = {
 					return debuff.Q2 && debuff.M && debuff.W;
 				},
 				startCheck: function() {
+					if (CHDATA.event.maps[7].debuffed) {
+						for (let ship of FLEETS1[0].ships.concat(FLEETS1[1].ships)) {
+							let baseMid = getBaseId(ship.mid);
+							if ([111,116,143].indexOf(baseMid) != -1) {
+								ship.bonusSpecial = [{mod:1.8}];
+								continue;
+							}
+						}
+					}
 					if (CHDATA.fleets.combined == 1) return 'Start1';
 					return 'Start2';
 				},

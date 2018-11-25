@@ -546,6 +546,11 @@ function chShipEquipItem(shipid,itemid,slot) {
 			if (neweqd[stats[i]]) ship[stats[i]]+=neweqd[stats[i]];
 		}
 		CHDATA.gears['x'+itemid].heldBy = shipid;
+		
+		if (shipid[0] == 'z') {
+			let num = chGetLBASNumPlanes(CHDATA.gears['x'+itemid]);
+			SHIPDATA[ship.masterId].SLOTS[slot] = ship.planes[slot] = num;
+		}
 	}
 	
 	if (CHDATA.config.mechanics.equipBonus) {
@@ -581,6 +586,13 @@ function chShipEquipItem(shipid,itemid,slot) {
 	} else if (ship.SPD != undefined) {
 		delete ship.SPD;
 	}
+}
+
+function chGetLBASNumPlanes(item) {
+	if (!EQDATA[item.masterId]) return (MAPDATA[WORLD].lbasSlotCount || 18);
+	let type = EQDATA[item.masterId].type;
+	let num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
+	return num;
 }
 
 //------------------------
@@ -1200,13 +1212,15 @@ function chGetSupportType(counts) {
 
 function chLoadLBAS(num) {
 	var base = CHDATA.ships['z'+num];
-	var equips = [], improvs = [0,0,0,0], profs = [0,0,0,0];
+	var equips = [], improvs = [], profs = [];
 	for (var j=0; j<base.items.length; j++) {
 		if (base.items[j] <= 0) { continue; }
 		var item = CHDATA.gears['x'+base.items[j]];
 		equips.push(item.masterId);
-		if (chAllowImprovement(item.masterId)) improvs[j] = item.stars || 0;
-		if (CHDATA.config.mechanics.proficiency) profs[j] = Math.max(0,item.ace) || 0;
+		if (chAllowImprovement(item.masterId)) improvs.push(item.stars || 0);
+		else improvs.push(0);
+		if (CHDATA.config.mechanics.proficiency) profs.push(Math.max(0,item.ace) || 0);
+		else profs.push(0);
 	}
 	LBAS[num-1] = new LandBase(equips,improvs,profs);
 	LBAS[num-1].PLANESLOTS = base.planes.slice();
@@ -1319,7 +1333,7 @@ function chTableSetShip(sid,fleet,slot,noswap) {
 	
 	if (fleet == 5) { //LBAS only
 		chLoadLBAS(slot);
-		$('#fleetlbac'+fleet+slot).text(LBAS[slot-1].fleetAirPower());
+		$('#fleetlbac'+fleet+slot).text(LBAS[slot-1].fleetAirPower(false,true));
 		$('#fleetlbab'+fleet+slot).text(LBAS[slot-1].airPowerDefend());
 		$('#fleetlbrn'+fleet+slot).text(getLBASRange(ship));
 	}
@@ -1446,11 +1460,11 @@ function chUpdateFleetInfo(fleetnum) {
 			if (ship.items[j] <= 0) continue;
 			var eq = CHDATA.gears['x'+ship.items[j]];
 			var eqd = EQDATA[eq.masterId];
-			if (EQTDATA[eqd.type].isfighter && eqd.AA && i<CHDATA.fleets[fleetnum].length) {
+			if ((EQTDATA[eqd.type].isfighter || EQTDATA[eqd.type].isdivebomber || EQTDATA[eqd.type].istorpbomber) && i<CHDATA.fleets[fleetnum].length) {
 				var impr = (chAllowImprovement(eq.masterId) && eq.stars>0)? eq.stars : 0;
 				var prof = (CHDATA.config.mechanics.proficiency && eq.ace>0)? eq.ace : 0;
 				var eqo = new Equip(eq.masterId,impr,prof);
-				ap += Math.floor((eqd.AA+impr*.2) * Math.sqrt(ship.planes[j]) + (eqo.APbonus||0));
+				ap += Math.floor(((eqd.AA||0)+impr*.2) * Math.sqrt(ship.planes[j]) + (eqo.APbonus||0));
 			}
 			
 		}
@@ -1882,14 +1896,25 @@ function chPushHP(fleetnum,shipnum,hp) {
 	chFleetSetHP(fleetnum,shipnum,hp);
 }
 
-function chPushResupply(fleetnum,shipnum,fuel,ammo,planes) {
+function chPushResupply(fleetnum,shipnum,fuel,ammo,planes,skipEmpty) {
 	var sid = CHDATA.fleets[fleetnum][shipnum-1];
 	var ship = CHDATA.ships[sid];
 	if (!ship) return;
 	ship.fuel = fuel;
 	ship.ammo = ammo;
-	ship.planes = planes.slice();
-	chFleetSetResupply(fleetnum,shipnum,fuel,ammo,planes);
+	if (skipEmpty) {
+		let planesSupply = SHIPDATA[ship.masterId].SLOTS.slice();
+		let ind = 0;
+		for (let i=0; i<planesSupply.length; i++) {
+			if (ship.items[i] <= 0) continue;
+			planesSupply[i] = planes[ind];
+			if (++ind >= planes.length) break;
+		}
+		ship.planes = planesSupply;
+	} else {
+		ship.planes = planes.slice();
+	}
+	chFleetSetResupply(fleetnum,shipnum,fuel,ammo,ship.planes);
 }
 
 function chPushMorale(fleetnum,shipnum,morale) {
