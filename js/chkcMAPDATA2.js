@@ -26832,6 +26832,15 @@ var MAPDATA = {
 					return debuff.Q2 && debuff.M && debuff.W;
 				},
 				startCheck: function() {
+					if (CHDATA.event.maps[7].debuffed) {
+						for (let ship of FLEETS1[0].ships.concat(FLEETS1[1].ships)) {
+							let baseMid = getBaseId(ship.mid);
+							if ([111,116,143].indexOf(baseMid) != -1) {
+								ship.bonusSpecial = [{mod:1.8}];
+								continue;
+							}
+						}
+					}
 					if (CHDATA.fleets.combined == 1) return 'Start1';
 					return 'Start2';
 				},

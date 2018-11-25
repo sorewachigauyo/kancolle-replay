@@ -73,7 +73,18 @@ function InitUI() {
 	if (MAPDATA[WORLD].allowLBAS) {
 		$('#tabLBAS').parent().show();
 		var n = MAPDATA[WORLD].lbasSlotCount || 18;
-		SHIPDATA[5001].SLOTS = SHIPDATA[5002].SLOTS = SHIPDATA[5003].SLOTS = [n,n,n,n];
+		SHIPDATA[5001].SLOTS = [n,n,n,n];
+		SHIPDATA[5002].SLOTS = [n,n,n,n];
+		SHIPDATA[5003].SLOTS = [n,n,n,n];
+		for (let i=1; i<=3; i++) {
+			let lbas = CHDATA.ships['z'+i];
+			if (!lbas) continue;
+			for (let j=0; j<lbas.items.length; j++) {
+				if (lbas.items[j] <= 0) continue;
+				let item = CHDATA.gears['x'+lbas.items[j]];
+				SHIPDATA[5000+i].SLOTS[j] = chGetLBASNumPlanes(item);
+			}
+		}
 	} else {
 		$('#tabLBAS').parent().hide();
 	}
@@ -90,6 +101,7 @@ function InitUI() {
 		$('#btnsupportB').show();
 	}
 	
+	chClickedTab('#tabmain');
 	$('#mainspace').show();
 }
 
@@ -2317,7 +2329,7 @@ function pushShipStatusToUI() {
 	}
 	for (var i=1; i<=3; i++) {
 		if (CHDATA.fleets['lbas'+i] && LBAS[i-1]) {
-			chPushResupply(5,i,0,0,LBAS[i-1].planecount);
+			chPushResupply(5,i,0,0,LBAS[i-1].planecount,true);
 		}
 	}
 }

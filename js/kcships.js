@@ -31,11 +31,11 @@ Fleet.prototype.loadShips = function(ships) {
 	}
 	this.ships[0].isflagship = true;
 }
-Fleet.prototype.fleetAirPower = function(jetonly) {  //get air power
+Fleet.prototype.fleetAirPower = function(jetonly,includeScout) {  //get air power
 	this.AP = 0;
 	for (var i=0; i<this.ships.length; i++) {
 		if (this.ships[i].HP <= 0 || this.ships[i].retreated) continue;
-		this.AP += this.ships[i].airPower(jetonly);
+		this.AP += this.ships[i].airPower(jetonly,includeScout);
 	}
 	return this.AP;
 }
@@ -716,10 +716,10 @@ Ship.prototype.reset = function() {
 }
 
 Ship.prototype.airState = function() { return this.fleet.AS; }
-Ship.prototype.airPower = function(jetonly) {
+Ship.prototype.airPower = function(jetonly,includeScout) {
 	var ap = 0;
 	for (var i=0; i<this.equips.length; i++) {
-		if (this.equips[i].isfighter && (!jetonly||this.equips[i].isjet)) {
+		if ((this.equips[i].isfighter && (!jetonly||this.equips[i].isjet)) || (includeScout && EQTDATA[this.equips[i].type].isPlane)) {
 			ap += Math.floor(((this.equips[i].AA||0) + (this.equips[i].level||0)*.2) * Math.sqrt(this.planecount[i]) + (this.equips[i].APbonus||0));
 		}
 	}
@@ -1013,14 +1013,14 @@ function LandBase(equips,levels,profs) {
 	this.PLANESLOTS = [18,18,18,18];
 	this.planecount = this.PLANESLOTS.slice();
 	this.equips = [];
-	for (var i=0; i<equips.length; i++) this.equips.push(new Equip(equips[i],levels[i],profs[i]));
+	for (var i=0; i<equips.length; i++) this.equips.push(new Equip(equips[i],levels[i],profs[i],true));
 	this.AS = 0;
 }
 LandBase.prototype.airState = function() { return this.AS; }
 LandBase.prototype.airPower = function(jetonly) {
 	var ap = 0;
 	for (var i=0; i<this.equips.length; i++) {
-		if (this.equips[i].isfighter && (!jetonly||this.equips[i].isjet)) {
+		if (EQTDATA[this.equips[i].type].isPlane && (!jetonly||this.equips[i].isjet)) {
 			var base = (this.equips[i].AA||0) + (this.equips[i].level||0)*.2;
 			if (this.equips[i].type == LANDBOMBER || this.equips[i].type == INTERCEPTOR) base += (this.equips[i].EV||0)*1.5;
 			ap += Math.floor(base * Math.sqrt(this.planecount[i]) + (this.equips[i].APbonus||0));
@@ -1032,7 +1032,7 @@ LandBase.prototype.fleetAirPower = LandBase.prototype.airPower;
 LandBase.prototype.airPowerDefend = function() {
 	var ap = 0, mod = 1;
 	for (var i=0; i<this.equips.length; i++) {
-		if (this.equips[i].isfighter) {
+		if (EQTDATA[this.equips[i].type].isPlane) {
 			var base = (this.equips[i].AA||0) + (this.equips[i].level||0)*.2;
 			if (this.equips[i].type == LANDBOMBER || this.equips[i].type == INTERCEPTOR) base += (this.equips[i].EV||0) + (this.equips[i].ACC||0)*2;
 			ap += Math.floor(base * Math.sqrt(this.planecount[i]) + (this.equips[i].APbonus||0));
@@ -1094,12 +1094,12 @@ LandBase.createJetLandBase = function(landbases) {
 var PLANEDEFAULT = new Ship(0,'PLANEDEFAULT',0, 1,1, 0,0,0,0, 0, 0,0,3, 1);
 PLANEDEFAULT.CVshelltype = true;
 
-function Equip(equipid,level,rank) {
+function Equip(equipid,level,rank,forLBAS) {
 	for(var key in EQDATA[equipid]) this[key] = EQDATA[equipid][key];
 	this.mid = equipid;
 	this.improves = {};
 	if (level) this.setImprovement(level);
-	if (rank) this.setProficiency(rank);
+	if (rank) this.setProficiency(rank,forLBAS);
 	
 	var eq = EQDATA[equipid];
 	if (EQTDATA[eq.type].isfighter && eq.AA) this.isfighter = true;
@@ -1134,7 +1134,7 @@ Equip.prototype.setImprovement = function(level) {
 		for (var key in special) this.improves[key] = improve[key]*Math.sqrt(level);
 	}
 }
-Equip.prototype.setProficiency = function(rank) {
+Equip.prototype.setProficiency = function(rank,forLBAS) {
 	if (!EQTDATA[this.type].isPlane) return;
 	this.rank = rank;
 	this.exp = [0,10,25,40,55,70,80,120][rank];
@@ -1151,7 +1151,7 @@ Equip.prototype.setProficiency = function(rank) {
 		case JETBOMBER:
 			break;
 		default:
-			this.APbonus = 0;
+			if (!forLBAS) this.APbonus = 0;
 			break;
 	}
 	if (this.APbonus) this.isfighter = true;
