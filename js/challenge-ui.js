@@ -1089,6 +1089,8 @@ function chStart() {
 		}
 		var fuel = 0, ammo = 0;
 		for (var i=0; i<LBAS.length; i++) {
+			if (i >= MAPDATA[WORLD].maps[MAPNUM].lbas) break;
+			if (!CHDATA.fleets['lbas'+(i+1)]) continue;
 			if (!LBAS[i]) continue;
 			for (var j=0; j<LBAS[i].equips.length; j++) {
 				var equip = LBAS[i].equips[j];

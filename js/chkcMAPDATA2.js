@@ -18170,9 +18170,14 @@ var MAPDATA = {
 						distance: 3,
 						boss: true,
 						compDiff: {
-							3: ['Hard 1','Hard 2','Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							3: ['Hard 1'],
+							2: ['Medium 1'],
+							1: ['Easy 2'],
+						},
+						compDiffC: {
+							3: ['Hard 2','Hard 3'],
+							2: ['Medium 2','Medium 3'],
+							1: ['Easy 1','Easy 3'],
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[3].part != 2) return;
@@ -21508,7 +21513,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						compDiffF: {
+						compDiffC: {
 							3: ['Hard 2'],
 							2: ['Medium 2'],
 							1: ['Easy 2'],
