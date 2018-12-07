@@ -1095,6 +1095,10 @@ function lbSelectPhase() {
 	var currentBase = 1;
 	if (currentBase == 1 && !CHDATA.fleets.lbas1) currentBase = 2;
 	if (currentBase == 2 && !CHDATA.fleets.lbas2) currentBase = 3;
+	if (currentBase > MAPDATA[WORLD].maps[MAPNUM].lbas) {
+		addTimeout(function() { mapPhase(); ecomplete = true; }, 1);
+		return;
+	}
 	var currentNum = 0;
 	var areas = [];
 	var crosshairs = [];
@@ -1357,6 +1361,7 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 	} else {
 		comps = (mapdata.compDiffF && lastdance)? mapdata.compDiffF[diff] : mapdata.compDiff[diff];
 		if (mapdata.compDiffC && CHDATA.event.maps[MAPNUM].hp <= 0) comps = mapdata.compDiffC[diff];
+		if (mapdata.compDiffC && MAPDATA[WORLD].maps[MAPNUM].currentBoss && MAPDATA[WORLD].maps[MAPNUM].currentBoss != letter) comps = mapdata.compDiffC[diff];
 	}
 	var comp = comps[Math.floor(Math.random()*comps.length)];
 	var compd;

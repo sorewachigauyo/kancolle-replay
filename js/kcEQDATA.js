@@ -3874,6 +3874,15 @@ var EQDATA = {
 		LOS: 3,
 		RNG: 2,
 	},
+	309: {
+		name: 'Type C Kouhyouteki',
+		nameJP: '甲標的 丙型',
+		added: '2018-10-30',
+		type: MIDGETSUB,
+		TP: 14,
+		ACC: 1,
+		EV: 1,
+	},
 	501: {
 		name: '5inch Single Cannon',
 		nameJP: '5inch単装砲',

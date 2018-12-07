@@ -1414,7 +1414,7 @@ function LBASPhase(lbas,alive2,subsalive2,isjetphase,APIkouku) {
 		if (lbas.planecount[i] < 0) continue;
 		
 		var contactMod = 1;
-		if (lbas.airState() != -2 && lbas.airState() != 0) {
+		if (lbas.airState() != -2) {
 			var contactdata = getContact([lbas]);
 			if (contactdata) {
 				contactMod = contactdata.mod;
@@ -2122,6 +2122,7 @@ function simStats(numsims,foptions) {
 			totalResult.totalFuelS += cost[0];
 			totalResult.totalAmmoS += cost[1];
 			totalResult.totalBauxS += cost[2];
+			LBAS[alllbas[j]-1].reset();
 		}
 		
 		for (var j=0; j<FLEETS1.length; j++) FLEETS1[j].reset();

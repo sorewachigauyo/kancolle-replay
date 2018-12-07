@@ -18170,9 +18170,14 @@ var MAPDATA = {
 						distance: 3,
 						boss: true,
 						compDiff: {
-							3: ['Hard 1','Hard 2','Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							3: ['Hard 1'],
+							2: ['Medium 1'],
+							1: ['Easy 2'],
+						},
+						compDiffC: {
+							3: ['Hard 2','Hard 3'],
+							2: ['Medium 2','Medium 3'],
+							1: ['Easy 1','Easy 3'],
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[3].part != 2) return;
@@ -21508,7 +21513,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						compDiffF: {
+						compDiffC: {
 							3: ['Hard 2'],
 							2: ['Medium 2'],
 							1: ['Easy 2'],
@@ -26759,6 +26764,19 @@ var MAPDATA = {
 							1: 800,
 							4: 800,
 						},
+						enemyRaid: {
+							maxNum: { 3: 1, 2: 1, 1: 1, 4: 0 },
+							chance: { 3: .2, 2: .2, 1: .2, 4: 0 },
+							compName: 'AB',
+							compDiff: {
+								3: ['1','2','3'],
+								2: ['4','5','6'],
+								1: ['7','8','9'],
+							},
+							debuffGive: function(airState,totalHPLost) {
+								if (airState >= 1) CHDATA.event.maps[7].debuff.AB = CHDATA.event.maps[7].debuff.AB + 1 || 1;
+							}
+						},
 					},
 					2: {
 						currentBoss: 'X',
@@ -26774,6 +26792,7 @@ var MAPDATA = {
 							1: 800,
 							4: 800,
 						},
+						enemyRaid: null,
 					}
 				},
 				reward: { ships: [549] },
@@ -26785,19 +26804,6 @@ var MAPDATA = {
 					setTimeout(function() { SM.playNew('assets/voice/Musashi_ShoGo_2018_End2.mp3'); }, 36000+offset);
 					setTimeout(function() { SM.playNew('assets/voice/KanColle_ShoGo_2018_ED.mp3'); }, 50500+offset);
 					setTimeout(function() { SM.playNew('assets/voice/Zuikaku_ShoGo_2018_End2.mp3'); }, 244500+offset);
-				},
-				enemyRaid: {
-					maxNum: { 3: 1, 2: 1, 1: 1, 4: 0 },
-					chance: { 3: .2, 2: .2, 1: .2, 4: 0 },
-					compName: 'AB',
-					compDiff: {
-						3: ['1','2','3'],
-						2: ['4','5','6'],
-						1: ['7','8','9'],
-					},
-					debuffGive: function(airState,totalHPLost) {
-						if (airState >= 1) CHDATA.event.maps[7].debuff.AB = CHDATA.event.maps[7].debuff.AB + 1 || 1;
-					}
 				},
 				hiddenRoutes: {
 					1: {

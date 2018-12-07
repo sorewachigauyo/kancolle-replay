@@ -1050,6 +1050,9 @@ LandBase.prototype.airPowerDefend = function() {
 	}
 	return Math.floor(ap*mod);
 }
+LandBase.prototype.reset = function() {
+	this.planecount = this.PLANESLOTS.slice();
+}
 LandBase.prototype.getCost = function() {
 	var cost = [0,0,0]; //fuel,ammo,baux
 	for (var i=0; i<this.equips.length; i++) {
