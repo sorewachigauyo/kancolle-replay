@@ -479,7 +479,7 @@ function chDialogItemFilter(category) {
 		case 5: types=[FIGHTER,INTERCEPTOR]; break;
 		case 6: types=[DIVEBOMBER,LANDBOMBER]; break;
 		case 7: types=[TORPBOMBER]; break;
-		case 8: types=[CARRIERSCOUT,AUTOGYRO,ASWPLANE,JETBOMBER,JETSCOUT,CARRIERSCOUT2]; break;
+		case 8: types=[CARRIERSCOUT,AUTOGYRO,ASWPLANE,JETBOMBER,JETSCOUT,CARRIERSCOUT2,LANDSCOUT]; break;
 		case 9: types=[RADARS,RADARL,RADARXL]; break;
 		case 10: types=[DEPTHCHARGE,SONARS,SONARL]; break;
 		case 11: types=[APSHELL,TYPE3SHELL]; break;
@@ -711,6 +711,7 @@ function chProcessKC3File2() {
 			let num = shipN[stat];
 			for (let item of shipN.items) {
 				if (item <= 0) continue;
+				console.log(item);
 				let eqdata = EQDATA[CHDATA.gears['x'+item].masterId];
 				if (!eqdata) {
 					CHDATA.gears['x'+item].heldBy = null;
@@ -892,6 +893,7 @@ function chSave() {
 	data.ships = CHDATA.ships;
 	data.gears = CHDATA.gears;
 	data.fleets = CHDATA.fleets;
+	data.maps = CHDATA.maps;
 	localStorage.setItem('ch_basic'+FILE,JSON.stringify(basic));
 	localStorage.setItem('ch_data'+FILE,JSON.stringify(data));
 	localStorage.setItem('ch_file',FILE);
@@ -1566,6 +1568,9 @@ function chToggleShowSF(show) {
 //----------------sortie----------------
 function chLoadSortieInfo(mapnum) {
 	var world = CHDATA.event.world;
+	if(world == 99){
+		world = MAPDATA[world].maps[mapnum].world;
+	}
 	if (!MAPDATA[world]) return;
 	var mapdata = MAPDATA[world].maps[mapnum];
 	if (!mapdata) return;
@@ -1730,21 +1735,39 @@ function chLoadSortieInfo(mapnum) {
 	MAPNUM = CHDATA.event.mapnum = mapnum;
 	if (MAPNUM <= 1) $('#srtLeft').hide();
 	else $('#srtLeft').show();
-	if (!MAPDATA[WORLD].maps[MAPNUM+1]) $('#srtRight').hide();
+	if (!MAPDATA[WORLD].maps[MAPNUM+1] && (CHDATA.event.world == 99 && MAPNUM >= 7)) $('#srtRight').hide();
 	else $('#srtRight').show();
 }
 
 function chClickedSortieLeft() {
 	if (MAPNUM <= 1) return;
 	$('#srtHPBar').css('animation','');
-	chLoadSortieInfo(MAPNUM-1);
-	
+
+	MAPNUM--;
+	WORLD = CHDATA.event.world;
+	if(WORLD == 99) {
+		WORLD = CHDATA.maps[MAPNUM].world;
+	}
+
+	chLoadSortieInfo(MAPNUM);	
 }
 
 function chClickedSortieRight() {
-	if (!MAPDATA[WORLD].maps[MAPNUM+1]) return;
+	if (!MAPDATA[WORLD].maps[MAPNUM+1] && CHDATA.event.world != 99) return;
 	$('#srtHPBar').css('animation','');
-	chLoadSortieInfo(MAPNUM+1);
+
+	MAPNUM++;
+	WORLD = CHDATA.event.world;
+	if(WORLD == 99) {
+		WORLD = CHDATA.maps[MAPNUM].world;
+	}
+
+	chLoadSortieInfo(MAPNUM);
+}
+
+function chSortieViewStrategy() {
+	if (MAPDATA[WORLD].maps[MAPNUM].strategy) alert(MAPDATA[WORLD].maps[MAPNUM].strategy);
+	else alert("No strategy description available.");
 }
 
 function chSortieStartChangeDiff() {
@@ -1955,7 +1978,8 @@ function chResupplyAll() {
 	fleets.push(4);
 	if (MAPDATA[WORLD].allowLBAS) fleets.push(5);
 	for (var i=0; i<fleets.length; i++) {
-		for (var j=0; j<CHDATA.fleets[fleets[i]].length; j++) chResupplyOne(fleets[i],j+1);
+		for (var j=0; j<CHDATA.fleets[fleets[i]].length; j++) 
+			chResupplyOne(fleets[i],j+1);
 	}
 }
 
@@ -1973,6 +1997,16 @@ function chResupplyOne(fleetnum,shipnum) {
 	chPushResupply(fleetnum,shipnum,10,10,shipd.SLOTS);
 }
 
+function chSparkleAll(){
+	var fleets = [1];
+	if (CHDATA.fleets.combined) fleets.push(2);
+	fleets.push(3);
+	fleets.push(4);
+	for (var i=0; i<fleets.length; i++) {
+		for (var j=0; j<CHDATA.fleets[fleets[i]].length; j++) 
+			chClickMorale(fleets[i],j+1,true);
+	}
+}
 
 function chShowHoverBox(name,element) {
 	var offset = $(element).offset();
@@ -2061,12 +2095,23 @@ function chGetSupplyCost(ship) {
 	return costs;
 }
 
-function chClickMorale(fleetnum,shipnum) {
-	var ship = CHDATA.ships[CHDATA.fleets[fleetnum][shipnum-1]];
-	ship.morale = Math.min(85,ship.morale+12);
+function chClickMorale(fleetnum,shipnum,dofull) {
+	if(dofull == undefined) dofull = false;
+	var sid = CHDATA.fleets[fleetnum][shipnum-1];
+	var ship = CHDATA.ships[sid];
+	if (!ship) return;
+	
+	var sparkleRuns = 1;
+	if(dofull){
+		sparkleRuns = Math.ceil((85 - ship.morale) / 12);
+		ship.morale = 85;
+	}
+	else{
+		ship.morale = Math.min(85,ship.morale+12);
+	}
 	chFleetSetMorale(fleetnum,shipnum,ship.morale);
-	var fuel = Math.floor(SHIPDATA[ship.masterId].fuel * .4);
-	var ammo = Math.floor(SHIPDATA[ship.masterId].ammo * .4);
+	var fuel = Math.floor(SHIPDATA[ship.masterId].fuel * .4) * sparkleRuns;
+	var ammo = Math.floor(SHIPDATA[ship.masterId].ammo * .4) * sparkleRuns;
 	CHDATA.event.resources.fuel += fuel;
 	CHDATA.event.resources.ammo += ammo;
 	chUIUpdateResources();

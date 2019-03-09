@@ -51,6 +51,7 @@ const TRANSPORTITEM = 50;
 const SUBRADAR = 51;
 const JETBOMBER = 57;
 const JETSCOUT = 59;
+const LANDSCOUT = 60;
 const RADARXL = 93;
 const CARRIERSCOUT2 = 94;
 const OTHER = 99;
@@ -492,6 +493,12 @@ EQTDATA[JETBOMBER] = {
 	isPlane: true,
 	isfighter: true,
 	isdivebomber: true,
+};
+EQTDATA[LANDSCOUT] = {
+	name: 'Land-Based Reconaissance Plane',
+	image: 9,
+	canequip: ['LandBase'],
+	isPlane: true,
 };
 EQTDATA[OTHER] = {
 	name: 'Misc',
@@ -3578,7 +3585,7 @@ var EQDATA = {
 		name: '51cm Twin Gun Mount',
 		nameJP: '51cm連装砲',
 		added: '2018-02-16',
-		type: MAINGUNL,
+		type: MAINGUNXL,
 		FP: 32,
 		AA: 5,
 		AR: 2,
@@ -3610,7 +3617,7 @@ var EQDATA = {
 		name: '5inch Single Gun Mount Mk.30',
 		nameJP: '5inch単装砲 Mk.30',
 		added: '2018-02-28',
-		type: MAINGUNS,
+		type: MAINGUNSAA,
 		FP: 2,
 		AA: 6,
 		AR: 1,
@@ -3882,6 +3889,71 @@ var EQDATA = {
 		TP: 14,
 		ACC: 1,
 		EV: 1,
+	},
+	310: {
+		name: '14cm Twin Gun Mount Kai',
+		nameJP: '14cm連装砲改',
+		added: '2018-11-29',
+		type: MAINGUNM,
+		FP: 5,
+		AR: 1,
+		ACC: 3,
+		RNG: 2,
+	},
+	311: {
+		name: 'Type 2 Land-based Reconnaissance Aircraft',
+		nameJP: '二式陸上偵察機',
+		added: '2018-11-29',
+		type: LANDSCOUT,
+		AA: 3,
+		ACC: 2,
+		LOS: 8,
+	},
+	312: {
+		name: 'Type 2 Land-based Reconnaissance Aircraft (Skilled)',
+		nameJP: '二式陸上偵察機(熟練)',
+		added: '2018-12-27',
+		type: LANDSCOUT,
+		AA: 3,
+		AR: 1,
+		ACC: 3,
+		LOS: 9,
+	},
+	313: {
+		name: '5inch Single Gun Mount Mk.30 Kai',
+		nameJP: '5inch単装砲 Mk.30改',
+		added: '2018-12-27',
+		type: MAINGUNSAA,
+		FP: 3,
+		AA: 7,
+		AR: 1,
+		ACC: 2,
+		EV: 2,
+		RNG: 1,
+	},
+	314: {
+		name: '533mm Quintuple Torpedo Mount (Initial Model)',
+		nameJP: '533mm五連装魚雷(初期型)',
+		added: '2018-12-25',
+		type: TORPEDO,
+		FP: 1,
+		TP: 8,
+		AR: 1,
+		EV: 1,
+		RNG: 1,
+	},
+	315: {
+		name: 'SG Radar (Initial Model)',
+		nameJP: 'SG レーダー(初期型)',
+		added: '2018-12-25',
+		type: RADARS,
+		FP: 1,
+		AA: 3,
+		ACC: 8,
+		EV: 6,
+		ASW: 3,
+		LOS: 8,
+		RNG: 2,
 	},
 	501: {
 		name: '5inch Single Cannon',
@@ -4752,6 +4824,54 @@ var EQDATA = {
 		EV: 3,
 		RNG: 4,
 	},
+	588: {
+		name: 'Abyssal 5inch Twin Gun Mount Model C',
+		nameJP: '深海5inch連装砲C型',
+		added: '2018-12-27',
+		type: MAINGUNS,
+		FP: 6,
+		AA: 3,
+		ACC: 18,
+		EV: 9,
+		ASW: 6,
+		RNG: 1,
+	},
+	589: {
+		name: 'Abyssal 5.5inch Twin Gun Mount Kai',
+		nameJP: '深海5.5inch連装砲改',
+		added: '2018-12-27',
+		type: MAINGUNM,
+		FP: 8,
+		AA: 4,
+		AR: 4,
+		ACC: 19,
+		EV: 7,
+		ASW: 6,
+		RNG: 2,
+	},
+	590: {
+		name: 'Abyssal Target',
+		nameJP: '深海標的',
+		added: '2018-12-27',
+		type: MIDGETSUB,
+		FP: 4,
+		TP: 18,
+		ACC: 9,
+		EV: 4,
+		RNG: 4,
+	},
+	591: {
+		name: 'Abyssal 5inch Single Gun Mount Mk.30',
+		nameJP: '深海5inch単装砲 Mk.30',
+		added: '2018-12-27',
+		type: MAINGUNSAA,
+		FP: 5,
+		AA: 7,
+		ACC: 20,
+		EV: 8,
+		ASW: 7,
+		RNG: 2,
+	},
 };
 
 var LBASDATA = {
@@ -4880,6 +5000,12 @@ var LBASDATA = {
 	277: { distance: 4, cost: 6 },
 	291: { distance: 5, cost: 5 },
 	292: { distance: 6, cost: 5 },
+	302: { distance: 4, cost: 5 },
+	304: { distance: 3, cost: 3 },
+	305: { distance: 4, cost: 8 },
+	306: { distance: 4, cost: 8 },
+	311: { distance: 8, cost: 5 },
+	312: { distance: 9, cost: 5 },
 };
 
 var EXPANSIONSLOTDATA = {
@@ -4905,6 +5031,7 @@ var EXPANSIONSLOTDATA = {
 		}
 	}
 };
+
 
 var EQUIPBONUSDATA = {
 	15: [ //61cm quad oxy
@@ -4969,7 +5096,7 @@ var EQUIPBONUSDATA = {
 		{ bonus: { FP: 1, EV: 1 }, shipClass: [30] },
 		{ bonus: { FP: 1 }, num: 1, shipS: [566,567,568] },
 		{ bonus: { FP: 2, EV: 1 }, bonusSR: { FP: 2, TP: 3, EV: 1 }, shipClass: [38] },
-		{ bonus: { FP: 1 }, bonusSR: { FP: 1, TP: 1, EV: 2 }, shipS: [542,543] },
+		{ bonus: { FP: 1 }, bonusSR: { FP: 1, TP: 1, EV: 2 }, shipS: [542,543,563,564] },
 		{ bonus: { FP: 2, EV: 1 }, bonusSR: { FP: 1, TP: 3, EV: 2 }, shipS: [229] },
 	],
 	268: [ //arctic camo

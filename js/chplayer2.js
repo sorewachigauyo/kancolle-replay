@@ -1,7 +1,12 @@
 function InitUI() {
 	if (!CHDATA.event) return;
-	WORLD = CHDATA.event.world;
+	randomizeMaps();
+
 	MAPNUM = CHDATA.event.mapnum;
+	WORLD = CHDATA.event.world;
+	if(WORLD == 99) {
+		WORLD = CHDATA.maps[MAPNUM].world;
+	}
 	
 	for (let mechanic in MECHANICDATES) { //refresh mechanics for updates
 		CHDATA.config.mechanics[mechanic] = (MECHANICDATES[mechanic] <= CHDATA.config.mechanicsdate);
@@ -436,7 +441,7 @@ function addMapNode(letter,type) {
 	if (mapnodes[letter]) stage.removeChild(mapnodes[letter]);
 	mapnodes[letter] = nodeG;
 	stage.addChildAt(nodeG,stage.getChildIndex(mapship));
-	console.log(stage.getChildIndex(map));
+	//console.log(stage.getChildIndex(map));
 }
 
 
@@ -938,14 +943,18 @@ function chPlayerStart() {
 
 function chLoadMap(mapnum) {
 	map.removeChildren();
-	map.addChild(PIXI.Sprite.fromImage('assets/maps/'+CHDATA.event.world+'/'+mapnum+'.png'));
+	world = CHDATA.event.world;
+	if(world == 99){
+		world = MAPDATA[world].maps[mapnum].world;
+	}
+	map.addChild(PIXI.Sprite.fromImage('assets/maps/'+world+'/'+mapnum+'.png'));
 	if (MAPDATA[WORLD].maps[mapnum].hiddenRoutes) {
 		if (!CHDATA.event.maps[mapnum].routes) CHDATA.event.maps[mapnum].routes = [];
 		for (var key in MAPDATA[WORLD].maps[mapnum].hiddenRoutes) {
 			if (CHDATA.event.maps[mapnum].routes.indexOf(parseInt(key)) == -1) continue;
 			var route = MAPDATA[WORLD].maps[mapnum].hiddenRoutes[key];
 			for (var image of route.images) {
-				var spr = PIXI.Sprite.fromImage('assets/maps/'+CHDATA.event.world+'/'+image.name);
+				var spr = PIXI.Sprite.fromImage('assets/maps/'+world+'/'+image.name);
 				spr.position.set(image.x,image.y);
 				map.addChild(spr);
 			}
@@ -1019,6 +1028,24 @@ function mapPhase(first) {
 	} else if (curnode.routeS) {
 		eventqueue.push([selectNode,[curnode.routeS]]);
 	}
+	//var letters = [];
+	
+	/*for(node in MAPDATA[WORLD].maps[MAPNUM].nodes){
+		let nodeData = MAPDATA[WORLD].maps[MAPNUM].nodes[node];
+		let hidden = nodeData.hidden && (!CHDATA.event.maps[MAPNUM].routes || CHDATA.event.maps[MAPNUM].routes.indexOf(nodeData.hidden) == -1);
+		if (!hidden) letters.push(node);
+	}
+
+	//nextletter = letters[Math.floor(Math.random()*letters.length)];
+
+	if(curnode.type === 3){
+		MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].routeS =[];
+	}*/
+
+	if (curnode.routeS) {
+		//eventqueue.push([selectNode,[randomNodes(letters)]]);
+		eventqueue.push([selectNode,[randomNodes(letters)]]);
+	}
 	
 	if (!curnode.routeS) mapPhase2(nextletter);
 	
@@ -1082,6 +1109,7 @@ function mapPhase2(nextletter) {
 			eventqueue.push([mapStormNode,[mapship,nextletter]]);
 			break;
 		default:
+			eventqueue.push([mapIllusionNode,[mapship,nextletter]]);
 			break;
 	}
 	
@@ -1120,6 +1148,7 @@ function lbSelectPhase() {
 		crosshair.position.set(node.x+MAPOFFX,node.y+MAPOFFY);
 		crosshairs.push(crosshair);
 		stage.addChild(crosshair);
+		SM.play('lbasselect');
 
 		if (currentNum >= 2) {
 			for (var i=0; i<areas.length; i++) {
@@ -1168,6 +1197,7 @@ function lbSelectPhase() {
 				ecomplete = true;
 			}, 1);
 		}
+		SM.play('lbassend');
 	}
 	
 	var afterCancel = function() {
@@ -1314,6 +1344,7 @@ function selectNode(letters) {
 		areas[i].pivot.set(10);
 		areas[i].alpha = 0;
 		areas[i].interactive = areas[i].buttonMode = true;
+		areas[i].mouseover = function(e) { SM.play('hover'); }
 		areas[i].position.set(node.x+MAPOFFX,node.y+MAPOFFY);
 		areas[i].letter = letters[i];
 		areas[i].callback = afterSelect;
@@ -1364,13 +1395,131 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 		if (mapdata.compDiffC && MAPDATA[WORLD].maps[MAPNUM].currentBoss && MAPDATA[WORLD].maps[MAPNUM].currentBoss != letter) comps = mapdata.compDiffC[diff];
 	}
 	var comp = comps[Math.floor(Math.random()*comps.length)];
-	var compd;
+	var compd = {};
 	if (WORLD == 20) {
 		let n = (mapdata.compName)? mapdata.compName : (mapdata.boss)? 'Boss' : letter;
 		compd = ENEMYCOMPS['World '+MAPDATA[WORLD].maps[MAPNUM].world][MAPDATA[WORLD].maps[MAPNUM].name][n][comp];
 	} else {
 		let n = (mapdata.compName)? mapdata.compName : letter;
-		compd = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
+		//compd = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
+		//abyssals
+		//'Easy 1':{c:[1761,1616,1528,1506,1575,1575],f:3,air:true},
+
+		//'Casual 2':{c:[1547,1557,1529,1616,1528,1528],ce:[1595,1591,1742,1742,1502,1502],f:114},
+
+		var bossnum = (typeof MAPDATA[WORLD].maps[MAPNUM].bossnode === 'object')? MAPDATA[WORLD].maps[MAPNUM].bossnode[0] : MAPDATA[WORLD].maps[MAPNUM].bossnode;
+		var letterboss = (typeof bossnum == 'string')? bossnum : String.fromCharCode(64+bossnum);
+
+		/*var mainNumb = 6;
+		var mainBossNumb = 0;
+		var isBoss = (MAPDATA[WORLD].maps[MAPNUM].currentBoss === letter || letterboss === letter);
+		if(isBoss) {
+			mainBossNumb = 3;
+			mainNumb = 6 - mainBossNumb;
+		}else{
+			mainBossNumb = 1;
+			mainNumb = 6 - mainBossNumb;
+		}*/
+		
+		var ennemies = MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly ? submarines : abyssals;
+		var ennemiesBoss = MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly ? submarinesBoss : boss;
+
+		//var normalComp = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
+		var compd = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
+		var compMain = [];
+
+
+		for(ship in compd.c){
+			var ship_id = compd.c[ship];
+
+			if(Object.keys(ennemiesBoss).indexOf(ship_id.toString()) !== -1){
+				var obj_keys = Object.keys(ennemiesBoss);
+				var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+
+				compMain.push(parseInt(shipID));
+			}else{
+				var obj_keys = Object.keys(ennemies);
+				var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+
+				compMain.push(parseInt(shipID));
+			}
+		}
+
+		compd.c = compMain;
+
+		/*
+		for(let i = 0; i < mainBossNumb; i++){
+			var obj_keys = Object.keys(ennemiesBoss);
+			var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+
+			compMain.push(parseInt(shipID));
+		}
+		for(let i = 0; i < mainNumb; i++){
+			var obj_keys = Object.keys(ennemies);
+			var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+
+			compMain.push(parseInt(shipID));
+		}*/
+
+		var formations = [1,2,3,3,4,4,4,5,6];
+		var formationsSubs = [5,4];
+		compd.f = formations[Math.floor(Math.random()*formations.length)];
+
+		if(MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly) compd.f = formationsSubs[Math.floor(Math.random()*formationsSubs.length)];
+
+		var shouldBeCombined = compd.ce ? true : false;
+
+		if(shouldBeCombined){
+			compEscort = [];
+
+			for(ship in compd.ce){
+				var ship_id = compd.ce[ship];
+	
+				if(Object.keys(ennemiesBoss).indexOf(ship_id.toString()) !== -1){
+					var obj_keys = Object.keys(ennemiesBoss);
+					var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+	
+					compEscort.push(parseInt(shipID));
+				}else{
+					var obj_keys = Object.keys(ennemies);
+					var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+	
+					compEscort.push(parseInt(shipID));
+				}
+			}
+
+			compd.ce = compEscort;
+
+			var formationsC = [114, 214];
+
+			compd.f = formationsC[Math.floor(Math.random()*formationsC.length)];
+		}
+
+		/*if(MAPDATA[WORLD].maps[MAPNUM].nodes[letter].raid) {
+			compd.air = true;
+		}*/
+
+		//var isCombinedFleet = (Math.random()) < 0.25;
+
+		/*var escortNumb = 6;
+		if(isCombinedFleet) escortNumb = 2;
+		if(isBoss) escortNumb = 4;
+
+		if(shouldBeCombined){
+			compEscort = []
+			for(let i = 0; i < escortNumb; i++){
+				var obj_keys = Object.keys(ennemies);
+				var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+	
+				compEscort.push(parseInt(shipID));
+			}
+
+			compd.ce = compEscort;
+
+			var formationsC = [114, 214];
+
+			compd.f = formationsC[Math.floor(Math.random()*formationsC.length)];
+		}*/
 	}
 	return compd;
 }
@@ -1679,7 +1828,6 @@ function endMap() {
 				chShowReward(reward);
 			}
 		}
-		
 		for (var mapnum in MAPDATA[WORLD].maps) {
 			if (mapnum < MAPNUM) continue;
 			if (mapnum > CHDATA.event.unlocked) continue;
@@ -1762,7 +1910,7 @@ function shuttersPrebattle() {
 		}
 		return false;
 	},[]]);
-	SM.play('shutters');
+	SM.play('shuttersopen');
 	addTimeout(function() { ecomplete = true; }, 500);
 }
 
@@ -1771,7 +1919,7 @@ function shuttersPostbattle(noshutters) {
 	if (!noshutters) {
 		shutterTop.alpha = shutterBottom.alpha = 1;
 		updates.push([closeShutters,[]]);
-		SM.play('shutters');
+		SM.play('shuttersclose');
 	}
 	if (bossbar.active) {  //update map hp
 		CHDATA.event.maps[MAPNUM].hp = bossbar.nowhp;
@@ -2209,7 +2357,7 @@ function continueSelect() {
 function shuttersSelect() {
 	shutterTop.alpha = shutterBottom.alpha = 1;
 	updates.push([closeShutters,[]]);
-	SM.play('shutters');
+	SM.play('shuttersclose');
 	
 	mapNBnobutton[0].position.set(226,188); mapNBnobutton[1].position.set(207,170);
 	mapNByesbutton[0].position.set(441,188); mapNByesbutton[1].position.set(422,170);
@@ -2234,7 +2382,7 @@ function shuttersSelect() {
 		if (NBSELECT==1) {
 			addTimeout(function() {
 				updates.push([openShutters,[]]);
-				SM.play('shutters');
+				SM.play('shuttersopen');
 			}, 700);
 			addTimeout(function(){ ecomplete = true; }, 1700);
 		} else {
@@ -2527,7 +2675,7 @@ function getLBASRange(ship) {
 		if (ship.items[i] <= -1) continue;
 		var eq = CHDATA.gears['x'+ship.items[i]];
 		if (LBASDATA[eq.masterId].distance < rangeMin) rangeMin = LBASDATA[eq.masterId].distance;
-		if (EQDATA[eq.masterId].type == SEAPLANE || EQDATA[eq.masterId].type == CARRIERSCOUT || EQDATA[eq.masterId].type == FLYINGBOAT) {
+		if (EQDATA[eq.masterId].type == SEAPLANE || EQDATA[eq.masterId].type == CARRIERSCOUT || EQDATA[eq.masterId].type == FLYINGBOAT || EQDATA[eq.masterId].type == LANDSCOUT) {
 			rangeScout = Math.max(rangeScout,LBASDATA[eq.masterId].distance);
 		}
 	}
@@ -2758,7 +2906,7 @@ function prepEnemyRaid() {
 		addTimeout(function() {
 			shutterTop.alpha = shutterBottom.alpha = 1;
 			updates.push([closeShutters,[]]);
-			SM.play('shutters');
+			SM.play('shuttersopen');
 		}, 700);
 		addTimeout(function() { ecomplete = true; }, 1500);
 	},[]]);

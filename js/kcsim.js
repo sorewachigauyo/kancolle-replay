@@ -71,6 +71,11 @@ var AACIDATA = {
 	30:{num:3,rate:.6,mod:1.3},
 	31:{num:2,rate:.6,mod:1.2},
 	32:{num:3,rate:.6,mod:1.2},
+	33:{num:3,rate:.6,mod:1.35},
+	34:{num:7,rate:.6,mod:1.6},
+	35:{num:6,rate:.6,mod:1.55},
+	36:{num:6,rate:.6,mod:1.55},
+	37:{num:4,rate:.6,mod:1.45},
 };
 
 var ARTILLERYSPOTDATA = {
@@ -560,7 +565,7 @@ function shellPhaseTarget(ship,alive,subsalive,isOASW) {
 			result.type = 3;
 			result.target = targets;
 			result.alive = alive;
-		} else {
+		}else {  // todo: nelson touch
 			var targets;
 			if (ship.hasDivebomber) {
 				targets = [];
@@ -1512,8 +1517,17 @@ function airstrikeLBAS(lbas,target,slot,contactMod) {
 		if (equip.isdivebomber) postMod *= (target.divebombWeak || 1);
 		// postMod *= (target.divebombWeak || 1);
 		if (target.fleet.combinedWith) postMod *= 1.1;
+		var reconPostMod = 1;
+		for(var i = 0; i < lbas.equips.length; ++i){
+			if(lbas.equips[i].type == LANDSCOUT){
+				if(lbas.equips[i].ACC == 3) reconPostMod = 1.15;
+				if(lbas.equips[i].ACC == 2 && reconPostMod < 1.15) reconPostMod = 1.125;
+			}
+		}
+		postMod *= reconPostMod;
 		dmg = damage(lbas,target,dmgbase,preMod,res*contactMod*postMod,150);
 		if (target.installtype == 3) dmg += 100;
+		
 		realdmg = takeDamage(target,dmg);
 	}
 	if(C) {
