@@ -1026,10 +1026,10 @@ function mapPhase(first) {
 		MAPDATA[WORLD].maps[MAPNUM].nodes[curletter].routeS =[];
 	}*/
 
-	if (curnode.routeS) {
+	/*if (curnode.routeS) {
 		//eventqueue.push([selectNode,[randomNodes(letters)]]);
-		eventqueue.push([selectNode,[randomNodes(letters)]]);
-	}
+		eventqueue.push([selectNode, MAPDATA[WORLD].maps[MAPNUM][currentNum].routeS]);
+	}*/
 	
 	if (!curnode.routeS) mapPhase2(nextletter);
 	
