@@ -7805,7 +7805,7 @@ var MAPDATA = {
 				},
 				debuffCheck: function(debuff) {
 					if (!debuff) return false;
-					return (debuff.A && debuff.G && debuff.L && CHDATA.event.maps[5].debuff && CHDATA.event.maps[5].debuff.I);
+					return (debuff.A && debuff.G && debuff.L);
 				},
 				nodes: {
 					'Start1': {
@@ -13510,9 +13510,9 @@ var MAPDATA = {
 				checkLock: [2,3,4,5],
 				giveLock: 1,
 				maphp: {
-					3: { 1: 1440 },
-					2: { 1: 1440 },
-					1: { 1: 1440 },
+					3: { 1: 500 },
+					2: { 1: 500 },
+					1: { 1: 500 },
 				},
 				finalhp: {
 					3: 220,
