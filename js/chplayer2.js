@@ -1405,8 +1405,8 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 			mainNumb = 6 - mainBossNumb;
 		}*/
 		
-		var ennemies = MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly ? submarines : abyssals;
-		var ennemiesBoss = MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly ? submarinesBoss : boss;
+		//var ennemies = MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly ? submarines : abyssals;
+		//var ennemiesBoss = MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly ? submarinesBoss : boss;
 
 		//var normalComp = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
 		var compd = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
@@ -1415,6 +1415,14 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 
 		for(ship in compd.c){
 			var ship_id = compd.c[ship];
+
+			var ennemies = abyssals;
+			var ennemiesBoss = boss;
+
+			if(Object.keys(submarines).indexOf(ship_id.toString()) !== -1 || Object.keys(submarinesBoss).indexOf(ship_id.toString()) !== -1){
+				ennemies = submarines;
+				ennemiesBoss = submarinesBoss;
+			}
 
 			if(Object.keys(ennemiesBoss).indexOf(ship_id.toString()) !== -1){
 				var obj_keys = Object.keys(ennemiesBoss);
