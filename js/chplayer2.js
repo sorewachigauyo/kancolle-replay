@@ -43,19 +43,13 @@ function InitUI() {
 	
 	var found = false;
 	for (var i=1; i<=3; i++) {
-		if (MAPDATA[WORLD].allowFleets.indexOf(i) != -1) {
-			$('#btncombine'+i).show();
-			found = true;
-		} else {
-			$('#btncombine'+i).hide();
-		}
-	}
-	if (MAPDATA[WORLD].allowFleets.indexOf(7) != -1) {
-		$('#btncombineSF').show();
+		$('#btncombine'+i).show();
 		found = true;
-	} else {
-		$('#btncombineSF').hide();
 	}
+	
+	$('#btncombineSF').show();
+	found = true;
+	
 	if (!found) $('.combinespacec').hide();
 	else $('.combinespacec').show();
 	
@@ -75,36 +69,26 @@ function InitUI() {
 		else $('#btnLBAS'+i).css('opacity',.5);
 	}
 	
-	if (MAPDATA[WORLD].allowLBAS) {
-		$('#tabLBAS').parent().show();
-		var n = MAPDATA[WORLD].lbasSlotCount || 18;
-		SHIPDATA[5001].SLOTS = [n,n,n,n];
-		SHIPDATA[5002].SLOTS = [n,n,n,n];
-		SHIPDATA[5003].SLOTS = [n,n,n,n];
-		for (let i=1; i<=3; i++) {
-			let lbas = CHDATA.ships['z'+i];
-			if (!lbas) continue;
-			for (let j=0; j<lbas.items.length; j++) {
-				if (lbas.items[j] <= 0) continue;
-				let item = CHDATA.gears['x'+lbas.items[j]];
-				SHIPDATA[5000+i].SLOTS[j] = chGetLBASNumPlanes(item);
-			}
+	
+	$('#tabLBAS').parent().show();
+	var n = MAPDATA[WORLD].lbasSlotCount || 18;
+	SHIPDATA[5001].SLOTS = [n,n,n,n];
+	SHIPDATA[5002].SLOTS = [n,n,n,n];
+	SHIPDATA[5003].SLOTS = [n,n,n,n];
+	for (let i=1; i<=3; i++) {
+		let lbas = CHDATA.ships['z'+i];
+		if (!lbas) continue;
+		for (let j=0; j<lbas.items.length; j++) {
+			if (lbas.items[j] <= 0) continue;
+			let item = CHDATA.gears['x'+lbas.items[j]];
+			SHIPDATA[5000+i].SLOTS[j] = chGetLBASNumPlanes(item);
 		}
-	} else {
-		$('#tabLBAS').parent().hide();
 	}
 	
-	if (MAPDATA[WORLD].disableSupport) {
-		$('#tabsupportN').parent().hide();
-		$('#tabsupportB').parent().hide();
-		$('#btnsupportN').hide();
-		$('#btnsupportB').hide();
-	} else {
-		$('#tabsupportN').parent().show();
-		$('#tabsupportB').parent().show();
-		$('#btnsupportN').show();
-		$('#btnsupportB').show();
-	}
+	$('#tabsupportN').parent().show();
+	$('#tabsupportB').parent().show();
+	$('#btnsupportN').show();
+	$('#btnsupportB').show();
 	
 	chClickedTab('#tabmain');
 	$('#mainspace').show();
