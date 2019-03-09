@@ -1453,7 +1453,7 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 			compMain.push(parseInt(shipID));
 		}*/
 
-		var formations = [1,2,3,3,4,4,4,5,6];
+		var formations = [1,2,3,4,6];
 		var formationsSubs = [5,4];
 		compd.f = formations[Math.floor(Math.random()*formations.length)];
 
