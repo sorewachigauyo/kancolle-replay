@@ -1457,7 +1457,7 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 		var formationsSubs = [5,4];
 		compd.f = formations[Math.floor(Math.random()*formations.length)];
 
-		if(MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly) compd.f = formationsSubs[Math.floor(Math.random()*formationsSubs.length)];
+		if(MAPDATA[WORLD].maps[MAPNUM].nodes[letter] && MAPDATA[WORLD].maps[MAPNUM].nodes[letter].subonly) compd.f = formationsSubs[Math.floor(Math.random()*formationsSubs.length)];
 
 		var shouldBeCombined = compd.ce ? true : false;
 
