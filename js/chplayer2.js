@@ -1464,16 +1464,33 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 		if(shouldBeCombined){
 			compEscort = [];
 
+			let ennemiesEscort = [];
+			let bossEscort = [];
+
+			for(ennemy in ennemiesBoss){
+				var enemy_data = ennemiesBoss[ennemy];
+				if(!enemy_data.type.includes('CV') && !enemy_data.type.includes('BB')){
+					bossEscort[ennemy] = enemy_data;
+				}
+			}
+
+			for(ennemy in ennemies){
+				var enemy_data = ennemies[ennemy];
+				if(!enemy_data.type.includes('CV') && !enemy_data.type.includes('BB')){
+					ennemiesEscort[ennemy] = enemy_data;
+				}
+			}
+
 			for(ship in compd.ce){
 				var ship_id = compd.ce[ship];
 	
-				if(Object.keys(ennemiesBoss).indexOf(ship_id.toString()) !== -1){
-					var obj_keys = Object.keys(ennemiesBoss);
+				if(Object.keys(bossEscort).indexOf(ship_id.toString()) !== -1){
+					var obj_keys = Object.keys(bossEscort);
 					var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
 	
 					compEscort.push(parseInt(shipID));
 				}else{
-					var obj_keys = Object.keys(ennemies);
+					var obj_keys = Object.keys(ennemiesEscort);
 					var shipID = obj_keys[Math.floor(Math.random() *obj_keys.length)];
 	
 					compEscort.push(parseInt(shipID));
