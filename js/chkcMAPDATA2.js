@@ -20514,8 +20514,12 @@ var MAPDATA = {
 		allowVanguard: true,
 		vanguardConsts: { vanguardEvDD1: 20, vanguardEvDD2: 40, vanguardEvOther1: 5, vanguardEvOther2: 20 },
 		newResupplyCosts: true,
-		bannerImg: 'http://i.imgur.com/Oj9Svb7.png',
-		bannerImgAlt: 'http://i.imgur.com/fRKQ4tM.png',
+		get bannerImg(){
+			return getRandomBanner();
+		},
+		get bannerImgAlt(){
+			return getRandomBannerAlt();
+		},
 		transportCalc: function(ships,rank) {
 			rank = rank || 'S';
 			let tp = transportCalcStandard(ships,'S');
@@ -20537,6 +20541,25 @@ var MAPDATA = {
 			return randomizeMaps();
 		} 
 	}
+}
+
+var banners = [];
+var bannersAlt = [];
+
+for(map in MAPDATA){
+	if(map != 99){
+		var map_data = MAPDATA[map];
+		banners.push(map_data.bannerImg);
+		bannersAlt.push(map_data.bannerImgAlt);
+	}
+}
+
+function getRandomBanner(){
+	return banners[Math.floor(Math.random()*banners.length)];
+}
+
+function getRandomBannerAlt(){
+	return bannersAlt[Math.floor(Math.random()*bannersAlt.length)];
 }
 
 function randomizeMaps(){
