@@ -71,6 +71,11 @@ var AACIDATA = {
 	30:{num:3,rate:.6,mod:1.3},
 	31:{num:2,rate:.6,mod:1.2},
 	32:{num:3,rate:.6,mod:1.2},
+	33:{num:3,rate:.6,mod:1.35},
+	34:{num:7,rate:.6,mod:1.6},
+	35:{num:6,rate:.6,mod:1.55},
+	36:{num:6,rate:.6,mod:1.55},
+	37:{num:4,rate:.6,mod:1.45},
 };
 
 var ARTILLERYSPOTDATA = {
@@ -1345,10 +1350,11 @@ function AADefenceBombersAndAirstrike(carriers,targets,defenders,APIkouku,issupp
 		var AACIship, AACItype = 0;
 		for (var i=0; i<defenders.length; i++) {
 			if (defenders[i].AACItype.length) {
-				var r = Math.random();
+				var r = Math.random(), r2 = Math.random();
 				for (var j=0; j<defenders[i].AACItype.length; j++) {
 					var type = defenders[i].AACItype[j];
-					if (type > AACItype && r < AACIDATA[type].rate) {
+					let roll = (type >= 34 && type <= 37)? r2 : r; //Johnston AACIs roll separately
+					if (type > AACItype && roll < AACIDATA[type].rate) {
 						AACItype = type;
 						AACIship = defenders[i];
 						break;
@@ -1750,10 +1756,14 @@ function LBASPhase(lbas,alive2,subsalive2,isjetphase,APIkouku) {
 				if (C) APIkouku.api_stage1.api_touch_plane[0] = contactdata.id;
 			}
 		}
+		let contactModLB = 1;
 		for (let eq of lbas.equips) {
-			if (eq.mid == 311) contactMod = 1.15;
-			if (eq.mid == 312) contactMod = 1.18;
+			if (eq.type == LANDSCOUT) {
+				if (eq.ACC >= 3) contactModLB = 1.15;
+				else if (eq.ACC <= 2 && contactModLB < 1.125) contactModLB = 1.125;
+			}
 		}
+		contactMod *= contactModLB;
 		
 		var targets = (MECHANICS.LBASBuff && eq.ASW >= 7)? subsalive2 : alive2;
 		if (targets.length) {
