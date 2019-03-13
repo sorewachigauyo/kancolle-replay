@@ -38,6 +38,80 @@ var SOUNDNAMES = {
 	'ooyodoClear': { path: 'assets/voice/425.mp3', voldef: .5 },
 	'hover': { path: 'assets/sounds/242_nodehover.mp3', voldef: .5 },
 }
+SoundManager.prototype = {
+	play: function(name,vol,loop) {
+		//if (this._mute) return undefined;
+		this._sounds[name].play();
+		return this._sounds[name];
+	},
+	playNew: function(path,vol) {
+		vol = vol || .5;
+		let sound = new Howl({src:[path],volume:vol*this._volume});
+		sound.play();
+	},
+	playBGM: function(num,vol,noloop) {
+		this.stopBGM();
+		if (!vol) vol = (BGMLIST[num].voldef)? BGMLIST[num].voldef : .3,
+		this._bgm = new Howl({
+			src:[BGMLIST[num].url],
+			volume:vol*this._volume,
+			loop:!noloop,
+			html5:true
+		});
+		this._bgm.play();
+		this.BGMnum = num;
+		return this._bgm;
+	},
+	stopBGM: function() {
+		if (!this._bgm) return;
+		this._bgm.stop();
+		this.BGMnum = 0;
+	},
+	fadeBGM: function(dur) {
+		if (!this._bgm) return;
+		if (this.BGMnum == 0) return;
+		if (!dur) dur = 2000;
+		this._bgm.fade(this._bgm.volume(),0,dur);
+		this.BGMnum = 0;
+	},
+	playVoice: function(shipid,type,slot) {
+		if (!this._voiceON) return;
+		if (!VOICES[shipid]) return;
+		if (slot >= 10 && isPlayable(shipid)) return; //no PVP enemy voices
+		// if (slot > 10) return; //want non boss voices?
+		if (type=='nbattack' && !VOICES[shipid].nbattack) type = 'attack';
+		if (!VOICES[shipid][type]) return;
+		let path = VOICES[shipid][type];
+		if (window['MAPDATA'] && window['WORLD'] && MAPDATA[WORLD] && MAPDATA[WORLD].voiceSpecial) {
+			let baseId = getBaseId(shipid);
+			if (MAPDATA[WORLD].voiceSpecial[baseId]) {
+				path = MAPDATA[WORLD].voiceSpecial[baseId][type] || path;
+			}
+		}
+		if (!this._sounds['V'+type+shipid] || this._sounds['V'+type+shipid]._src != path) {
+			this._sounds['V'+type+shipid] = new Howl({
+				src:[path],
+				volume:.4*this._volume,
+				html5:true
+			});
+		}
+		if (this._voices[slot] && isPlayable(shipid)) {
+			this._voices[slot].stop();
+		}
+		this._voices[slot] = this._sounds['V'+type+shipid];
+		this._sounds['V'+type+shipid].play();
+		return this._sounds['V'+type+shipid];
+	},
+	turnOffVoice: function() {
+		this._voiceON = false;
+		for (var snd in this._sounds) {
+			if (snd[0] == 'V') this._sounds[snd].stop();
+		}
+	},
+	turnOnVoice: function() {
+		this._voiceON = true;
+	}
+}
 
 var BGMLIST = {
 	1: {url:'assets/music/Sound_b_bgm_1.ogg',voldef:.7},
@@ -160,67 +234,5 @@ var BGMLIST = {
 	3003: {url:'assets/music/Sound_se_52.ogg'},
 	3004: {url:'assets/music/Sound_se_31.ogg'},
 };
-
-
-SoundManager.prototype = {
-	play: function(name,vol,loop) {
-		//if (this._mute) return undefined;
-		this._sounds[name].play();
-		return this._sounds[name];
-	},
-	playBGM: function(num,vol,noloop) {
-		this.stopBGM();
-		if (!vol) vol = (BGMLIST[num].voldef)? BGMLIST[num].voldef : .3,
-		this._bgm = new Howl({
-			src:[BGMLIST[num].url],
-			volume:vol*this._volume,
-			loop:!noloop,
-			html5:true
-		});
-		this._bgm.play();
-		this.BGMnum = num;
-		return this._bgm;
-	},
-	stopBGM: function() {
-		if (!this._bgm) return;
-		this._bgm.stop();
-		this.BGMnum = 0;
-	},
-	fadeBGM: function(dur) {
-		if (this.BGMnum == 0) return;
-		if (!this._bgm) return;
-		if (!dur) dur = 2000;
-		this._bgm.fade(this._bgm.volume(),0,dur);
-		this.BGMnum = 0;
-	},
-	playVoice: function(shipid,type,slot) {
-		if (!this._voiceON) return;
-		if (!VOICES[shipid]) return;
-		if (slot >= 10 && isPlayable(shipid)) return; //no PVP enemy voices
-		// if (slot > 10) return; //want non boss voices?
-		if (type=='nbattack' && !VOICES[shipid].nbattack) type = 'attack';
-		if (!VOICES[shipid][type]) return;
-		if (!this._sounds['V'+type+shipid]) this._sounds['V'+type+shipid] = new Howl({
-			src:[VOICES[shipid][type]],
-			volume:.4*this._volume,
-			html5:true
-			});
-		if (this._voices[slot] && isPlayable(shipid)) {
-			this._voices[slot].stop();
-		}
-		this._voices[slot] = this._sounds['V'+type+shipid];
-		this._sounds['V'+type+shipid].play();
-		return this._sounds['V'+type+shipid];
-	},
-	turnOffVoice: function() {
-		this._voiceON = false;
-		for (var snd in this._sounds) {
-			if (snd[0] == 'V') this._sounds[snd].stop();
-		}
-	},
-	turnOnVoice: function() {
-		this._voiceON = true;
-	}
-}
 
 

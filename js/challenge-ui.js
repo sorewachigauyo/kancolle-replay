@@ -26,6 +26,7 @@ var MECHANICDATES = {
 	aswSoftCap: '2017-11-10',
 	LBASBuff: '2017-11-17',
 	equipBonus: '2017-12-22',
+	specialAttacks: '2018-09-12',
 };
 
 var MECHANICDATESOTHER = {
@@ -711,7 +712,6 @@ function chProcessKC3File2() {
 			let num = shipN[stat];
 			for (let item of shipN.items) {
 				if (item <= 0) continue;
-				console.log(item);
 				let eqdata = EQDATA[CHDATA.gears['x'+item].masterId];
 				if (!eqdata) {
 					CHDATA.gears['x'+item].heldBy = null;
