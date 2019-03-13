@@ -179,9 +179,9 @@ var MAPDATA = {
 				bgmNB: 9,
 				bossnode: 10,
 				maphp: {
-					3: { 1: 780 },
-					2: { 1: 780 },
-					1: { 1: 588 },
+					3: { 1: 580 },
+					2: { 1: 480 },
+					1: { 1: 388 },
 				},
 				finalhp: {
 					3: 0,
@@ -244,7 +244,14 @@ var MAPDATA = {
 						x: 479,
 						y: 204,
 						compDiff: {
-							
+							3: ['1'],
+							2: ['2'],
+							1: ['3','4'],
+						},
+						compHQ: {
+							75: ['1'],
+							35: ['2'],
+							1: ['3','4'],
 						},
 						routeC: function(ships) {
 							if (ships.CLT) return (Math.random() < .5)? 'F' : 'H';
