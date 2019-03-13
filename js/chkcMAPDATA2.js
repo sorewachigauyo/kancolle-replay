@@ -6388,7 +6388,14 @@ var MAPDATA = {
 						x: 479,
 						y: 204,
 						compDiff: {
-							
+							3: ['1'],
+							2: ['2'],
+							1: ['3'],
+						},
+						compHQ: {
+							65: ['1'],
+							30: ['2'],
+							1: ['3'],
 						},
 						routeC: function(ships) {
 							if (ships.CLT) return (Math.random() < .5)? 'F' : 'H';
