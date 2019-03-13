@@ -107,12 +107,14 @@ Fleet.prototype.supportChance = function(isboss) {
 	return c;
 }
 Fleet.prototype.reset = function(notShips) {
-	if (!notShips) { for (var i=0; i<this.ships.length; i++) this.ships[i].reset();}
+	if (!notShips) {
+		for (var i=0; i<this.ships.length; i++) this.ships[i].reset();
+		delete this.didSpecial;
+	}
 	this.AS = 0;
 	this.DMGTOTALS = [0,0,0,0,0,0];
 	this._baseFAA = undefined;
 	this._fLoS = undefined;
-	delete this.didSpecial;
 }
 Fleet.prototype.giveCredit = function(ship,damage) {
 	this.DMGTOTALS[this.ships.indexOf(ship)] += damage;
