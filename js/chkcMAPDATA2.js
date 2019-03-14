@@ -20572,7 +20572,7 @@ function getRandomBannerAlt(){
 function randomizeMaps(){
 	if(CHDATA.maps === undefined){
 		// randomize
-		var maps = [];
+		var maps = {};
 		for(var i = 1; i < 8; i++){
 			let possible_maps = [];
 			for(event_id in MAPDATA){
@@ -20589,6 +20589,15 @@ function randomizeMaps(){
 		CHDATA.maps = maps;
 		return maps;
 	}else{
+		if(Array.isArray(CHDATA.maps)){
+			var newObjMap = {};
+			for(map_num in CHDATA.maps){
+				if (CHDATA.maps[map_num] !== null){
+					newObjMap[map_num] = CHDATA.maps[map_num];
+				}
+			}
+			CHDATA.maps = newObjMap;
+		}
 		return CHDATA.maps;
 	}
 }
