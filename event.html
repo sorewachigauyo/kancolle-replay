@@ -255,7 +255,27 @@
 				<div><input type="button" value="Back" onclick="chMenuBackEvent()" /></div>
 				<br>
 				<label for="fileKC3" style="font-weight:bold">Import .kc3 file: </label><input type="file" id="fileKC3" accept=".kc3" onchange="chLoadKC3File()"/><Br>
-				<span style="font-size:10px">Strategy Room > Profile > Export Basic Profile (player info, fleets, ships, equipment, config)</span>
+				<span style="font-size:10px">Strategy Room > Profile > Export Basic Profile (player info, fleets, ships, equipment, config)</span><br>
+				<span style="font-weight:bold">Or import from any viewer (kancolle-fleetanalysis format) : </span><br>
+				<label for="shipData" style="font-weight:bold">Ship data : </label><input type="text" id="shipData"/><Br>
+				<label for="equipmentData" style="font-weight:bold">Equipment data : </label><input type="text" id="equipmentData"/><Br>
+				<label for="ttkName" style="font-weight:bold">Your name : </label><input type="text" id="ttkName"/><Br>
+				<label for="ttkLevel" style="font-weight:bold">Your level : </label><input type="number" min="1" max="120" step="1" id="ttkLevel" value="120"/><Br>
+				<label for="ttkRank" style="font-weight:bold">Your rank : </label>
+				<select id="ttkRank">
+					<option value="Marshal Admiral">Marshal Admiral</option>
+					<option value="Admiral">Admiral</option>
+					<option value="Vice-Admiral">Vice-Admiral</option>
+					<option value="Rear-Admiral">Rear-Admiral</option>
+					<option value="Captain">Captain</option>
+					<option value="Commander">Commander</option>
+					<option value="Commander (Novice)">Commander (Novice)</option>
+					<option value="Lieutenant-Commander">Lieutenant-Commander</option>
+					<option value="Vice Lieutenant-Commander">Vice Lieutenant-Commander</option>
+					<option value="Lieutenant-Commander (Novice)">Lieutenant-Commander (Novice)</option>
+				</select>
+				<Br>
+				<input value="Import" type="button" onclick="chLoadFleetData()"><br>
 				<br>
 				<div id="menufinfo" style="display:none"><br><span id="menufrank"></span> <span id="menufname"></span><span style="margin-left:20px">HQ </span><span id="menufhq"></span><span id="menufdate" style="margin-left:20px"></span></div>
 			</div>
