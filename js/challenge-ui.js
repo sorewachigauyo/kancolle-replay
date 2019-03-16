@@ -684,7 +684,7 @@ function chLoadFleetData(){
 
 		// HP = Base HP + Marriage HP + HP Mod
 		if(ship.level > 99){
-			ship.hp[0] = ship.hp[1] = ship_base_data.HP + (ship_base_data.HPMarriage || 0) + ship.mod[5];
+			ship.hp[0] = ship.hp[1] = ship_base_data.HP + (ship_base_data.HPmarriage || 0) + ship.mod[5];
 		}else{
 			ship.hp[0] = ship.hp[1] = ship_base_data.HP + ship.mod[5];
 		}
