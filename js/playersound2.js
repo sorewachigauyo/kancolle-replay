@@ -5682,6 +5682,42 @@ var VOICES = {
 		damage: "assets/voice/Abyssal_Nimbus_Princess_Broken_Form_Damaged.oga",
 		sunk: "assets/voice/Abyssal_Nimbus_Princess_Broken_Form_Sunk.ogg",
 	},
+	1852: {
+		start: "assets/voice/Abyssal_Sun_Princess_Intro.ogg",
+		attack: "assets/voice/Abyssal_Sun_Princess_Attack.ogg",
+		damage: "assets/voice/Abyssal_Sun_Princess_Damaged.oga",
+		sunk: "assets/voice/Abyssal_Sun_Princess_Sunk.oga",
+	},
+	1853: {
+		start: "assets/voice/Abyssal_Sun_Princess_Intro.ogg",
+		attack: "assets/voice/Abyssal_Sun_Princess_Attack.ogg",
+		damage: "assets/voice/Abyssal_Sun_Princess_Damaged.oga",
+		sunk: "assets/voice/Abyssal_Sun_Princess_Sunk.oga",
+	},
+	1854: {
+		start: "assets/voice/Abyssal_Sun_Princess_Intro.ogg",
+		attack: "assets/voice/Abyssal_Sun_Princess_Attack.ogg",
+		damage: "assets/voice/Abyssal_Sun_Princess_Damaged.oga",
+		sunk: "assets/voice/Abyssal_Sun_Princess_Sunk.oga",
+	},
+	1855: {
+		start: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Intro.oga",
+		attack: "assets/voice/Abyssal_Sun_Princess_Broken_Forn_Attack.oga",
+		damage: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Damaged.oga",
+		sunk: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Sunk.oga",
+	},
+	1856: {
+		start: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Intro.oga",
+		attack: "assets/voice/Abyssal_Sun_Princess_Broken_Forn_Attack.oga",
+		damage: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Damaged.oga",
+		sunk: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Sunk.oga",
+	},
+	1857: {
+		start: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Intro.oga",
+		attack: "assets/voice/Abyssal_Sun_Princess_Broken_Forn_Attack.oga",
+		damage: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Damaged.oga",
+		sunk: "assets/voice/Abyssal_Sun_Princess_Broken_Form_Sunk.oga",
+	},
 	2001: {
 		start: "assets/voice/Iona_fog_-Battle_Start.ogg",
 		attack: "assets/voice/Iona_fog_-Attack.ogg",
