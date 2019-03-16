@@ -231,6 +231,7 @@ EQTDATA[FIGHTER] = {
 	canequipS: [553],
 	isPlane: true,
 	isfighter: true,
+	canAce: true,
 };
 EQTDATA[TORPBOMBER] = {
 	name: 'Torpedo Bomber',
