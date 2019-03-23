@@ -3,9 +3,13 @@
 var SHIPGET, MAPENEMY;
 var MAP, CELLID, COMPID, RANK = 'S';
 var RANKOFFSET = { 'S':0, 'A':20, 'B': 50 };
+var HLTYPE, SDZ = 1.25;
+var DATAOUT;
 
 $('#divNode').hide();
 $('#spanPoiLoad').hide();
+$('#linkExport').css('visibility','hidden');
+$('#radHL'+(HLTYPE = +localStorage.drops_hl || 1)).prop('checked',true);
 
 for (let i=0; i<100; i++) {
 	$('#tabDrops').append('<tr id="trDrops'+i+'"><td>'+(i+1)+'</td><td id="tdDropsName'+i+'"></td><td><img id="imgDrops'+i+'" src="" /></td><td><img id="imgDropsR'+i+'" src="" /></td></tr>');
@@ -73,6 +77,23 @@ for (let letter of ['S','A','B']) {
 		}
 	});
 }
+
+for (let i=1; i<=2; i++) {
+	$('#radHL'+i).change(function() {
+		localStorage.drops_hl = HLTYPE = i;
+		if (COMPID) changeRates();
+	});
+}
+
+document.getElementById('linkExport').onclick = function() {
+	let data = getExportData();
+	if (!data) return;
+	let blob = new Blob([data], {type: "octet/stream"});
+  	this.href = window.URL.createObjectURL(blob);
+    this.target = '_blank';
+    this.download = 'droptables_'+MAP+'_'+CELLID+'_'+COMPID+'_'+RANK+'.csv';
+};
+
 
 function getShipImagePath(mid) {
 	return 'assets/icons/'+SHIPDATA[mid].image;
@@ -174,6 +195,7 @@ function changeNode(cellId) {
 	tableHighlightRank();
 	tableOutlinePool();
 	$('#tabRates').hide();
+	$('#linkExport').css('visibility','hidden');
 	// $('#inpComp1').click();
 	// $('#inpComp1').change();
 	
@@ -238,6 +260,7 @@ function changeRates() {
 		}
 	}
 	
+	DATAOUT = [];
 	let rankInd = (RANK == 'S')? 0 : (RANK == 'A')? 1 : 2;
 	for (let mid of mids) {
 		let rate = Math.round(shipRates[mid]*100)/100;
@@ -251,6 +274,8 @@ function changeRates() {
 		let html = '<tr class="rateData"><td class="rateName">'+shipName+'</td><td><img src="'+getShipImagePath(mid)+'" /></td><td>'+rateStr+'</td>';
 		let rateShipOnly = (mid == 0)? '' : Math.round(10000*rate/(100-(shipRates[0] || 0)))/10000;
 		html += '<td>'+rateShipOnly+'</td>';
+		let dataRow = [];
+		dataRow.push(mid); dataRow.push(shipName); dataRow.push(rate); dataRow.push(rateShipOnly);
 		
 		if (poiData && poiComp) {
 			let numPoi = 0;
@@ -263,10 +288,20 @@ function changeRates() {
 				numPoiStr = numPoi + '/' + poiData.counts[poiComp][rankInd];
 				ratePoiStr = Math.round(numPoi/poiData.counts[poiComp][rankInd]*10000)/10000;
 				if (numPoi > 0) {
-					let diff = Math.abs(rateShipOnly-ratePoiStr)/(1/shipCount);
-					if (diff > 1) diff = 1;
-					let cGreen = (diff <= .5)? 255 : 255*2*(1-diff);
-					let cRed = (diff >= .5)? 255 : 255*2*diff;
+					let cGreen, cRed;
+					if (HLTYPE == 1) {
+						let diff = Math.abs(rateShipOnly-ratePoiStr)/(1/shipCount);
+						if (diff > 1) diff = 1;
+						cGreen = (diff <= .5)? 255 : 255*2*(1-diff);
+						cRed = (diff >= .5)? 255 : 255*2*diff;
+					} else {
+						let sd = SD(rateShipOnly, numPoi, poiData.counts[poiComp][rankInd]);
+						sd = sd/SDZ;
+						let tRed = 3, tYellow = 2;
+						if (sd > tRed) sd = tRed;
+						cGreen = (sd <= tYellow)? 255 : 255*(tRed-sd)/(tRed-tYellow);
+						cRed = (sd >= tYellow)? 255 : 255*(sd)/tYellow;
+					}
 					let c = Math.round(cRed)*65536 + Math.round(cGreen)*256;
 					style = 'background-color:#' + c.toString(16).padStart(6,'0');
 					poiNames.push(shipName);
@@ -275,11 +310,13 @@ function changeRates() {
 				numPoiStr = numPoi + '/' + (numPoi + poiData.counts[poiComp][rankInd]);
 			}
 			html += '<td>'+numPoiStr+'</td><td style="'+style+'">'+ratePoiStr+'</td>';
+			dataRow.push(numPoi); dataRow.push(poiData.counts[poiComp][rankInd]); dataRow.push(ratePoiStr);
 		}
 		
 		html += '</tr>';
 		let e = $(html);
 		$('#tabRates').append(e);
+		DATAOUT.push(dataRow);
 	}
 	if (poiData && poiComp) {
 		$('#tabRates').append('<tr class="rateData"></tr>');
@@ -298,6 +335,7 @@ function changeRates() {
 	}
 	
 	$('#tabRates').show();
+	$('#linkExport').css('visibility','visible');
 }
 
 
@@ -356,9 +394,13 @@ function poiLoadData(map,cellId) {
 	if (!POIDATA[map]) POIDATA[map] = {};
 	console.log('start get '+map+' '+letter);
 	$('#spanPoiLoad').show();
+	$('#spanHL').hide();
+	$('#linkExport').hide();
 	if (window.location.hostname == 'fourinone41.github.io') url = 'https://cors-anywhere.herokuapp.com/' + url;
 	$.getJSON(url,function(data) {
 		$('#spanPoiLoad').hide();
+		$('#spanHL').show();
+		$('#linkExport').show();
 		let poiData = POIDATA[map][cellId] = { 'orig': data, 'counts': {} };
 		for (let name in data.data) {
 			if (name == '(无)') continue;
@@ -372,6 +414,18 @@ function poiLoadData(map,cellId) {
 		console.log(poiData);
 		if (COMPID) changeRates();
 	});
+}
+
+function SD(p,i,n) {
+	return Math.abs(p - i / n) / Math.sqrt((i / n) * (1 - i / n) / n);
+}
+
+
+function getExportData() {
+	if (!DATAOUT) return null;
+	let output = '';
+	for (let row of DATAOUT) output += row.join(',') + '\n';
+	return output.trim();
 }
 
 // })();

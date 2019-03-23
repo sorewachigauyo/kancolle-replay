@@ -94,6 +94,7 @@
 		
 		#tabRates {
 			font-weight: bold;
+			margin-top: 10px;
 		}
 		#tabRates td {
 			min-width: 80px;
@@ -104,8 +105,14 @@
 		}
 		
 		#spanPoiLoad {
-			margin-left: 20px;
+			margin-left: 40px;
 			color: red;
+		}
+		#linkExport {
+			margin-left: 100px;
+		}
+		#spanHL {
+			margin-left: 50px;
 		}
 	</style>
 </head>
@@ -163,6 +170,12 @@
 				<input type="radio" name="radRank" id="inpRankS" checked /><label for="inpRankS"><img src="assets/stats/S.png" /></label>
 				<input type="radio" name="radRank" id="inpRankA" /><label for="inpRankA"><img src="assets/stats/A.png" /></label>
 				<input type="radio" name="radRank" id="inpRankB" /><label for="inpRankB"><img src="assets/stats/B.png" /></label>
+				<a id="linkExport" href="#">Export Rates to CSV</a>
+				<span id="spanHL">
+					Highlight Mode: 
+					<input type="radio" name="radHL" id="radHL1" /><label for="radHL1">Diff</label>
+					<input type="radio" name="radHL" id="radHL2" /><label for="radHL2">Stdev</label>
+				</span>
 				<span id="spanPoiLoad">poi-statistics data loading...</span>
 				<br>
 				<table id="tabRates">
