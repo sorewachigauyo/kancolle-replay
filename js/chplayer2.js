@@ -1294,6 +1294,7 @@ function selectNode(letters) {
 	var glows = [], areas = [];
 	for (var i=0; i<letters.length; i++) {
 		var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letters[i]];
+		if (node.hidden && !(CHDATA.event.maps[MAPNUM].routes && CHDATA.event.maps[MAPNUM].routes.includes(node.hidden))) { continue; }
 		glows[i] = getFromPool('nodeGlow','assets/maps/nodeGlow.png');
 		glows[i].pivot.set(28);
 		glows[i].position.set(node.x+MAPOFFX,node.y+MAPOFFY);
@@ -1392,6 +1393,7 @@ function prepBattle(letter) {
 	if (MAPDATA[WORLD].maps[MAPNUM].parts && MAPDATA[WORLD].maps[MAPNUM].parts[CHDATA.event.maps[MAPNUM].part+1] && WORLD == 32) lastdance = false; //for now Fall15 only
 	
 	var compd = getEnemyComp(letter,mapdata,diff,lastdance);
+	if (MAPDATA[WORLD].maps[MAPNUM].overrideStats) MAPDATA[WORLD].overrideStats = MAPDATA[WORLD].maps[MAPNUM].overrideStats(diff);
 	
 	for (var i=0; i<compd.c.length; i++) {
 		var sid = compd.c[i];

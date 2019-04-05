@@ -12681,7 +12681,7 @@ var SHIPDATA = {
 		fuel: 20,
 		ammo: 25,
 		next: 0,
-		prev: 0,
+		prev: 532,
 		nextlvl: 0,
 		hasBuiltInFD: true,
 	},
