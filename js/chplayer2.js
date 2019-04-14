@@ -28,6 +28,7 @@ function InitUI() {
 	chDialogItemInit();
 	DIALOGSORT = null;
 	
+	if (MAPDATA[WORLD].allowFleets.indexOf(7) != -1 && CHDATA.fleets[1].length < 7) CHDATA.fleets[1].push(null);
 	for (var fleetnum in CHDATA.fleets) chFillTable(CHDATA.fleets[fleetnum],fleetnum);
 	if (CHDATA.fleets.combined) chClickedCombine(CHDATA.fleets.combined, true);
 	else chClickedCombine(0,true);
@@ -100,6 +101,8 @@ function InitUI() {
 		$('#btnsupportN').show();
 		$('#btnsupportB').show();
 	}
+	
+	chInitPreset();
 	
 	chClickedTab('#tabmain');
 	$('#mainspace').show();
