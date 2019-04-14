@@ -674,7 +674,8 @@ function chProcessImportOther(ships,equipments,name,level){
 
 		// HP = Base HP + Marriage HP + HP Mod
 		if(ship.level > 99){
-			ship.hp[0] = ship.hp[1] = ship_base_data.HP + (ship_base_data.HPmarriage || 0) + ship.mod[5];
+			let HPmarriage = [4,4,4,5,6,7,7,8,8,9][Math.floor(ship_base_data.HP/10)] || 9;
+			ship.hp[0] = ship.hp[1] = ship_base_data.HP + (HPmarriage || 0) + ship.mod[5];
 		}else{
 			ship.hp[0] = ship.hp[1] = ship_base_data.HP + ship.mod[5];
 		}
