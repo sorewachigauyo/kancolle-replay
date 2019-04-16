@@ -7,6 +7,9 @@ function SoundManager() {
 	this._sounds = {};
 	this._voices = [null,null,null,null,null,null,null,null,null,null,null,null];
 	this._voiceON = true;
+	this._bgmON = true;
+	this._sfxON = true;
+	this._bgmVol = 0;
 	for (name in SOUNDNAMES) {
 		var vol = (SOUNDNAMES[name].voldef)? SOUNDNAMES[name].voldef : .6;
 		this._sounds[name] = new Howl({src:[SOUNDNAMES[name].path],volume:vol*this._volume});
@@ -41,17 +44,21 @@ var SOUNDNAMES = {
 SoundManager.prototype = {
 	play: function(name,vol,loop) {
 		//if (this._mute) return undefined;
+		if (!this._sfxON) return;
 		this._sounds[name].play();
 		return this._sounds[name];
 	},
 	playNew: function(path,vol) {
+		if (!this._sfxOn) return;
 		vol = vol || .5;
 		let sound = new Howl({src:[path],volume:vol*this._volume});
 		sound.play();
 	},
 	playBGM: function(num,vol,noloop) {
 		this.stopBGM();
-		if (!vol) vol = (BGMLIST[num].voldef)? BGMLIST[num].voldef : .3,
+		if (!vol) vol = (BGMLIST[num].voldef)? BGMLIST[num].voldef : .3;
+		this._bgmVol = vol;
+		if (!this._bgmON) vol = 0;
 		this._bgm = new Howl({
 			src:[BGMLIST[num].url],
 			volume:vol*this._volume,
@@ -110,7 +117,28 @@ SoundManager.prototype = {
 	},
 	turnOnVoice: function() {
 		this._voiceON = true;
-	}
+	},
+	turnOffBGM: function() {
+		this._bgmON = false;
+		if (this._bgm) {
+			this._bgm.volume(0);
+		}
+	},
+	turnOnBGM: function() {
+		this._bgmON = true;
+		if (this._bgm && this.BGMnum) {
+			this._bgm.volume(this._bgmVol);
+		}
+	},
+	turnOffSFX: function() {
+		this._sfxON = false;
+		for (var snd in this._sounds) {
+			if (snd[0] != 'V') this._sounds[snd].stop();
+		}
+	},
+	turnOnSFX: function() {
+		this._sfxON = true;
+	},
 }
 
 var BGMLIST = {

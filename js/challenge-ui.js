@@ -2375,4 +2375,15 @@ function chPresetAddSelect(num,name) {
 		$(this).append('<option id="' + $(this).attr('id') + '_' + num + '" value="' + num + '">' + num + ' - ' + name + '</option>');
 	});
 }
-//-----
+//---------
+
+$('#inpSoundBGM').change(function() {
+	($(this).prop('checked'))? SM.turnOnBGM() : SM.turnOffBGM();
+});
+$('#inpSoundSFX').change(function() {
+	let isOn = $(this).prop('checked');
+	($(this).prop('checked'))? SM.turnOnSFX() : SM.turnOffSFX();
+});
+$('#inpSoundVoice').change(function() {
+	($(this).prop('checked'))? SM.turnOnVoice() : SM.turnOffVoice();
+});

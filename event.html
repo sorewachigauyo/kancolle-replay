@@ -98,8 +98,15 @@
 			<td><input type="button" value="&#128266;" style="width:30px;vertical-align:middle" onclick="if(!Howler._muted){Howler.mute(true);this.value='&#128263;'}else{Howler.mute(false);this.value='&#128266;';Howler.volume(parseFloat($('#rngvol').val()))}" /></td>
 			<td><input id="rngvol" type="range" value=".6" step=".01" min="0" max="1" style="width:100px;vertical-align:middle" oninput="if(!Howler._muted)Howler.volume(parseFloat(this.value))" /></td>
 			</tr></table>
-			<br><br>
 		</div>
+		<div style="margin-left:615px">
+			<table><tr>
+			<td><input type="checkbox" id="inpSoundBGM" checked /></td><td><label for="inpSoundBGM">BGM</label></td>
+			<td><input type="checkbox" id="inpSoundSFX" checked /></td><td><label for="inpSoundSFX">SE</label></td>
+			<td><input type="checkbox" id="inpSoundVoice" checked /></td><td><label for="inpSoundVoice">Voice</label></td>
+			</tr></table>
+		</div>
+		<br><br>
 		
 		<div id="sortiespace">
 			<div style="position:absolute;margin-top:300px">
