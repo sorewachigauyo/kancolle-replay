@@ -1728,8 +1728,10 @@ function chLoadSortieInfo(mapnum) {
 	}
 	if (mapdata.transport) {
 		$('#srtHPBar').css('background-color','#00ff00');
+		$('#srtHPBorder').attr('src','assets/bossbarTP.png');
 	} else {
 		$('#srtHPBar').css('background-color','red');
+		$('#srtHPBorder').attr('src','assets/bossbar.png');
 	}
 	if (mapnum == CHDATA.event.unlocked && mapdata.hpRegenTick && nowhp > 0 && nowhp < maxhp) {
 		$('#srtHPRegen').show();

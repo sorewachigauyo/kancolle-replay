@@ -19,7 +19,8 @@ var SOUNDNAMES = {
 	'torpedo': { path: 'assets/sounds/41_res.sounds.battle.SE_battle_gyorai.mp3' },
 	'planelaunch': { path: 'assets/sounds/38_res.sounds.battle.SE_battle_plane1.mp3',voldef:.5 },
 	'planeatk': { path: 'assets/sounds/36_res.sounds.battle.SE_battle_shoot.mp3',voldef:1 },
-	'shutters': { path: 'assets/sounds/29_res.sounds.SE_frame_close.mp3' },
+	'shuttersopen': { path: 'assets/sounds/218_shuttersopen.mp3' },
+	'shuttersclose': { path: 'assets/sounds/29_res.sounds.SE_frame_close.mp3' },
 	'enter': { path: 'assets/sounds/48_res.sounds.battle.SE_battle_card.mp3',voldef:.45 },
 	'airphase': { path: 'assets/sounds/42_res.sounds.battle.SE_battle_fannelCutIn.mp3',voldef:.5 },
 	'aaci': { path: 'assets/sounds/52_res.sounds.battle.SE_Bam.mp3' },
@@ -31,7 +32,10 @@ var SOUNDNAMES = {
 	'scout': { path: 'assets/sounds/19_res.sounds.map_kouku_teisatsu.mp3',voldef: .5 },
 	'jet': { path: 'assets/sounds/182_res.sounds.battle.SE_battle_jet.mp3', voldef: .5 },
 	'siren': { path: 'assets/sounds/75_res.sounds.siren.mp3', voldef: .5 },
+	'lbasselect': { path: 'assets/sounds/224_lbasselect.mp3', voldef: .35 },
+	'lbassend': { path: 'assets/sounds/227_lbassend.mp3', voldef: .35 },
 	'done': { path: 'assets/sounds/41_res.sounds.SE_correct_answer3.mp3', voldef: .5 },
+	'hover': { path: 'assets/sounds/242_nodehover.mp3', voldef: .5 },
 	'ooyodoClear': { path: 'assets/voice/425.mp3', voldef: .5 },
 }
 SoundManager.prototype = {
