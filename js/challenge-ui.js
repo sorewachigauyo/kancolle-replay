@@ -1206,13 +1206,12 @@ function chStart() {
 	if (MAPDATA[CHDATA.event.world].allowLBAS) {
 		var numBase = 0, numBaseMax = MAPDATA[WORLD].maps[MAPNUM].lbasSortie || MAPDATA[WORLD].maps[MAPNUM].lbas;
 		for (var i=1; i<=3; i++) {
-			if (numBase < numBaseMax && CHDATA.fleets['lbas'+i]) {
-				chLoadLBAS(i);
+			chLoadLBAS(i);
+			if (numBase < numBaseMax && CHDATA.fleets['lbas'+i] && LBAS[i-1].equips.length) {
 				numBase++;
 			} else {
-				// LBAS[i-1] = null;
 				CHDATA.fleets['lbas'+i] = false;
-				chLoadLBAS(i);
+				$('#btnLBAS'+i).css('opacity',.5);
 			}
 		}
 		var fuel = 0, ammo = 0;
@@ -1978,7 +1977,7 @@ function chAddLBAS(num) {
 	if (MAPNUM > CHDATA.event.unlocked) return;
 	var numBaseMax = MAPDATA[WORLD].maps[MAPNUM].lbasSortie || MAPDATA[WORLD].maps[MAPNUM].lbas;
 	var numSelected = 0;
-	for (var i=1; i<=3; i++) if (CHDATA.fleets['lbas'+i]) numSelected++;
+	for (var i=1; i<=MAPDATA[WORLD].maps[MAPNUM].lbas; i++) if (CHDATA.fleets['lbas'+i]) numSelected++;
 	
 	if (!CHDATA.fleets['lbas'+num] && numSelected < numBaseMax) {
 		CHDATA.fleets['lbas'+num] = true;
