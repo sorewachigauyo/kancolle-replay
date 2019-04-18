@@ -17511,7 +17511,6 @@ var MAPDATA = {
 						],
 						unlock: function(debuff) {
 							if (CHDATA.event.maps[1].part == 2) {
-								//do something here to remove blue node on J?
 								return true;
 							}
 							return false;
@@ -17667,7 +17666,15 @@ var MAPDATA = {
 						x: 727,
 						y: 82,
 						distance: 6,
+						replacedBy: 'J*',
 						route: 'K'
+					},
+					'J*': {
+						type: 3,
+						x: -100,
+						y: -100,
+						hidden: 1,
+						end: true
 					},
 					'K': {
 						type: 2,
