@@ -2360,6 +2360,7 @@ var VOICES = {
 		damage1: "assets/voice/Yamato-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Yamato-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Yamato-Major_Damage.ogg",
+		friend141: "assets/voice/Yamato_FriendFleet.mp3",
 	},
 	301: {
 		start: "assets/voice/Akigumo-Battle_Start.ogg",
