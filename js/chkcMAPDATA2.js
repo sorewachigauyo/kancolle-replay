@@ -29555,6 +29555,8 @@ var MAPDATA = {
 								'[95,96,98,48.49,63,65,54,138,140,527]': 1.1,
 							};
 							applyBonusToShips(bonusList);
+							FLEETS2[0].ships[0].HP = 250;
+							FLEETS2[0].ships[0].maxHP = 250;
 						}
 					},
 					'M': {
@@ -30972,7 +30974,9 @@ var MAPDATA = {
 							}[difficulty];
 							if (isLD && difficulty == 3) {
 								FLEETS2[0].ships[1].HP = 600;
+								FLEETS2[0].ships[1].maxHP = 600;
 								FLEETS2[1].ships[1].HP = 150;
+								FLEETS2[1].ships[1].maxHP = 150;
 							}
 						},
 						debuffGive: function() {
