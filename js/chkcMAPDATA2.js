@@ -30535,7 +30535,7 @@ var MAPDATA = {
 						boss: true,
 						friendFleet: ['tengo2','miyauchi','kasumi','shigure','amatsu'],
 						setupSpecial: function() {
-							if (CHDATA.event.maps[7].part == 1 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[diff]) {
+							if (CHDATA.event.maps[7].part == 1 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[CHDATA.event.maps[7].diff]) {
 								FLEETS2[0].ships[0].AR = {
 									3: 230,
 									2: 200,
