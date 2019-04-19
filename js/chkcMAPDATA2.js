@@ -29446,7 +29446,8 @@ var MAPDATA = {
 						routeC: function(ships) {
 							if (ships.CA > 2 || ships.DD < 3) return 'A';
 							return 'C';
-						}
+						},
+						subonly: true
 					},
 					'C': {
 						type: 3,
