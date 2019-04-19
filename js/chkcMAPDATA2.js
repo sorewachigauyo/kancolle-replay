@@ -29993,7 +29993,7 @@ var MAPDATA = {
 				bgmMap: 2136,
 				bgmDN: 89,
 				bgmNN: 89,
-				bgmDB: 41,
+				bgmDB: 115,
 				bgmNB: 41,
 				bossnode: [20,'Z5','ZZ8'],
 				checkLock: [9],

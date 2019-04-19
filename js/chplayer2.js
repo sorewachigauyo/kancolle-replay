@@ -2832,7 +2832,7 @@ function chLoadFriendFleet(friendData) {
 		let ev = sdata.EVbase + Math.floor((sdata.EV - sdata.EVbase)*ship.LVL/99);
 		let asw = sdata.ASWbase + Math.floor((sdata.ASW - sdata.ASWbase)*ship.LVL/99);
 		let los = sdata.LOSbase + Math.floor((sdata.LOS - sdata.LOSbase)*ship.LVL/99);
-		let simShip = new ShipType(ship.mid,'',0,ship.LVL,sdata.HP,ship.FP,ship.TP,ship.AA,ship.AR,ev,asw,los,sdata.LUK,sdata.RNG,sdata.SLOTS);
+		let simShip = new ShipType(ship.mid,'',0,ship.LVL,sdata.HP,ship.FP||sdata.FP,ship.TP||sdata.TP,ship.AA,ship.AR||sdata.AR,ev,asw,los,sdata.LUK,sdata.RNG,sdata.SLOTS);
 		simShip.loadEquips(ship.equips,[],[],true);
 		
 		if (ship.damage) {
