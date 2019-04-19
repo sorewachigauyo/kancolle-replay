@@ -28,6 +28,7 @@ function InitUI() {
 	chDialogItemInit();
 	DIALOGSORT = null;
 	
+	if (MAPDATA[WORLD].allowFleets.indexOf(7) != -1 && CHDATA.fleets[1].length < 7) CHDATA.fleets[1].push(null);
 	for (var fleetnum in CHDATA.fleets) chFillTable(CHDATA.fleets[fleetnum],fleetnum);
 	if (CHDATA.fleets.combined) chClickedCombine(CHDATA.fleets.combined, true);
 	else chClickedCombine(0,true);
@@ -100,6 +101,8 @@ function InitUI() {
 		$('#btnsupportN').show();
 		$('#btnsupportB').show();
 	}
+	
+	chInitPreset();
 	
 	chClickedTab('#tabmain');
 	$('#mainspace').show();
@@ -1120,6 +1123,7 @@ function lbSelectPhase() {
 		crosshair.position.set(node.x+MAPOFFX,node.y+MAPOFFY);
 		crosshairs.push(crosshair);
 		stage.addChild(crosshair);
+		SM.play('lbasselect');
 
 		if (currentNum >= 2) {
 			for (var i=0; i<areas.length; i++) {
@@ -1168,6 +1172,7 @@ function lbSelectPhase() {
 				ecomplete = true;
 			}, 1);
 		}
+		SM.play('lbassend');
 	}
 	
 	var afterCancel = function() {
@@ -1315,6 +1320,7 @@ function selectNode(letters) {
 		areas[i].pivot.set(10);
 		areas[i].alpha = 0;
 		areas[i].interactive = areas[i].buttonMode = true;
+		areas[i].mouseover = function(e) { SM.play('hover'); }
 		areas[i].position.set(node.x+MAPOFFX,node.y+MAPOFFY);
 		areas[i].letter = letters[i];
 		areas[i].callback = afterSelect;
@@ -1778,7 +1784,7 @@ function shuttersPrebattle() {
 		}
 		return false;
 	},[]]);
-	SM.play('shutters');
+	SM.play('shuttersopen');
 	addTimeout(function() { ecomplete = true; }, 500);
 }
 
@@ -1787,7 +1793,7 @@ function shuttersPostbattle(noshutters) {
 	if (!noshutters) {
 		shutterTop.alpha = shutterBottom.alpha = 1;
 		updates.push([closeShutters,[]]);
-		SM.play('shutters');
+		SM.play('shuttersclose');
 	}
 	if (bossbar.active) {  //update map hp
 		CHDATA.event.maps[MAPNUM].hp = bossbar.nowhp;
@@ -2225,7 +2231,7 @@ function continueSelect() {
 function shuttersSelect() {
 	shutterTop.alpha = shutterBottom.alpha = 1;
 	updates.push([closeShutters,[]]);
-	SM.play('shutters');
+	SM.play('shuttersclose');
 	
 	mapNBnobutton[0].position.set(226,188); mapNBnobutton[1].position.set(207,170);
 	mapNByesbutton[0].position.set(441,188); mapNByesbutton[1].position.set(422,170);
@@ -2250,7 +2256,7 @@ function shuttersSelect() {
 		if (NBSELECT==1) {
 			addTimeout(function() {
 				updates.push([openShutters,[]]);
-				SM.play('shutters');
+				SM.play('shuttersopen');
 			}, 700);
 			addTimeout(function(){ ecomplete = true; }, 1700);
 		} else {
@@ -2775,7 +2781,7 @@ function prepEnemyRaid() {
 		addTimeout(function() {
 			shutterTop.alpha = shutterBottom.alpha = 1;
 			updates.push([closeShutters,[]]);
-			SM.play('shutters');
+			SM.play('shuttersclose');
 		}, 700);
 		addTimeout(function() { ecomplete = true; }, 1500);
 	},[]]);
