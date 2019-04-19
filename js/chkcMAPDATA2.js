@@ -30238,7 +30238,7 @@ var MAPDATA = {
 						},
 						range: 16,
 						debuffGive: function() {
-							if (CHDATA.event.maps[7].part >= 1 && (CHDATA.event.maps[7].difficulty == 1 ? 
+							if (CHDATA.event.maps[7].part >= 1 && (CHDATA.event.maps[7].diff == 1 ? 
 								['A', 'S'] : ['S']).includes(CHDATA.temp.rank)) {
 									CHDATA.event.maps[7].debuff.A = true;
 							} 
@@ -30669,7 +30669,7 @@ var MAPDATA = {
 						range: 7,
 						hidden: 1,
 						debuffGive: function() {
-							if((CHDATA.event.maps[7].difficulty == 2 ? ['A', 'S'] : ['S']).includes(CHDATA.temp.rank)) CHDATA.event.maps[7].debuff.Z2 = true;
+							if((CHDATA.event.maps[7].diff == 2 ? ['A', 'S'] : ['S']).includes(CHDATA.temp.rank)) CHDATA.event.maps[7].debuff.Z2 = true;
 						},
 						setupSpecial: function() {							
 							const bonusList = {
@@ -30724,14 +30724,14 @@ var MAPDATA = {
 						},
 						friendFleet: ["yuugumos2",'muragumo','smolyuro','kimura','random'],
 						setupSpecial: function() {
-							const isLD = CHDATA.event.maps[7].part == 2 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[diff];
+							const isLD = CHDATA.event.maps[7].part == 2 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[CHDATA.event.maps[7].diff];
 							const kitanda = FLEETS2[0].ships[0];
 							kitanda.HP = 800;
 							kitanda.AR = {
 								3: isLD ? 283 : 230,
 								2: isLD ? 245 : 219,
 								1: isLD ? 215 : 194
-							}[CHDATA.event.maps[7].difficulty];
+							}[CHDATA.event.maps[7].diff];
 						},
 						debuffGive: function() { 
 							CHDATA.event.maps[7].debuff.Z5 = true;
@@ -30965,9 +30965,9 @@ var MAPDATA = {
 						debuffAmount: 90,
 						friendFleet: ["leyte1", "leyte2", "nishimra", "tengo3", "italian", "euro", "allies", "american", "british", "dd32su", "aganos", "kagerous", "yuugumos", "53level", "asashios", "nakama"],
 						setupSpecial: function() {
-							const isLD = CHDATA.event.maps[7].hp > 0 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[diff];
+							const isLD = CHDATA.event.maps[7].hp > 0 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[CHDATA.event.maps[7].diff];
 							const nsh = FLEETS2[0].ships[0];
-							const difficulty = CHDATA.event.maps[7].difficulty;
+							const difficulty = CHDATA.event.maps[7].diff;
 							nsh.AR = {
 								3: isLD ? 405 : 260,
 								2: isLD ? 350 : 220,
