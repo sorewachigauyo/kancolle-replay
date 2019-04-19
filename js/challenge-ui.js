@@ -1744,6 +1744,13 @@ function chClickedSortieLeft() {
 function chClickedSortieRight() {
 	if (!MAPDATA[WORLD].maps[MAPNUM+1]) return;
 	$('#srtHPBar').css('animation','');
+	if (!CHDATA.event.maps[MAPNUM+1]) {
+		CHDATA.event.maps[MAPNUM+1] = {
+			visited: [],
+			hp: null
+		};
+		if (MAPDATA[WORLD].maps[MAPNUM+1].parts) CHDATA.event.maps[MAPNUM+1].part = 1;
+	}
 	chLoadSortieInfo(MAPNUM+1);
 }
 

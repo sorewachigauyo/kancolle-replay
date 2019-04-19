@@ -1373,6 +1373,20 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 		let n = (mapdata.compName)? mapdata.compName : letter;
 		compd = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][n][comp];
 	}
+	if (compd.r) {
+		const wordDiff = {
+			3: 'Hard ',
+			2: 'Medium ',
+			1: 'Easy ',
+		}[diff];
+		const list = ENEMYCOMPS[MAPDATA[WORLD].name]['E-'+MAPNUM][letter];
+		let roll = Math.random();
+		for (let i = 1; i < 6; i++) {
+			const current = list[wordDiff + i];
+			if (current.r < roll) { compd = current; break; }
+			roll -= current.r
+		}
+	}
 	return compd;
 }
 
@@ -2387,6 +2401,7 @@ function chUpdateSupply() {
 	for (let n=0; n<num; n++) {
 		for (var i=0; i<FLEETS1[n].ships.length; i++) {
 			var ship = FLEETS1[n].ships[i];
+			ship.bonusSpecial = [{ mod: 1 }];
 			if (ship.retreated) continue;
 			ship.fuelleft -= 10*Math.floor(Math.max(1,baseF*ship.fuel))/ship.fuel;
 			if (!results.noammo) {
