@@ -29725,7 +29725,7 @@ var MAPDATA = {
 							if (CHDATA.event.maps[6].part == 1) return 'B*';
 							this.showNoCompass = false;
 							return (ships.SS > 2 || ships.aBB > 3) ? 'L' :
-								(ships.aBB > 1 || ships.CA > 1) ? 'N' : 'M';
+								(ships.aBB > 1 || ships.CA > 2) ? 'N' : 'M';
 						}
 					},
 					'B*': {
