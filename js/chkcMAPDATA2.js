@@ -30543,10 +30543,11 @@ var MAPDATA = {
 								}[CHDATA.event.maps[7].diff];
 							}
 							const bonusList = {
-								'[97]': 2,
-								'[96]': 1.8,
-								'[98]': 1.5,
-								'[49]': 1.4,
+								'[332]': 2,
+								'[184]': 1.8,
+								'[25,35,42]': 1.3,
+								'[458,410,135,532]': 1.2,
+								'[80,143,26,27,110,111,124,125,68,69,54,114,137,140,459,43,44,49,95,97,485]': 1.2,								
 							};
 							applyBonusToShips(bonusList);	
 						},					
@@ -30727,11 +30728,20 @@ var MAPDATA = {
 							const isLD = CHDATA.event.maps[7].part == 2 && CHDATA.event.maps[7].hp <= MAPDATA[42].maps[7].finalhp[CHDATA.event.maps[7].diff];
 							const kitanda = FLEETS2[0].ships[0];
 							kitanda.HP = 800;
+							kitanda.maxHP = 800;
 							kitanda.AR = {
 								3: isLD ? 283 : 230,
 								2: isLD ? 245 : 219,
 								1: isLD ? 215 : 194
 							}[CHDATA.event.maps[7].diff];
+							const bonusList = {
+								'[332]': 2,
+								'[184]': 1.8,
+								'[25,35,42]': 1.3,
+								'[458,410,135,532]': 1.2,
+								'[80,143,26,27,110,111,124,125,68,69,54,114,137,140,459,43,44,49,95,97,485]': 1.2,								
+							};
+							applyBonusToShips(bonusList);
 						},
 						debuffGive: function() { 
 							CHDATA.event.maps[7].debuff.Z5 = true;
@@ -30748,23 +30758,6 @@ var MAPDATA = {
 								}
 							}
 							if (CHDATA.fleets.combined && (!allBlue || !allSame) && ['A', 'S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[7].debuff.Z5_2 = true;
-						},
-						setupSpecial: function() {
-							const debuffed = MAPDATA[42].maps[7].debuffCheck(CHDATA.event.maps[7].debuff);
-							const bonusList = debuffed ? {
-								'[332]': 2.8,
-								'[184]': 2,
-								'[25,35,42]': 1.8,
-								'[458,410,135,532]': 1.6,
-								'[80,143,26,27,110,111,124,125,68,69,54,114,137,140,459,43,44,49,95,97,485]': 1.5,								
-							} : {
-								'[332]': 2,
-								'[184]': 1.8,
-								'[25,35,42]': 1.3,
-								'[458,410,135,532]': 1.2,
-								'[80,143,26,27,110,111,124,125,68,69,54,114,137,140,459,43,44,49,95,97,485]': 1.2,								
-							};
-							applyBonusToShips(bonusList);							
 						},
 						range: 6,
 						hidden: 1,
@@ -30980,6 +30973,21 @@ var MAPDATA = {
 								FLEETS2[1].ships[1].HP = 150;
 								FLEETS2[1].ships[1].maxHP = 150;
 							}
+							const debuffed = MAPDATA[42].maps[7].debuffCheck(CHDATA.event.maps[7].debuff);
+							const bonusList = debuffed ? {
+								'[332]': 2.8,
+								'[184]': 2,
+								'[25,35,42]': 1.8,
+								'[458,410,135,532]': 1.6,
+								'[80,143,26,27,110,111,124,125,68,69,54,114,137,140,459,43,44,49,95,97,485]': 1.5,								
+							} : {
+								'[332]': 2,
+								'[184]': 1.8,
+								'[25,35,42]': 1.3,
+								'[458,410,135,532]': 1.2,
+								'[80,143,26,27,110,111,124,125,68,69,54,114,137,140,459,43,44,49,95,97,485]': 1.2,								
+							};
+							applyBonusToShips(bonusList);	
 						},
 						debuffGive: function() {
 							let lock = null;
