@@ -31040,7 +31040,7 @@ var MAPDATA = {
 								const ship = SHIPDATA[idList[key]] || {};
 								if (ship.speed === 5) ss++;
 							}
-							if (ss >= 4) return 'ZZZ2'
+							if (ss >= 2 || (ships.aCV + (ships.escort ? ships.escort.aCV : 0) > 3)  || (CHDATA.fleets.combined === 1 ? ships.aBB + ships.escort.aBB >= 1 : false)) return 'ZZZ2';
 							this.showLoSPlane = checkELoS33(getELoS33(1,1, CHDATA.fleets.combined),{ 35: 'ZZ9', 34.99: 'ZZZ2' });
 							return this.showLoSPlane;
 						}
