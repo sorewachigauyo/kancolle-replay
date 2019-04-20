@@ -30105,7 +30105,7 @@ var MAPDATA = {
 								3: 2
 							}[CHDATA.event.maps[7].diff];
 							const debuffAS = (debuff.AB >= ASreq) || CHDATA.config.disableRaidReq;
-							if (CHDATA.event.maps[7].diff == 3 && debuff.ZZ7 && debuff.ZZ4 && debuff.ZZ3 && debuff.Z7 && debuffAS) return true;
+							if (CHDATA.event.maps[7].diff == 3 && debuff.ZZ7 && debuff.ZZZ4 && debuff.ZZ3 && debuff.Z7 && debuffAS) return true;
 							if (CHDATA.event.maps[7].diff == 2 && debuff.ZZ7 && debuff.ZZ3 && debuffAS) return true;
 							if (CHDATA.event.maps[7].diff == 1 && debuff.ZZ3) return true;
 							return false;
@@ -31078,7 +31078,10 @@ var MAPDATA = {
 						distance: 5,
 						hidden: 4,
 						raid: true,
-						route: 'ZZZ3'
+						route: 'ZZZ3',
+						debuffGive: function() {
+							if(FLEETS1[0].AS >= 1) CHDATA.event.maps[7].debuff.ZZZ4 = true;
+						}
 					},
 				}
 			},
