@@ -30236,7 +30236,7 @@ var MAPDATA = {
 								if (['CV','CVL','CVB'].includes(SHIPDATA[ship.mid].type)) ship.bonusSpecial = [{mod:0.7}];
 							}							
 						},
-						range: 16,
+						distance: 16,
 						debuffGive: function() {
 							if (CHDATA.event.maps[7].part > 1 && (CHDATA.event.maps[7].diff == 1 ? 
 								['A', 'S'] : ['S']).includes(CHDATA.temp.rank)) {
@@ -30254,7 +30254,7 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2'],
 						},
 						routeC: s => (s.DD < 3 || s.aBB > 1) ? 'C' : 'F',
-						range: 99,
+						distance: 99,
 						subonly: true,
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
@@ -30292,7 +30292,7 @@ var MAPDATA = {
 							1: ['Easy 1'],
 						},
 						route: 'A',
-						range: 15,
+						distance: 15,
 						raid: true,
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
@@ -30319,7 +30319,7 @@ var MAPDATA = {
 							}
 							return 'K';
 						},
-						range: 13,
+						distance: 13,
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
 							ships = ships.concat(FLEETS2[0].ships).concat((FLEETS2[1] || {}).ships || []);
@@ -30337,7 +30337,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 15,
+						distance: 15,
 						route: 'E',
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
@@ -30357,7 +30357,7 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2'],
 						},
 						subonly: true,
-						range: 99,
+						distance: 99,
 						routeC: s => s.aCV < 1 ? 'L' : 'M'
 					},
 					'I': {
@@ -30369,7 +30369,7 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1','Easy 2'],
 						},
-						range: 99,
+						distance: 99,
 						showNoCompass: true,
 						routeC: () => CHDATA.event.maps[7].part >= 2 ? 'P*' : 'P',
 						setupSpecial: function(){
@@ -30390,7 +30390,7 @@ var MAPDATA = {
 							1: ['Easy 1'],
 						},
 						routeC: () => CHDATA.fleets.combined == 1 ? 'N' : 'I',
-						range: 99,
+						distance: 99,
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
 							ships = ships.concat(FLEETS2[0].ships).concat((FLEETS2[1] || {}).ships || []);
@@ -30404,21 +30404,21 @@ var MAPDATA = {
 						x: 587,
 						y: 293,
 						routeS: ['Q', 'G'],
-						range: 13
+						distance: 13
 					},
 					'L': {
 						type: 3,
 						x: 537,
 						y: 21,
 						end: true,
-						range: 99
+						distance: 99
 					},
 					'M': {
 						type: 3,
 						x: 527,
 						y: 83,
 						routeS: ['J', 'N', 'V', 'ZZ4'],
-						range: 99
+						distance: 99
 					},
 					'N': {
 						type: 1,
@@ -30429,7 +30429,7 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1'],
 						},
-						range: 99,
+						distance: 99,
 						route: 'O',
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
@@ -30449,7 +30449,7 @@ var MAPDATA = {
 							1: ['Easy 1'],
 						},
 						routeC: () => CHDATA.fleets.combined == 1 ? (CHDATA.event.maps[7].part >= 2 ? 'P*' : 'P') : 'I',
-						range: 99,
+						distance: 99,
 						setupSpecial: function(){
 							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
 							ships = ships.concat(FLEETS2[0].ships).concat((FLEETS2[1] || {}).ships || []);
@@ -30463,14 +30463,14 @@ var MAPDATA = {
 						x: 550,
 						y: 223,
 						route: 'K',
-						range: 99
+						distance: 99
 					},
 					'P*': {
 						type: 3,
 						x: 550,
 						y: 223,
 						routeS: ['K', 'U'],
-						range: 99,
+						distance: 99,
 						hidden: 1,
 					},
 					'Q': {
@@ -30482,14 +30482,14 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 12,
+						distance: 12,
 						routeC: s => (s.aBB > 4 || s.aCV > 3 || s.AV) ? 'S' : checkELoS33(getELoS33(1,1, CHDATA.fleets.combined),{ 25: 'T', 24.99: 'R' })
 					},
 					'R': {
 						type: 3,
 						x: 509,
 						y: 362,
-						range: 12,
+						distance: 12,
 						end: true
 					},
 					'S': {
@@ -30501,7 +30501,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 11,
+						distance: 11,
 						end: true,
 						debuffGive: function() {
 							if (CHDATA.event.maps[7].part == 3 && 'S' == CHDATA.temp.rank) CHDATA.event.maps[7].debuff.S = true;
@@ -30531,7 +30531,7 @@ var MAPDATA = {
 							1: ['Easy 2'],
 						},
 						end: true,
-						range: 11,
+						distance: 11,
 						boss: true,
 						friendFleet: ['tengo2','miyauchi','kasumi','shigure','amatsu'],
 						setupSpecial: function() {
@@ -30565,7 +30565,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 11,
+						distance: 11,
 						showNoCompass: true,
 						routeC: () => CHDATA.event.maps[7].part == 3 ? 'W*' : 'W',
 						hidden: 1
@@ -30582,14 +30582,14 @@ var MAPDATA = {
 						hidden: 1,
 						routeC: s => (s.escort.DD > 3 && (s.aBB + s.aCV + s.escort.aBB + s.escort.aCV) < 5 
 							&& s.speed >= 10 && s.escort.speed >= 10)  ? 'X' : 'Y',
-						range: 9
+						distance: 9
 					},
 					'W': {
 						type: 3,
 						x: 427,
 						y: 176,
 						route: 'Y',
-						range: 10,
+						distance: 10,
 						hidden: 1,
 					},
 					'W*': {
@@ -30597,7 +30597,7 @@ var MAPDATA = {
 						x: 427,
 						y: 176,
 						routeS: ['Y', 'ZZ6'],
-						range: 10,
+						distance: 10,
 						hidden: 4
 					},
 					'X': {
@@ -30610,7 +30610,7 @@ var MAPDATA = {
 							1: ['Easy 1', 'Easy 2'],
 						},
 						hidden: 1,
-						range: 8,
+						distance: 8,
 						routeC: s => (s.ids.length == 7 && s.AS) ? 'Z1' : 'Z'
 					},
 					'Y': {
@@ -30623,7 +30623,7 @@ var MAPDATA = {
 							1: ['Easy 1', 'Easy 2'],
 						},
 						routeC: s => (s.ids.length == 7 && checkFlagshipSurfaceRadar()) ? 'Z2' : 'X',
-						range: 8,
+						distance: 8,
 						hidden : 1
 					},
 					'Z': {
@@ -30635,7 +30635,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 7,
+						distance: 7,
 						hidden: 1,
 						route: 'Z1'
 					},
@@ -30648,7 +30648,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 7,
+						distance: 7,
 						hidden: 1,
 						raid: true,
 						route: 'Z3',
@@ -30667,7 +30667,7 @@ var MAPDATA = {
 							1: ['Easy 1'],
 						},
 						end: true,
-						range: 7,
+						distance: 7,
 						hidden: 1,
 						debuffGive: function() {
 							if((CHDATA.event.maps[7].diff == 2 ? ['A', 'S'] : ['S']).includes(CHDATA.temp.rank)) CHDATA.event.maps[7].debuff.Z2 = true;
@@ -30691,7 +30691,7 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1'],
 						},
-						range: 5,
+						distance: 5,
 						hidden: 1,
 						routeC: function(ships) {
 							this.showLoSPlane = null;
@@ -30705,7 +30705,7 @@ var MAPDATA = {
 						x: 228,
 						y: 49,
 						end: true,
-						range: 5,
+						distance: 5,
 						hidden: 1,
 						
 					},
@@ -30759,7 +30759,7 @@ var MAPDATA = {
 							}
 							if (CHDATA.fleets.combined && (!allBlue || !allSame) && ['A', 'S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[7].debuff.Z5_2 = true;
 						},
-						range: 6,
+						distance: 6,
 						hidden: 1,
 						end: true,
 						boss: true
@@ -30773,7 +30773,7 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1'],
 						},
-						range: 5,
+						distance: 5,
 						hidden: 3,
 						route: 'Z5'
 					},
@@ -30786,7 +30786,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 4,
+						distance: 4,
 						hidden: 3,
 						route: 'Z6',
 						raid: true,
@@ -30803,7 +30803,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 3,
+						distance: 3,
 						hidden: 3,
 						route: 'Z9'
 					},
@@ -30816,7 +30816,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 3,
+						distance: 3,
 						hidden: 3,
 						route: 'ZZ1'
 					},
@@ -30824,7 +30824,7 @@ var MAPDATA = {
 						type: 3,
 						x: 112,
 						y: 276,
-						range: 4,
+						distance: 4,
 						hidden: 3,
 						routeS: ['Z7', 'ZZ2', 'ZZZ4']
 					},
@@ -30837,7 +30837,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 3,
+						distance: 3,
 						hidden: 3,
 						route: 'ZZ3',
 						subonly: true,
@@ -30851,7 +30851,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 4,
+						distance: 4,
 						hidden: 3,
 						end: true,
 						debuffGive: function() {
@@ -30867,7 +30867,7 @@ var MAPDATA = {
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1', 'Easy 2'],
 						},
-						range: 11,
+						distance: 11,
 						hidden: 4,
 						route: 'W*',
 						subonly: true
@@ -30881,7 +30881,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 9,
+						distance: 9,
 						hidden: 4,
 						route: 'ZZ7'
 					},
@@ -30894,7 +30894,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 8,
+						distance: 8,
 						hidden: 4,
 						routeC: function(ships) {
 							let ss = 0;
@@ -30915,7 +30915,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 7,
+						distance: 7,
 						hidden: 4,
 						raid: true,
 						debuffGive: function() {
@@ -30952,7 +30952,7 @@ var MAPDATA = {
 							2: ['Medium 2'],
 							1: ['Easy 2'],
 						},
-						range: 9,
+						distance: 9,
 						hidden: 4,
 						boss: true,
 						end: true,
@@ -31013,14 +31013,14 @@ var MAPDATA = {
 							1: ['Easy 1'],
 						},
 						route: 'ZZ8',
-						range: 7,
+						distance: 7,
 						hidden: 4,
 					},
 					'ZZZ1': {
 						type: 3,
 						x: 273,
 						y: 301,
-						range: 6,
+						distance: 6,
 						hidden: 4,
 						routeC: function(ships) {
 							this.showLoSPlane = false;
@@ -31039,7 +31039,7 @@ var MAPDATA = {
 						type: 3,
 						x: 257,
 						y: 359,					
-						range: 8,
+						distance: 8,
 						hidden: 4,
 						end: true
 					},
@@ -31052,7 +31052,7 @@ var MAPDATA = {
 							2: ['Medium 1', 'Medium 2'],
 							1: ['Easy 1', 'Easy 2'],
 						},
-						range: 6,
+						distance: 6,
 						hidden: 4,
 						route: 'ZZZ1'
 					},
@@ -31065,7 +31065,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						range: 5,
+						distance: 5,
 						hidden: 4,
 						raid: true,
 						route: 'ZZZ3'
