@@ -2084,6 +2084,7 @@ var VOICES = {
 		damage1: "assets/voice/Zuikaku-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Zuikaku-Minor_Damage_2.ogg",
 		damage3: "assets/voice/ZuikakuKai2A-Major_Damage.ogg",
+		friend999: 'assets/voice/Zuikaku_Kantai_Kessen_2018_AirBattle.mp3',
 	},
 	112: {
 		start: "assets/voice/Zuikaku-Battle_Start.ogg",

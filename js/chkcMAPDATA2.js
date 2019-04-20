@@ -27621,6 +27621,14 @@ var MAPDATA = {
 				{ "mid": 371, "LVL": 76, "FP": 41, "TP": 77, "AA": 58, "AR": 39, "equips": [ 295, 285, 29 ] },			   
 				{ "mid": 476, "LVL": 65, "FP": 43, "TP": 77, "AA": 49, "AR": 40, "equips": [ 294, 285, 29 ] }
 				]},
+			'zkk': { voice: [467,999], ships: [
+				{"mid": 467, "LVL": 94, "FP": 72, "TP": 18, "AA": 102, "AR": 85, "equips": [257, 257, 255, 259]},
+				{"mid": 466, "LVL": 91, "FP": 77, "TP": 18, "AA": 100, "AR": 85, "equips": [257, 257, 255, 259]},
+				{"mid": 149, "lvl": 87, "fp": 140, "tp": 0, "AA": 98, "AR": 84, "equips": [289, 290, 102, 101]},
+				{"mid": 151, "LVL": 86, "FP": 147, "TP": 0, "AA": 98, "AR": 84, "equips": [289, 290, 59, 543]},
+				{"mid": 543, "LVL": 99, "FP": 75, "TP": 89, "AA": 70, "AR": 55, "equips": [267, 267, 29]},
+				{"mid": 373, "LVL": 99, "FP": 75, "TP": 89, "AA": 70, "AR": 55, "equips": [267, 267, 29]},
+				]},
 		},
 		maps: {
 			1: {
@@ -30854,6 +30862,7 @@ var MAPDATA = {
 						distance: 4,
 						hidden: 3,
 						end: true,
+						friendFleet: ['zkk'],
 						debuffGive: function() {
 							if (['A', 'S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[7].debuff.ZZ3 = true;
 						}
