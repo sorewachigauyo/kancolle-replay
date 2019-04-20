@@ -30201,7 +30201,7 @@ var MAPDATA = {
 							this.showNoCompass = true;
 							if (CHDATA.event.maps[7].routes && CHDATA.event.maps[7].routes.includes(2)) {
 								this.showNoCompass = false;
-								return (ships.BBV > 1 && ships.CA > 1 && ships.ids.length == 7 && checkFlagshipSurfaceRadar()) ? 'P': 'B';
+								return (ships.BBV > 1 && ships.CA > 1 && ships.ids.length == 7 && checkFlagshipSurfaceRadar()) ? 'P*': 'B';
 							}
 							return 'B';
 						}
