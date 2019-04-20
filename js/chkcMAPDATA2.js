@@ -30781,7 +30781,7 @@ var MAPDATA = {
 						},
 						range: 5,
 						hidden: 3,
-						route: 'Z6'
+						route: 'Z5'
 					},
 					'Z7': {
 						type: 1,
