@@ -30735,6 +30735,7 @@ var MAPDATA = {
 						},
 						debuffGive: function() { 
 							CHDATA.event.maps[7].debuff.Z5 = true;
+							let num = (CHDATA.fleets.combined)? 2 : 1;
 							let lock = null;
 							let allBlue = true, allSame = true;
 							for (let n = 1; n <= num; n++) {
