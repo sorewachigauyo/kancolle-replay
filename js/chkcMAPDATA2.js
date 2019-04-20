@@ -30910,7 +30910,7 @@ var MAPDATA = {
 							const idList = ships.ids.concat(ships.escort ? ships.escort.ids : []);
 							for (let key in idList) {
 								const ship = SHIPDATA[idList[key]] || {};
-								if (ship.speed === 5) ss++;
+								if (ship.SPD === 5) ss++;
 							}
 							return ss > 3 ? 'ZZ5' : 'ZZ7';
 						}
@@ -30939,7 +30939,7 @@ var MAPDATA = {
 								const idList = ships.ids.concat(ships.escort ? ships.escort.ids : []);
 								for (let key in idList) {
 									const ship = SHIPDATA[idList[key]] || {};
-									if (ship.speed === 5) ss++;
+									if (ship.SPD === 5) ss++;
 								}
 								if (ss < 3 && (CHDATA.fleets.combined == 1 ? ships.aBB + ships.escort.aBB < 3 : true) && (CHDATA.fleets.combined == 2 
 									? ships.aCV < 2 : true)) return 'ZZ9'
@@ -31038,7 +31038,7 @@ var MAPDATA = {
 							const idList = ships.ids.concat(ships.escort ? ships.escort.ids : []);
 							for (let key in idList) {
 								const ship = SHIPDATA[idList[key]] || {};
-								if (ship.speed === 5) ss++;
+								if (ship.SPD === 5) ss++;
 							}
 							if (ss >= 2 || (ships.aCV + (ships.escort ? ships.escort.aCV : 0) > 3)  || (CHDATA.fleets.combined === 1 ? ships.aBB + ships.escort.aBB >= 1 : false)) return 'ZZZ2';
 							this.showLoSPlane = checkELoS33(getELoS33(1,1, CHDATA.fleets.combined),{ 35: 'ZZ9', 34.99: 'ZZZ2' });
