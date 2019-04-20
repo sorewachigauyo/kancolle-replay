@@ -30941,7 +30941,7 @@ var MAPDATA = {
 									const ship = SHIPDATA[idList[key]] || {};
 									if (ship.SPD === 5) ss++;
 								}
-								if (ss < 3 && (CHDATA.fleets.combined == 1 ? ships.aBB + ships.escort.aBB < 3 : true) && (CHDATA.fleets.combined == 2 
+								if (ss < 5 && (CHDATA.fleets.combined == 1 ? ships.aBB + ships.escort.aBB < 3 : true) && (CHDATA.fleets.combined == 2 
 									? ships.aCV < 2 : true)) return 'ZZ9'
 							}
 							return 'ZZZ1';
