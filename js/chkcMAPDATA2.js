@@ -29999,7 +29999,7 @@ var MAPDATA = {
 				checkLock: [9],
 				lockSpecial: true,
 				lbas: 3,
-				lbasSortie: 2,
+				lbasSortie: 3,
 				parts: {
 					1: {
 						currentBoss: 'T',
