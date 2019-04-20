@@ -30238,7 +30238,7 @@ var MAPDATA = {
 						},
 						range: 16,
 						debuffGive: function() {
-							if (CHDATA.event.maps[7].part >= 1 && (CHDATA.event.maps[7].diff == 1 ? 
+							if (CHDATA.event.maps[7].part > 1 && (CHDATA.event.maps[7].diff == 1 ? 
 								['A', 'S'] : ['S']).includes(CHDATA.temp.rank)) {
 									CHDATA.event.maps[7].debuff.A = true;
 							} 
