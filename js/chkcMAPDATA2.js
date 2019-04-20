@@ -31000,6 +31000,7 @@ var MAPDATA = {
 						},
 						debuffGive: function() {
 							let lock = null;
+							let num = (CHDATA.fleets.combined)? 2 : 1;
 							let allBlue = true;
 							for (let n = 1; n <= num; n++) {
 								for (let sid of CHDATA.fleets[n]) {
