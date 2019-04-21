@@ -30362,9 +30362,9 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2'],
 							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2'],
+							1: ['Easy 1'],
 						},
-						subonly: true,
+						overrideCost: { fuel: .04, ammo: .04 },
 						distance: 99,
 						routeC: s => s.aCV < 1 ? 'L' : 'M'
 					},
@@ -30872,7 +30872,7 @@ var MAPDATA = {
 						x: 477,
 						y: 125,
 						compDiff: {
-							3: ['Hard 1', 'Hard 2', 'Hard 3', 'Hard 4', 'Hard 5', 'Hard 6'],
+							3: ['Hard 1', 'Hard 2'],
 							2: ['Medium 1','Medium 2'],
 							1: ['Easy 1', 'Easy 2'],
 						},
