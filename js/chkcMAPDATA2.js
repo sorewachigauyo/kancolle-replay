@@ -29113,7 +29113,7 @@ var MAPDATA = {
 				},
 				debuffCheck: function(debuff) {
 					if (!debuff) return false;
-					return debuff.Z2CTF && debuff.Z2STF;
+					return debuff.Z2CTF >= 1 && debuff.Z2STF >= 1;
 				},
 				lockSpecial: true,
 				startCheck: function(ships) {
@@ -29360,8 +29360,8 @@ var MAPDATA = {
 								this.showNoCompass = true;
 								return 'K';
 							}
-							if(ships.aBB + ships.escort.aBB <= 2) return 'K';
-							if(ships.aCV) return 'K';
+							if(ships.aBB + ships.escort.aBB > 2) return 'K';
+							if(ships.CV + ships.CVB > 0) return 'K';
 							let ids = ships.ids.concat(ships.escort.ids);
 							if(ships.CVL <= 1 || checkHistorical(MAPDATA[42].historical.europeans,ids,[2,4,6,1])) return 'X';
 							return 'K';
@@ -29529,15 +29529,15 @@ var MAPDATA = {
 						y: 74.8,
 						hidden: 2,
 						distance: 5,
-						routeC: function() {
+						routeC: function(ships) {
 							if(CHDATA.event.maps[5].routes.indexOf(3) === -1){
 								this.showNoCompass = true;
 								return 'Y';
 							} else {
 								if(ships.SS || ships.SSV || ships.escort.SS || ships.escort.SSV) return 'Y';
-								if(ships.CV + ships.CVB > 0 && ships.speed < 10) return 'Y';
-								if(CHDATA.fleets.combined === 2 && ships.aBB + ships.escort.aBB + ships.CV + ships.CVB <= 2) return 'Z3';
 								if(ships.DE + ships.escort.DE + ships.DD + ships.escort.DD + ships.CL + ships.escort.CL >= 5) return 'Z3';
+								if(ships.CV + ships.CVB === 0 && ships.speed > 10) return 'Z3';
+								if(CHDATA.fleets.combined === 2 && ships.aBB + ships.escort.aBB + ships.CV + ships.CVB <= 2) return 'Z3';
 								if(ships.speed >= 15) return 'Z3';
 								return 'Y';
 							}
@@ -29578,9 +29578,11 @@ var MAPDATA = {
 							let debuffed = MAPDATA[42].maps[5].debuffCheck(CHDATA.event.maps[5].debuff);
 							
 							let euWaterHimeId = FLEETS2[0].ships[0].mid;
-							SHIPDATA[euWaterHimeId].image = debuffed ? SHIPDATA[euWaterHimeId].imageBroken : SHIPDATA[euWaterHimeId].imageBase;
-							VOICES[euWaterHimeId].damage = debuffed ? VOICES[euWaterHimeId].armorBrokenDamage : VOICES[euWaterHimeId].normalDamage;
-
+							if ([1843,1844,1845].indexOf(euWaterHimeId) !== -1){
+								SHIPDATA[euWaterHimeId].image = debuffed ? SHIPDATA[euWaterHimeId].imageBroken : SHIPDATA[euWaterHimeId].imageBase;
+								VOICES[euWaterHimeId].damage = debuffed ? VOICES[euWaterHimeId].armorBrokenDamage : VOICES[euWaterHimeId].normalDamage;	
+							}
+							
 							let ships = FLEETS1[0].ships.concat(FLEETS1[1].ships);
 							if (CHDATA.sortie.fleetFriend) ships = ships.concat(CHDATA.sortie.fleetFriend.ships);
 
@@ -29611,7 +29613,7 @@ var MAPDATA = {
 								}
 								
 								if (debuffed) bonuses.push({ mod: 1.5 });
-								if (MAPDATA[42].historical.europeans.indexOf(getBaseId(ship.mid)) !== -1)  bonuses.push({ mod: 1.25 });
+								if (!debuffed && MAPDATA[42].historical.europeans.indexOf(getBaseId(ship.mid)) !== -1)  bonuses.push({ mod: 1.2 });
 								if (hasSPFSPB) bonuses.push({ mod: 1.3 });
 								if (hasT3shell) bonuses.push({ mod: 1.2 });
 								if (hasDiveBomber) bonuses.push({ mod: 1.2 });

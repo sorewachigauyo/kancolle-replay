@@ -3143,7 +3143,7 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 	}
 	
 	var complete = false;
-	let callback = () => {
+	let skipLine = () => {
 		if (!complete) {
 			complete = true;
 			ecomplete = true;
@@ -3154,7 +3154,7 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 	if (voiceId && voiceNo) {
 		let ind = voiceNo.indexOf(1);
 		if (ind != -1) {
-			voice = SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind,callback);
+			voice = SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind,skipLine);
 		}
 	}
 
@@ -3210,7 +3210,7 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 	}else{
 		addTimeout(function() {
 			$('#battlespace').one('click', function(){
-				ecomplete = complete = true;
+				skipLine();
 			});
 		}, 2000);
 	}
