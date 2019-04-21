@@ -2,11 +2,6 @@ function InitUI() {
 	if (!CHDATA.event) return;
 	WORLD = CHDATA.event.world;
 	MAPNUM = CHDATA.event.mapnum;
-
-	if(WORLD == 99) {
-		chOpenMenu();
-		return;
-	}
 	
 	for (let mechanic in MECHANICDATES) { //refresh mechanics for updates
 		CHDATA.config.mechanics[mechanic] = (MECHANICDATES[mechanic] <= CHDATA.config.mechanicsdate);

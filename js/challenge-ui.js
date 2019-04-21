@@ -486,7 +486,7 @@ function chDialogItemFilter(category) {
 		case 5: types=[FIGHTER,INTERCEPTOR]; break;
 		case 6: types=[DIVEBOMBER,LANDBOMBER]; break;
 		case 7: types=[TORPBOMBER]; break;
-		case 8: types=[CARRIERSCOUT,AUTOGYRO,ASWPLANE,JETBOMBER,JETSCOUT,CARRIERSCOUT2,LANDSCOUT]; break;
+		case 8: types=[CARRIERSCOUT,AUTOGYRO,ASWPLANE,JETBOMBER,JETSCOUT,CARRIERSCOUT2]; break;
 		case 9: types=[RADARS,RADARL,RADARXL]; break;
 		case 10: types=[DEPTHCHARGE,SONARS,SONARL]; break;
 		case 11: types=[APSHELL,TYPE3SHELL]; break;
@@ -736,126 +736,6 @@ function chProcessKC3File(reader){
 	$('#menufhq').text(CHDATA.kcdata.player.level);
 	if (CHDATA.kcdata.player.lastPortTime)
 		$('#menufdate').text((new Date(CHDATA.kcdata.player.lastPortTime*1000)).toISOString().slice(0,10));
-	$('#menufinfo').show();
-	$('#menusettings').show();
-}
-
-function getEvasion(ship, level){
-	return ship.EVbase + Math.floor((ship.EV - ship.EVbase) * (level/99));
-}
-
-function getASW(ship, level){
-	return ship.ASWbase + Math.floor((ship.ASW - ship.ASWbase) * (level/99));
-}
-
-function getLOS(ship, level){
-	return ship.LOSbase + Math.floor((ship.LOS - ship.LOSbase) * (level/99));
-}
-
-function chLoadFleetData(){
-	var equipments = JSON.parse(document.getElementById('equipmentData').value);
-	var ships = JSON.parse(document.getElementById('shipData').value);
-
-	CHDATA = {};
-	CHDATA.kcdata = {};
-	CHDATA.kcdata.player = {};
-	CHDATA.kcdata.player.rank = document.getElementById('ttkRank').value;
-	CHDATA.kcdata.player.name = document.getElementById('ttkName').value;
-	CHDATA.kcdata.player.level = document.getElementById('ttkLevel').value;
-
-	CHDATA.kcdata.gears = {};
-	var equip = {};
-	var id = 1;
-	for(equipment of equipments){
-		equip = {};
-		equip.itemId = id;
-		equip.masterId = equipment.api_slotitem_id;
-		equip.stars = equipment.api_level;
-		equip.lock = 1;
-		
-		if(EQTDATA[EQDATA[equip.masterId].type].canAce && (EQDATA[equip.masterId].canAce === undefined || EQDATA[equip.masterId].canAce)){
-			equip.ace = 7;
-		}
-
-		CHDATA.kcdata.gears["x"+id++] = equip;
-	}
-
-	CHDATA.kcdata.ships = {};
-	var ship = {};
-	id = 1;
-	for(ship_data of ships){
-		ship = {
-			hp: [],
-			fp: [],
-			tp: [],
-			aa: [],
-			ar: [],
-			ev: [],
-			as: [],
-			ls: [],
-			lk: [],
-		};
-		
-		ship.rosterId = id;
-		ship.masterId = ship_data.api_ship_id;
-		ship.level = ship_data.api_lv;
-		ship.mod = ship_data.api_kyouka
-
-		var ship_base_data = SHIPDATA[ship.masterId];
-
-		// HP = Base HP + Marriage HP + HP Mod
-		if(ship.level > 99){
-			ship.hp[0] = ship.hp[1] = ship_base_data.HP + (ship_base_data.HPmarriage || 0) + ship.mod[5];
-		}else{
-			ship.hp[0] = ship.hp[1] = ship_base_data.HP + ship.mod[5];
-		}
-
-		ship.fp[0] = ship_base_data.FPbase + ship.mod[0];
-		ship.fp[1] = ship_base_data.FP;
-
-		ship.tp[0] = ship_base_data.TPbase + ship.mod[1];
-		ship.tp[1] = ship_base_data.TP;
-
-		ship.aa[0] = ship_base_data.AAbase + ship.mod[2];
-		ship.aa[1] = ship_base_data.AA;
-
-		ship.ar[0] = ship_base_data.ARbase + ship.mod[3];
-		ship.ar[1] = ship_base_data.AR;
-
-		ship.ev[0] = getEvasion(ship_base_data, ship.level);
-		ship.ev[1] = ship_base_data.EV;
-
-		ship.as[0] = getASW(ship_base_data, ship.level) + ship.mod[6];
-		ship.as[1] = ship_base_data.ASW;
-
-		ship.ls[0] = getLOS(ship_base_data, ship.level);
-		ship.ls[1] = ship_base_data.LOS;
-
-		ship.lk[0] = ship_base_data.LUK + ship.mod[4];
-		ship.lk[1] = ship_base_data.LUKmax;
-
-		ship.range = ship_base_data.RNG;
-		ship.speed = ship_base_data.SPD;
-
-		ship.items = [-1, -1, -1, -1, -1];
-		ship.slots = ship_base_data.SLOTS;
-		ship.slotnum = ship_base_data.SLOTS.length;
-
-		ship.fuel = ship_base_data.fuel;
-		ship.ammo = ship_base_data.ammo;
-
-		ship.morale = 49;
-		ship.akashiMark = true;
-
-		CHDATA.kcdata.ships["x"+id++] = ship;
-	}
-	
-	$('#menusdone').prop('disabled',false);
-	$('#menufrank').text(CHDATA.kcdata.player.rank);
-	$('#menufname').text(CHDATA.kcdata.player.name);
-	$('#menufhq').text(CHDATA.kcdata.player.level);
-	if (CHDATA.kcdata.player.lastPortTime)
-		$('#menufdate').text((new Date()).toISOString().slice(0,10));
 	$('#menufinfo').show();
 	$('#menusettings').show();
 }
@@ -1989,7 +1869,6 @@ function chClickedSortieLeft() {
 	if (MAPNUM <= 1) return;
 	$('#srtHPBar').css('animation','');
 	chLoadSortieInfo(MAPNUM-1);
-
 }
 
 function chClickedSortieRight() {
@@ -2314,7 +2193,7 @@ function chGetSupplyCost(ship) {
 
 function chClickMorale(fleetnum,shipnum) {
 	var ship = CHDATA.ships[CHDATA.fleets[fleetnum][shipnum-1]];
-		ship.morale = Math.min(85,ship.morale+12);
+	ship.morale = Math.min(85,ship.morale+12);
 	chFleetSetMorale(fleetnum,shipnum,ship.morale);
 	var fuel = Math.floor(SHIPDATA[ship.masterId].fuel * .4);
 	var ammo = Math.floor(SHIPDATA[ship.masterId].ammo * .4);

@@ -5399,59 +5399,6 @@ var EQUIPBONUSDATA2 = {
 	},
 };
 
-var EQUIPBONUSDATA2 = {
-	'2018-11-16': {
-		74: [ //searchlight
-			{ bonus: { FP: 2, EV: -1 }, shipS: [34,69,85,86,150,152,210,212,234,272,427,437] },
-			{ bonus: { FP: 2, TP: 2, EV: -1 }, shipS: [55,159,223] },
-			{ bonus: { FP: 1 }, shipS: [132,301] },
-		],
-		90: [ //20.3 (2)
-			{ bonus: { FP: 2, EV: 1 }, bonusSR: { FP: 3, TP: 2, EV: 2}, bonusAR: { AA: 5, EV: 2 }, shipS: [142] },
-			{ bonus: { FP: 1, AA: 1 }, bonusSR: { FP: 3, TP: 2, EV: 2}, shipS: [264] },
-			{ bonus: { FP: 1 }, bonusSR: { FP: 3, TP: 2, EV: 2}, shipS: [416,417] },
-		],
-		140: [ //searchlight large
-			{ bonus: { FP: 3, EV: -2 }, shipS: [85,86,150,152,210,212] },
-			{ bonus: { FP: 2, EV: -1 }, shipS: [131,136,143,148,546] },
-		],
-	},
-	'2018-11-29': {
-		119: [ //14cm twin
-			{ bonus: { FP: 1 }, shipClass: [34,56] },
-			{ bonus: { FP: 2, TP: 1 }, shipClass: [90] },
-		],
-	},
-	'2019-01-22': {
-		47: [ //type 3 sonar
-			{ bonus: { FP: 1, ASW: 3, EV: 2 }, shipS: [43,243,145,425,344,471,476,473,363,457,369,122,294] },
-			{ bonus: { ASW: 2, EV: 2 }, shipS: [16,233,407,36,236,414,328,167,320,557,170,312,558,527,686] },
-		],
-		106: [
-			{ bonus: { FP: 1, AA: 2, AR: 1, EV: 3 }, shipS: [16,233,407,43,243,145,41,241,419,151,541] },
-			{ bonus: { AA: 2, AR: 1, EV: 2 }, shipS: [167,320,557,170,312,558,532,537,20,228,49,253,464,470,425,344,139,307] },
-			{ bonus: { AA: 1, AR: 1, EV: 3 }, shipS: [35,235,147,183,321,465,356] },
-		],
-		282: [ //130mm
-			{ bonus: { FP: 2, AR: 1 }, shipS: [147,516,395] },
-		],
-		283: [ //533mm
-			{ bonus: { FP: 1, TP: 3, AR: 1 }, shipS: [147,516,395] },
-		],
-	},
-	'2019-02-08': {
-		61: [ //type 2 recon
-			// { bonus: { LOS: 1 }, improve: 2, shipType: ['CV','CVL','CVB','BBV'] },
-			// { bonus: { FP: 2, LOS: 2 }, improve: 10, shipType: ['CV','CVL','CVB','BBV'] },
-			{ bonus: { FP: 3, AR: 1, EV: 2 }, shipS: [553] },
-			// { bonus: { FP: 3, LOS: 3 }, improve: 1, shipS: [197] },
-			// { bonus: { FP: 1, LOS: 1 }, improve: 6, shipS: [197] },
-			// { bonus: { FP: 2, LOS: 2 }, improve: 1, shipS: [196] },
-			// { bonus: { FP: 1, LOS: 1 }, improve: 1, shipS: [508,509,560] },
-		],
-	},
-};
-
 function getBonusStats(mid,eqids) {
 	let sdata = SHIPDATA[mid];
 	let result = {};
