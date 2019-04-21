@@ -2115,9 +2115,9 @@ var SHIPDATA = {
 		SLOTS: [11, 11, 11, 14],
 		fuel: 95,
 		ammo: 105,
-		next: 0,
+		next: 554,
 		prev: 87,
-		nextlvl: 0,
+		nextlvl: 90,
 	},
 	89: {
 		name: 'Houshou',
@@ -9435,8 +9435,8 @@ var SHIPDATA = {
 		type: 'CV', sclass: 84,
 		nid: 1477,
 		added: '2018-02-22',
-		HP: 69, HPmax: 90, HPmarriage: 7,
-		FP: 58, FPbase: 38,
+		HP: 69, HPmax: 90,
+		FP: 58, FPbase: 0,
 		TP: 0, TPbase: 0,
 		AA: 95, AAbase: 55,
 		AR: 90, ARbase: 52,
@@ -12462,16 +12462,15 @@ var SHIPDATA = {
 		type: 'DD',
 		nid: 328,
 		added: '2018-12-27',
-		HP: 16, HPmax: 34, HPmarriage: 4,
+		HP: 16, HPmax: 34,
 		FP: 30, FPbase: 10,
 		TP: 68, TPbase: 24,
 		AA: 44, AAbase: 12,
 		AR: 19, ARbase: 6,
-		EV: 0, EVbase: 0,
-		ASW: 0, ASWbase: 0,
-		LOS: 0, LOSbase: 0,
+		EV: 79, EVbase: 44,
+		ASW: 54, ASWbase: 25,
+		LOS: 23, LOSbase: 9,
 		LUK: 9, LUKmax: 46,
-		unknownstats: true,
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
@@ -12649,9 +12648,8 @@ var SHIPDATA = {
 		AR: 56, ARbase: 26,
 		EV: 53, EVbase: 34,
 		ASW: 88, ASWbase: 73,
-		LOS: 64, LOSbase: 0,
+		LOS: 64, LOSbase: 32,
 		LUK: 15, LUKmax: 70,
-		unknownstats: true,
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [9, 18, 18, 6],
@@ -12746,7 +12744,7 @@ var SHIPDATA = {
 		added: '2017-05-22',
 		fitclass: 11,
 		attackSpecial: 101,
-		HP: 91, HPmax: 99, HPmarriage: 8,
+		HP: 91, HPmax: 99,
 		FP: 118, FPbase: 91,
 		TP: 0, TPbase: 0,
 		AA: 100, AAbase: 40,
@@ -12873,7 +12871,8 @@ var SHIPDATA = {
 		type: 'BB', sclass: 37,
 		nid: 346,
 		added: '2018-02-16',
-		HP: 99, HPmax: 110, HPmarriage: 9,
+		fitclass: 9,
+		HP: 99, HPmax: 110,
 		FP: 145, FPbase: 100,
 		TP: 0, TPbase: 0,
 		AA: 105, AAbase: 65,
@@ -12948,8 +12947,8 @@ var SHIPDATA = {
 		type: 'CV', sclass: 84,
 		nid: 349,
 		added: '2018-02-22',
-		HP: 65, HPmax: 90, HPmarriage: 8,
-		FP: 55, FPbase: 36,
+		HP: 65, HPmax: 90,
+		FP: 55, FPbase: 0,
 		TP: 0, TPbase: 0,
 		AA: 90, AAbase: 50,
 		AR: 80, ARbase: 43,
@@ -13066,6 +13065,32 @@ var SHIPDATA = {
 		ammo: 145,
 		next: 0,
 		prev: 82,
+		nextlvl: 0,
+	},
+	554: {
+		name: 'Hyuuga Kai 2',
+		nameJP: '日向改二',
+		image: 'K554.jpg',
+		type: 'BBV', sclass: 2,
+		nid: 354,
+		added: '2019-03-27',
+		fitclass: 6,
+		HP: 78, HPmax: 96,
+		FP: 85, FPbase: 58,
+		TP: 0, TPbase: 0,
+		AA: 84, AAbase: 46,
+		AR: 94, ARbase: 73,
+		EV: 83, EVbase: 49,
+		ASW: 81, ASWbase: 68,
+		LOS: 75, LOSbase: 32,
+		LUK: 40, LUKmax: 93,
+		RNG: 2,
+		SPD: 5,
+		SLOTS: [2, 4, 22, 11, 11],
+		fuel: 115,
+		ammo: 140,
+		next: 0,
+		prev: 88,
 		nextlvl: 0,
 	},
 	555: {
@@ -13252,7 +13277,7 @@ var SHIPDATA = {
 		nid: 362,
 		added: '2018-12-27',
 		alwaysOASW: true,
-		HP: 17, HPmax: 35, HPmarriage: 4,
+		HP: 17, HPmax: 35,
 		FP: 32, FPbase: 12,
 		TP: 60, TPbase: 20,
 		AA: 60, AAbase: 32,
@@ -13302,7 +13327,7 @@ var SHIPDATA = {
 		type: 'DD',
 		nid: 364,
 		added: '2019-02-08',
-		HP: 33, HPmax: 57, HPmarriage: 5,
+		HP: 33, HPmax: 57,
 		FP: 66, FPbase: 18,
 		TP: 89, TPbase: 30,
 		AA: 67, AAbase: 20,
@@ -13427,8 +13452,9 @@ var SHIPDATA = {
 		type: 'BB', sclass: 88,
 		nid: 371,
 		added: '2018-09-12',
+		fitclass: 13,
 		attackSpecial: 100,
-		HP: 82, HPmax: 92, HPmarriage: 8,
+		HP: 82, HPmax: 92,
 		FP: 102, FPbase: 72,
 		TP: 0, TPbase: 0,
 		AA: 82, AAbase: 24,
@@ -13453,8 +13479,9 @@ var SHIPDATA = {
 		type: 'BB',
 		nid: 373,
 		added: '2019-02-27',
+		fitclass: 11,
 		attackSpecial: 102,
-		HP: 91, HPmax: 99, HPmarriage: 8,
+		HP: 91, HPmax: 99,
 		FP: 118, FPbase: 91,
 		TP: 0, TPbase: 0,
 		AA: 102, AAbase: 38,
@@ -13529,8 +13556,9 @@ var SHIPDATA = {
 		type: 'BB', sclass: 88,
 		nid: 376,
 		added: '2018-09-12',
+		fitclass: 13,
 		attackSpecial: 100,
-		HP: 93, HPmax: 98, HPmarriage: 5,
+		HP: 93, HPmax: 98,
 		FP: 114, FPbase: 81,
 		TP: 0, TPbase: 0,
 		AA: 92, AAbase: 30,
@@ -13605,7 +13633,7 @@ var SHIPDATA = {
 		type: 'AV',
 		nid: 381,
 		added: '2018-12-27',
-		HP: 45, HPmax: 65, HPmarriage: 6,
+		HP: 45, HPmax: 65,
 		FP: 46, FPbase: 16,
 		TP: 40, TPbase: 0,
 		AA: 48, AAbase: 20,
@@ -13630,7 +13658,7 @@ var SHIPDATA = {
 		type: 'DD',
 		nid: 383,
 		added: '2018-12-27',
-		HP: 16, HPmax: 33, HPmarriage: 4,
+		HP: 16, HPmax: 33,
 		FP: 30, FPbase: 10,
 		TP: 69, TPbase: 24,
 		AA: 40, AAbase: 9,
@@ -13655,7 +13683,7 @@ var SHIPDATA = {
 		type: 'AV',
 		nid: 386,
 		added: '2018-12-27',
-		HP: 49, HPmax: 69, HPmarriage: 6,
+		HP: 49, HPmax: 69,
 		FP: 60, FPbase: 20,
 		TP: 88, TPbase: 0,
 		AA: 65, AAbase: 25,
@@ -13881,7 +13909,7 @@ var SHIPDATA = {
 		type: 'DD',
 		nid: 1487,
 		added: '2018-12-27',
-		HP: 31, HPmax: 49, HPmarriage: 5,
+		HP: 31, HPmax: 49,
 		FP: 51, FPbase: 12,
 		TP: 79, TPbase: 28,
 		AA: 50, AAbase: 16,
@@ -13906,7 +13934,7 @@ var SHIPDATA = {
 		type: 'DD',
 		nid: 1488,
 		added: '2018-12-27',
-		HP: 32, HPmax: 49, HPmarriage: 5,
+		HP: 32, HPmax: 49,
 		FP: 51, FPbase: 12,
 		TP: 80, TPbase: 27,
 		AA: 58, AAbase: 18,
@@ -13932,7 +13960,7 @@ var SHIPDATA = {
 		nid: 1489,
 		added: '2018-12-27',
 		alwaysOASW: true,
-		HP: 34, HPmax: 50, HPmarriage: 5,
+		HP: 34, HPmax: 50,
 		FP: 55, FPbase: 15,
 		TP: 72, TPbase: 26,
 		AA: 90, AAbase: 40,
@@ -13957,7 +13985,7 @@ var SHIPDATA = {
 		type: 'AV',
 		nid: 1490,
 		added: '2018-12-27',
-		HP: 47, HPmax: 67, HPmarriage: 6,
+		HP: 47, HPmax: 67,
 		FP: 54, FPbase: 18,
 		TP: 75, TPbase: 0,
 		AA: 62, AAbase: 22,
@@ -20878,7 +20906,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [52, 44, 0, 0],
-		EQUIPS: [586,582,553,553],
+		EQUIPS: [586,582,553,553]
 	},
 	1822: {
 		name: 'German Escort Princess 2',
@@ -20898,7 +20926,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [72, 50, 0, 0],
-		EQUIPS: [586,582,553,553],
+		EQUIPS: [586,582,553,553]
 	},
 	1823: {
 		name: 'German Escort Princess 3',
@@ -20918,7 +20946,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [92, 56, 0, 0],
-		EQUIPS: [586,582,553,553],
+		EQUIPS: [586,582,553,553]
 	},
 	1824: {
 		name: 'German Escort Princess - Damaged 1',
@@ -20938,7 +20966,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [72, 50, 0, 0],
-		EQUIPS: [586,582,553,553],
+		EQUIPS: [586,582,553,553]
 	},
 	1825: {
 		name: 'German Escort Princess - Damaged 2',
@@ -20958,7 +20986,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [92, 56, 0, 0],
-		EQUIPS: [586,582,553,553],
+		EQUIPS: [586,582,553,553]
 	},
 	1826: {
 		name: 'German Escort Princess - Damaged 3',
@@ -20978,7 +21006,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [98, 80, 0, 0],
-		EQUIPS: [586,582,553,553],
+		EQUIPS: [586,582,553,553]
 	},
 	// I don't know what i'm doing - Jebzou
 	1827: {
@@ -20999,7 +21027,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580,580,580],
+		EQUIPS: [580,580,580]
 	},
 	1828: {
 		name: 'Dock Princess 2',
@@ -21019,7 +21047,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580,580,580],
+		EQUIPS: [580,580,580]
 	},
 	1829: {
 		name: 'Dock Princess 3',
@@ -21039,7 +21067,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580,580,580],
+		EQUIPS: [580,580,580]
 	},
 	1830: {
 		name: 'Dock Princess - Damaged 1',
@@ -21059,7 +21087,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580,580,580],
+		EQUIPS: [580,580,580]
 	},
 	1831: {
 		name: 'Dock Princess - Damaged 2',
@@ -21079,7 +21107,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580,580,580],
+		EQUIPS: [580,580,580]
 	},
 	1832: {
 		name: 'Dock Princess - Damaged 3',
@@ -21099,7 +21127,7 @@ var SHIPDATA = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580,580,580],
+		EQUIPS: [580,580,580]
 	},
 	1834: {
 		name: 'French Battleship Princess Vacation Mode 1',
@@ -21119,7 +21147,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [577,577,559,574],
+		EQUIPS: [577,577,559,574]
 	},
 	1835: {
 		name: 'French Battleship Princess Vacation Mode 2',
@@ -21139,7 +21167,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [577,577,559,574],
+		EQUIPS: [577,577,559,574]
 	},
 	1836: {
 		name: 'French Battleship Princess Vacation Mode 3',
@@ -21159,7 +21187,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [577,577,559,574],
+		EQUIPS: [577,577,559,574]
 	},
 	1837: {
 		name: 'French Battleship Princess Vacation Mode - Damaged 1',
@@ -21179,7 +21207,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [577,577,559,574],
+		EQUIPS: [577,577,559,574]
 	},
 	1838: {
 		name: 'French Battleship Princess Vacation Mode - Damaged 2',
@@ -21199,7 +21227,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [577,577,559,574],
+		EQUIPS: [577,577,559,574]
 	},
 	1839: {
 		name: 'French Battleship Princess Vacation Mode - Damaged 3',
@@ -21219,7 +21247,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [577,577,559,574],
+		EQUIPS: [577,577,559,574]
 	},
 	1840: {
 		name: 'European Water Princess 1',
@@ -21238,8 +21266,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [587,587,559,586],
+		SLOTS: [0, 0, 0, 25],
+		EQUIPS: [587,587,559,586]
 	},
 	1841: {
 		name: 'European Water Princess 2',
@@ -21258,8 +21286,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [587,587,559,586],
+		SLOTS: [0, 0, 0, 36],
+		EQUIPS: [587,587,559,586]
 	},
 	1842: {
 		name: 'European Water Princess 3',
@@ -21278,8 +21306,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [587,587,559,586],
+		SLOTS: [0, 0, 0, 64],
+		EQUIPS: [587,587,559,586]
 	},
 	1843: {
 		name: 'European Water Princess - Damaged 1',
@@ -21300,8 +21328,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [587,587,580,586],
+		SLOTS: [0, 0, 0, 36],
+		EQUIPS: [587,587,580,586]
 	},
 	1844: {
 		name: 'European Water Princess - Damaged 2',
@@ -21322,8 +21350,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [587,587,580,586],
+		SLOTS: [0, 0, 0, 49],
+		EQUIPS: [587,587,580,586]
 	},
 	1845: {
 		name: 'European Water Princess - Damaged 3',
@@ -21344,8 +21372,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [587,587,580,586],
+		SLOTS: [0, 0, 0, 81],
+		EQUIPS: [587,587,580,586]
 	},
 	1846: {
 		name: 'Abyssal Nimbus Princess 1',
@@ -21531,7 +21559,7 @@ var SHIPDATA = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [590,590,590,571],
+		EQUIPS: [589,589,590,571],
 	},
 	1855: {
 		name: 'Abyssal Sun Princess - Damaged 1',

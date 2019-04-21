@@ -7,6 +7,9 @@ function SoundManager() {
 	this._sounds = {};
 	this._voices = [null,null,null,null,null,null,null,null,null,null,null,null];
 	this._voiceON = true;
+	this._bgmON = true;
+	this._sfxON = true;
+	this._bgmVol = 0;
 	for (name in SOUNDNAMES) {
 		var vol = (SOUNDNAMES[name].voldef)? SOUNDNAMES[name].voldef : .6;
 		this._sounds[name] = new Howl({src:[SOUNDNAMES[name].path],volume:vol*this._volume});
@@ -19,7 +22,8 @@ var SOUNDNAMES = {
 	'torpedo': { path: 'assets/sounds/41_res.sounds.battle.SE_battle_gyorai.mp3' },
 	'planelaunch': { path: 'assets/sounds/38_res.sounds.battle.SE_battle_plane1.mp3',voldef:.5 },
 	'planeatk': { path: 'assets/sounds/36_res.sounds.battle.SE_battle_shoot.mp3',voldef:1 },
-	'shutters': { path: 'assets/sounds/29_res.sounds.SE_frame_close.mp3' },
+	'shuttersopen': { path: 'assets/sounds/218_shuttersopen.mp3' },
+	'shuttersclose': { path: 'assets/sounds/29_res.sounds.SE_frame_close.mp3' },
 	'enter': { path: 'assets/sounds/48_res.sounds.battle.SE_battle_card.mp3',voldef:.45 },
 	'airphase': { path: 'assets/sounds/42_res.sounds.battle.SE_battle_fannelCutIn.mp3',voldef:.5 },
 	'aaci': { path: 'assets/sounds/52_res.sounds.battle.SE_Bam.mp3' },
@@ -31,23 +35,30 @@ var SOUNDNAMES = {
 	'scout': { path: 'assets/sounds/19_res.sounds.map_kouku_teisatsu.mp3',voldef: .5 },
 	'jet': { path: 'assets/sounds/182_res.sounds.battle.SE_battle_jet.mp3', voldef: .5 },
 	'siren': { path: 'assets/sounds/75_res.sounds.siren.mp3', voldef: .5 },
+	'lbasselect': { path: 'assets/sounds/224_lbasselect.mp3', voldef: .35 },
+	'lbassend': { path: 'assets/sounds/227_lbassend.mp3', voldef: .35 },
 	'done': { path: 'assets/sounds/41_res.sounds.SE_correct_answer3.mp3', voldef: .5 },
+	'hover': { path: 'assets/sounds/242_nodehover.mp3', voldef: .5 },
 	'ooyodoClear': { path: 'assets/voice/425.mp3', voldef: .5 },
 }
 SoundManager.prototype = {
 	play: function(name,vol,loop) {
 		//if (this._mute) return undefined;
+		if (!this._sfxON) return;
 		this._sounds[name].play();
 		return this._sounds[name];
 	},
 	playNew: function(path,vol) {
+		if (!this._sfxOn) return;
 		vol = vol || .5;
 		let sound = new Howl({src:[path],volume:vol*this._volume});
 		sound.play();
 	},
 	playBGM: function(num,vol,noloop) {
 		this.stopBGM();
-		if (!vol) vol = (BGMLIST[num].voldef)? BGMLIST[num].voldef : .3,
+		if (!vol) vol = (BGMLIST[num].voldef)? BGMLIST[num].voldef : .3;
+		this._bgmVol = vol;
+		if (!this._bgmON) vol = 0;
 		this._bgm = new Howl({
 			src:[BGMLIST[num].url],
 			volume:vol*this._volume,
@@ -111,7 +122,28 @@ SoundManager.prototype = {
 	},
 	turnOnVoice: function() {
 		this._voiceON = true;
-	}
+	},
+	turnOffBGM: function() {
+		this._bgmON = false;
+		if (this._bgm) {
+			this._bgm.volume(0);
+		}
+	},
+	turnOnBGM: function() {
+		this._bgmON = true;
+		if (this._bgm && this.BGMnum) {
+			this._bgm.volume(this._bgmVol);
+		}
+	},
+	turnOffSFX: function() {
+		this._sfxON = false;
+		for (var snd in this._sounds) {
+			if (snd[0] != 'V') this._sounds[snd].stop();
+		}
+	},
+	turnOnSFX: function() {
+		this._sfxON = true;
+	},
 }
 
 var BGMLIST = {
