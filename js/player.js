@@ -3142,12 +3142,19 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 		SM.playBGM(bgm);
 	}
 	
+	var complete = false;
+	let skipLine = () => {
+		if (!complete) {
+			complete = true;
+			ecomplete = true;
+		}
+	}
 	let delay = 0;
+	let voice;
 	if (voiceId && voiceNo) {
 		let ind = voiceNo.indexOf(1);
 		if (ind != -1) {
-			delay = 2000;
-			SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind);
+			voice = SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind,skipLine);
 		}
 	}
 
@@ -3195,9 +3202,18 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 		}
 	},1000);
 	
-	addTimeout(function() {
-		ecomplete = true;
-	}, 2000+delay);
+
+	if(!voice){
+		addTimeout(function() {
+			ecomplete = true;
+		}, 2000+delay);
+	}else{
+		addTimeout(function() {
+			$('#battlespace').one('click', function(){
+				skipLine();
+			});
+		}, 2000);
+	}
 }
 
 function friendExit() {

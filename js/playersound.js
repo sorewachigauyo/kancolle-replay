@@ -81,7 +81,7 @@ SoundManager.prototype = {
 		this._bgm.fade(this._bgm.volume(),0,dur);
 		this.BGMnum = 0;
 	},
-	playVoice: function(shipid,type,slot) {
+	playVoice: function(shipid,type,slot,callback) {
 		if (!this._voiceON) return;
 		if (!VOICES[shipid]) return;
 		if (slot >= 10 && isPlayable(shipid)) return; //no PVP enemy voices
@@ -99,7 +99,12 @@ SoundManager.prototype = {
 			this._sounds['V'+type+shipid] = new Howl({
 				src:[path],
 				volume:.4*this._volume,
-				html5:true
+				html5:true,
+				onstop: function(){
+					if(callback) {
+						callback();
+					}
+				}
 			});
 		}
 		if (this._voices[slot] && isPlayable(shipid)) {
@@ -237,6 +242,12 @@ var BGMLIST = {
 	115: {url:'assets/music/1_res.sounds.battle.BGM_115.mp3'},
 	116: {url:'assets/music/Sound_b_bgm_116.oga'},
 	117: {url:'assets/music/Sound_b_bgm_117.oga'},
+	119: {url:'assets/music/Sound_b_bgm_119.ogg'},
+	120: {url:'assets/music/Sound_b_bgm_120.ogg'},
+	121: {url:'assets/music/Sound_b_bgm_121.oga'},
+	122: {url:'assets/music/Sound_b_bgm_122.ogg'},
+	123: {url:'assets/music/Sound_b_bgm_123.ogg'},
+	124: {url:'assets/music/Sound_b_bgm_124.ogg'},
 	998: {url:'assets/music/savior of song.mp3',voldef:.25},
 	999: {url:'assets/music/Orel Cruising & LSC Song [ENG Sub].mp3',voldef:.3},
 	1107: {url:'assets/music/107b.ogg'},
