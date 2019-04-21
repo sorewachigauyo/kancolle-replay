@@ -30945,6 +30945,13 @@ var MAPDATA = {
 									? ships.aCV < 2 : true)) return 'ZZ9'
 							}
 							return 'ZZZ1';
+						},
+						setupSpecial: function(){
+							let ships = FLEETS1[0].ships.concat((FLEETS1[1] || {}).ships || []);
+							ships = ships.concat(FLEETS2[0].ships).concat((FLEETS2[1] || {}).ships || []);
+							for (let ship of ships) {
+								if (['CV','CVL','CVB'].includes(SHIPDATA[ship.mid].type)) ship.bonusSpecial = [{mod:0.6}];
+							}
 						}
 					},
 					'ZZ8': {
