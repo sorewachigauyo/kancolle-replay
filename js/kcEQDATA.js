@@ -231,7 +231,6 @@ EQTDATA[FIGHTER] = {
 	canequipS: [553],
 	isPlane: true,
 	isfighter: true,
-	canAce: true,
 };
 EQTDATA[TORPBOMBER] = {
 	name: 'Torpedo Bomber',
@@ -243,7 +242,6 @@ EQTDATA[TORPBOMBER] = {
 	canContact: true,
 	isfighter: true,
 	istorpbomber: true,
-	canAce: true,
 };
 EQTDATA[DIVEBOMBER] = {
 	name: 'Dive Bomber',
@@ -253,7 +251,6 @@ EQTDATA[DIVEBOMBER] = {
 	isPlane: true,
 	isfighter: true,
 	isdivebomber: true,
-	canAce: true,
 };
 EQTDATA[SEAPLANE] = {
 	name: 'Recon Seaplane',
@@ -264,7 +261,6 @@ EQTDATA[SEAPLANE] = {
 	cannotequipS: [477, 478],
 	isPlane: true,
 	canContact: true,
-	canAce: true,
 };
 EQTDATA[SEAPLANEBOMBER] = {
 	name: 'Seaplane Bomber',
@@ -275,7 +271,6 @@ EQTDATA[SEAPLANEBOMBER] = {
 	isPlane: true,
 	isfighter: true,
 	isdivebomber: true,
-	canAce: true,
 };
 EQTDATA[CARRIERSCOUT] = {
 	name: 'Scout Plane',
@@ -285,7 +280,6 @@ EQTDATA[CARRIERSCOUT] = {
 	cannotequipS: [380, 521, 526, 534, 381],
 	isPlane: true,
 	canContact: true,
-	canAce: true,
 };
 EQTDATA[CARRIERSCOUT2] = {
 	name: 'Scout Plane',
@@ -294,7 +288,6 @@ EQTDATA[CARRIERSCOUT2] = {
 	canequip: ['CVB','LandBase'],
 	isPlane: true,
 	canContact: true,
-	canAce: true,
 };
 EQTDATA[AUTOGYRO] = {
 	name: 'Anti-Sub Plane',
@@ -433,7 +426,6 @@ EQTDATA[FLYINGBOAT] = {
 	canequipS: [445,450,500],
 	isPlane: true,
 	canContact: true,
-	canAce: true,
 };
 EQTDATA[REPAIR] = {
 	name: 'Misc',
@@ -452,7 +444,6 @@ EQTDATA[SEAPLANEFIGHTER] = {
 	canequipS: [136, 148, 275, 276, 358, 361, 446, 447, 488, 496, 541, 546, 547],
 	isPlane: true,
 	isfighter: true,
-	canAce: true,
 };
 EQTDATA[LANDINGTANK] = {
 	name: 'Misc',
@@ -476,7 +467,6 @@ EQTDATA[LANDBOMBER] = {
 	isfighter: true,
 	isdivebomber: true,
 	istorpbomber: true,
-	canAce: true,
 };
 EQTDATA[INTERCEPTOR] = {
 	name: 'Misc',
@@ -484,7 +474,6 @@ EQTDATA[INTERCEPTOR] = {
 	canequip: ['LandBase'],
 	isPlane: true,
 	isfighter: true,
-	canAce: true,
 };
 EQTDATA[LANDSCOUT] = {
 	name: 'Misc',
@@ -492,7 +481,6 @@ EQTDATA[LANDSCOUT] = {
 	canequip: ['LandBase'],
 	isPlane: true,
 	canContact: true,
-	canAce: true,
 };
 EQTDATA[TRANSPORTITEM] = {
 	name: 'Transportation Material',
@@ -512,7 +500,6 @@ EQTDATA[JETBOMBER] = {
 	isPlane: true,
 	isfighter: true,
 	isdivebomber: true,
-	canAce: true,
 };
 EQTDATA[OTHER] = {
 	name: 'Misc',
@@ -3922,7 +3909,6 @@ var EQDATA = {
 		AA: 3,
 		ACC: 2,
 		LOS: 8,
-		canAce: false,
 	},
 	312: {
 		name: 'Type 2 Land-based Reconnaissance Aircraft (Skilled)',

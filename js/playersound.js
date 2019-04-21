@@ -19,8 +19,7 @@ var SOUNDNAMES = {
 	'torpedo': { path: 'assets/sounds/41_res.sounds.battle.SE_battle_gyorai.mp3' },
 	'planelaunch': { path: 'assets/sounds/38_res.sounds.battle.SE_battle_plane1.mp3',voldef:.5 },
 	'planeatk': { path: 'assets/sounds/36_res.sounds.battle.SE_battle_shoot.mp3',voldef:1 },
-	'shuttersopen': { path: 'assets/sounds/218_shuttersopen.mp3' },
-	'shuttersclose': { path: 'assets/sounds/29_res.sounds.SE_frame_close.mp3' },
+	'shutters': { path: 'assets/sounds/29_res.sounds.SE_frame_close.mp3' },
 	'enter': { path: 'assets/sounds/48_res.sounds.battle.SE_battle_card.mp3',voldef:.45 },
 	'airphase': { path: 'assets/sounds/42_res.sounds.battle.SE_battle_fannelCutIn.mp3',voldef:.5 },
 	'aaci': { path: 'assets/sounds/52_res.sounds.battle.SE_Bam.mp3' },
@@ -31,12 +30,9 @@ var SOUNDNAMES = {
 	'storm': { path: 'assets/sounds/2_res.sounds.SE_sally_storm.mp3',voldef: .5 },
 	'scout': { path: 'assets/sounds/19_res.sounds.map_kouku_teisatsu.mp3',voldef: .5 },
 	'jet': { path: 'assets/sounds/182_res.sounds.battle.SE_battle_jet.mp3', voldef: .5 },
-	'lbasselect': { path: 'assets/sounds/224_lbasselect.mp3', voldef: .35 },
-	'lbassend': { path: 'assets/sounds/227_lbassend.mp3', voldef: .35 },
 	'siren': { path: 'assets/sounds/75_res.sounds.siren.mp3', voldef: .5 },
 	'done': { path: 'assets/sounds/41_res.sounds.SE_correct_answer3.mp3', voldef: .5 },
 	'ooyodoClear': { path: 'assets/voice/425.mp3', voldef: .5 },
-	'hover': { path: 'assets/sounds/242_nodehover.mp3', voldef: .5 },
 }
 SoundManager.prototype = {
 	play: function(name,vol,loop) {
@@ -74,7 +70,7 @@ SoundManager.prototype = {
 		this._bgm.fade(this._bgm.volume(),0,dur);
 		this.BGMnum = 0;
 	},
-	playVoice: function(shipid,type,slot) {
+	playVoice: function(shipid,type,slot,callback) {
 		if (!this._voiceON) return;
 		if (!VOICES[shipid]) return;
 		if (slot >= 10 && isPlayable(shipid)) return; //no PVP enemy voices
@@ -92,7 +88,12 @@ SoundManager.prototype = {
 			this._sounds['V'+type+shipid] = new Howl({
 				src:[path],
 				volume:.4*this._volume,
-				html5:true
+				html5:true,
+				onstop: function(){
+					if(callback) {
+						callback();
+					}
+				}
 			});
 		}
 		if (this._voices[slot] && isPlayable(shipid)) {
@@ -209,8 +210,12 @@ var BGMLIST = {
 	115: {url:'assets/music/1_res.sounds.battle.BGM_115.mp3'},
 	116: {url:'assets/music/Sound_b_bgm_116.oga'},
 	117: {url:'assets/music/Sound_b_bgm_117.oga'},
-	126: {url:'assets/music/Sound_b_bgm_126.oga'},
-	129: {url:'assets/music/Sound_b_bgm_129.oga'},
+	119: {url:'assets/music/Sound_b_bgm_119.ogg'},
+	120: {url:'assets/music/Sound_b_bgm_120.ogg'},
+	121: {url:'assets/music/Sound_b_bgm_121.oga'},
+	122: {url:'assets/music/Sound_b_bgm_122.ogg'},
+	123: {url:'assets/music/Sound_b_bgm_123.ogg'},
+	124: {url:'assets/music/Sound_b_bgm_124.ogg'},
 	998: {url:'assets/music/savior of song.mp3',voldef:.25},
 	999: {url:'assets/music/Orel Cruising & LSC Song [ENG Sub].mp3',voldef:.3},
 	1107: {url:'assets/music/107b.ogg'},
@@ -234,5 +239,4 @@ var BGMLIST = {
 	3003: {url:'assets/music/Sound_se_52.ogg'},
 	3004: {url:'assets/music/Sound_se_31.ogg'},
 };
-
 

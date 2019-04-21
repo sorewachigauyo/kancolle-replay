@@ -3141,12 +3141,19 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 		SM.playBGM(bgm);
 	}
 	
+	var complete = false;
+	let callback = () => {
+		if (!complete) {
+			complete = true;
+			ecomplete = true;
+		}
+	}
 	let delay = 0;
+	let voice;
 	if (voiceId && voiceNo) {
 		let ind = voiceNo.indexOf(1);
 		if (ind != -1) {
-			delay = 2000;
-			SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind);
+			voice = SM.playVoice(fleetFriend[ind].mid,'friend'+voiceId[ind],ind,callback);
 		}
 	}
 
@@ -3194,9 +3201,18 @@ function friendStart(hps,bgm,voiceId,voiceNo) {
 		}
 	},1000);
 	
-	addTimeout(function() {
-		ecomplete = true;
-	}, 2000+delay);
+
+	if(!voice){
+		addTimeout(function() {
+			ecomplete = true;
+		}, 2000+delay);
+	}else{
+		addTimeout(function() {
+			$('#battlespace').one('click', function(){
+				ecomplete = complete = true;
+			});
+		}, 2000);
+	}
 }
 
 function friendExit() {
@@ -3328,13 +3344,13 @@ function resetBattle() {
 function shuttersNextBattle(battledata, newships) {
 	shutterTop.alpha = shutterBottom.alpha = 1;
 	updates.push([closeShutters,[]]);
-	SM.play('shuttersclose');
+	SM.play('shutters');
 	addTimeout(function(){
 		resetBattle();
 		if (battledata[5]=='1') { stage.removeChild(bg); stage.addChildAt(bg2,0); } //must be done ahead of time if shutters going up
 		
 		updates.push([openShutters,[]]);
-		SM.play('shuttersopen');
+		SM.play('shutters');
 	},1000);
 	addTimeout(function(){ ecomplete = true; }, 1500);
 }
@@ -3344,7 +3360,7 @@ function shutters(nightToDay) {
 	// shutterBottom.y = 480;
 	shutterTop.alpha = shutterBottom.alpha = 1;
 	updates.push([closeShutters,[]]);
-	SM.play('shuttersclose');
+	SM.play('shutters');
 	addTimeout(function(){
 		if (nightToDay) {
 			stage.removeChild(bg2);
@@ -3354,7 +3370,7 @@ function shutters(nightToDay) {
 			stage.addChildAt(bg2,0);
 		}
 		updates.push([openShutters,[]]);
-		SM.play('shuttersopen');
+		SM.play('shutters');
 	},1000);
 	
 	addTimeout(function(){ ecomplete = true; }, 2000);
