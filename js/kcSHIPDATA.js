@@ -22285,6 +22285,7 @@ var SHIPDATAHISTORY = {
 		470: { FP: 59, AA: 80 },
 		476: { ASW: 64 },
 		487: { TP: 82, AA: 83, ASW: 85 },
+		541: { attackSpecial: null },
 		556: { TP: 76 },
 		557: { FP: 60, TP: 80 },
 		558: { TP: 81 },
@@ -22519,6 +22520,9 @@ var SHIPDATAHISTORY = {
 		556: { TP: 80 },
 		557: { FP: 61, TP: 82 },
 		558: { TP: 83 },
+	},
+	'2018-11-16': {
+		541: { attackSpecial: 101 },
 	},
 	'2018-12-07': {
 		188: { AA: 83, LUKmax: 70 },
