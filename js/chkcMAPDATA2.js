@@ -27333,8 +27333,6 @@ var MAPDATA = {
 		allowFleets: [0,1,2,3],
 		allowLBAS: true,
 		allowVanguard: true,
-		lbas: 3,
-		// same as Winter 2018 ?
 		vanguardConsts: { vanguardEvDD1: 20, vanguardEvDD2: 40, vanguardEvOther1: 5, vanguardEvOther2: 20 },
 		newResupplyCosts: true,
 		bannerImg: 'assets/maps/42/banner1.png',
@@ -27527,7 +27525,7 @@ var MAPDATA = {
 		maps: {
 			1: {
 				name: 'E-1',
-				nameT: 'Off the Bali Island',
+				nameT: 'Off the Bali Island<br>Strategy preparations! Secure a rear supply line',
 				fleetTypes: [0],
 				bgmMap: 119,
 				bgmDN: 120,
@@ -27537,7 +27535,6 @@ var MAPDATA = {
 				bossnode: 9,
 				checkLock: [2,4,3,9,8],
 				giveLock: 5,
-				lbas: 0,
 				maphp: {
 					3: { 1: 1500 },
 					2: { 1: 1200 },
@@ -27565,7 +27562,7 @@ var MAPDATA = {
 						type: 3,
 						x: 97,
 						y: 88,
-						route: 'B'
+						route: 'A'
 					},
 					'Start2': {
 						type: 3,
@@ -27587,7 +27584,7 @@ var MAPDATA = {
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function (ships) {
-							if(ships.CA <= 2 && ships.CAV <= 2 && !ships.SS && !ships.SSV) return 'B';
+							if(ships.CA + ships.CAV <= 2 && !ships.SS && !ships.SSV) return 'B';
 							if(ships.SS || ships.SSV) return (Math.random() < .5)? 'B' : 'D';
 							return 'D';
 						}
@@ -27597,23 +27594,23 @@ var MAPDATA = {
 						x: 236,
 						y: 160,
 						routeC: function (ships) {
-							if(ships.CA || ships.CAV) return 'E';
 							if(ships.DE >= 3 || ships.AV >= 2 || ships.AO) return 'C';
 							if(ships.DE === 2) return (Math.random() < .5)? 'C' : 'E';
-							return 'E';
+							if(ships.CA || ships.CAV) return 'E';
+							return (Math.random() < .5)? 'C' : 'E';
 						}
 					},
 					'C': {
 						type: 2,
-						x: 275,
+						x: 274,
 						y: 222,
 						route: 'E'
 					},
 					'D': {
 						type: 4,
 						resource: 1,
-						x: 316,
-						y: 126,
+						x: 315,
+						y: 125,
 						route: 'E'
 					},
 					'E': {
@@ -27630,7 +27627,7 @@ var MAPDATA = {
 					},
 					'F': {
 						type: 1,
-						x: 393,
+						x: 392,
 						y: 303,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3', 'Hard 4'],
@@ -27659,7 +27656,7 @@ var MAPDATA = {
 						type: 4,
 						x: 563,
 						y: 209,
-						ressource: 1,
+						resource: 1,
 						route: 'G'
 					},
 					'I': {
@@ -27667,8 +27664,8 @@ var MAPDATA = {
 						boss: true,
 						subonly: true,
 						end: true,
-						x: 553,
-						y: 318,
+						x: 554,
+						y: 319,
 						compDiff: {
 							3: ['Hard 1','Hard 2'],
 							2: ['Medium 1','Medium 2'],
@@ -27686,7 +27683,7 @@ var MAPDATA = {
 			},
 			2: {
 				name: 'E-2',
-				nameT: 'Northern Straits of Malacca',
+				nameT: 'Northern Straits of Malacca<br>Operation \'Reclaim the Strait\'',
 				fleetTypes: [0],
 				bgmMap: 119,
 				bgmDN: 120,
@@ -27730,6 +27727,7 @@ var MAPDATA = {
 							1: 720,
 							4: 720,
 						},
+						transport: null,
 					}
 				},
 				startCheck: function() {
@@ -27752,7 +27750,7 @@ var MAPDATA = {
 					'A': {
 						type: 3,
 						x: 551,
-						y: 330,
+						y: 331,
 						distance: 3,
 						routeC: function(ships) {
 							if(ships.DE + ships.DD < 2) return 'B'; 
@@ -27803,6 +27801,7 @@ var MAPDATA = {
 								this.showNoCompass = true;
 								return 'F';
 							}
+							this.showNoCompass = false;
 							if(ships.DD + ships.CL < 2) return 'J';			
 							if(ships.CV + ships.CVB > 1) return 'J';
 							if(ships.BBV && (ships.CT + ships.CLT + ships.CA + ships.CAV + ships.FBB + 
@@ -27878,7 +27877,7 @@ var MAPDATA = {
 					},
 					'J': {
 						type: 1,
-						x: 352,
+						x: 351,
 						y: 199,
 						subonly: true,
 						route: 'E',
@@ -27893,7 +27892,7 @@ var MAPDATA = {
 					},
 					'K': {
 						type: 3,
-						x: 207,
+						x: 206,
 						y: 196,
 						distance: 4,
 						hidden: 1,
@@ -27944,7 +27943,7 @@ var MAPDATA = {
 					'O': {
 						type: 1,
 						x: 246,
-						y: 138,
+						y: 140,
 						boss: true,
 						end: true,
 						distance: 4,
@@ -27966,7 +27965,7 @@ var MAPDATA = {
 			},
 			3: {
 				name: 'E-3',
-				nameT: 'Battle off South-western Ceylon',
+				nameT: 'Battle off South-Western Ceylon<br>Crush the Enemy\'s Western Frontline Anchorage!',
 				fleetTypes: [0,1,2,3],
 				bgmMap: 119,
 				bgmDN: 120,
@@ -28134,7 +28133,7 @@ var MAPDATA = {
 						y: 107,
 						distance: 5,
 						compDiff: {
-							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
+							3: ['Hard 1','Hard 2','Hard 3','Hard 4'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5'],
 							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
 							4: ['Casual 1','Casual 2','Casual 3'],
@@ -28187,7 +28186,7 @@ var MAPDATA = {
 					'K': {
 						type: 1,
 						x: 194,
-						y: 88,
+						y: 89,
 						subonly: true,
 						distance: 7,
 						compDiff: {
@@ -28448,6 +28447,7 @@ var MAPDATA = {
 							1: 700,
 							4: 700,
 						},
+						transport: null,
 					}
 				},
 				hiddenRoutes: {
@@ -28501,7 +28501,7 @@ var MAPDATA = {
 					},
 					'A': {
 						type: 1,
-						x: 677,
+						x: 678,
 						y: 224,
 						subonly: true,
 						distance: 1,
@@ -28509,7 +28509,7 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
+							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 					},
@@ -28540,7 +28540,7 @@ var MAPDATA = {
 					'C': {
 						type: 1,
 						x: 546,
-						y: 219,
+						y: 220,
 						distance: 3,
 						route: 'E',
 						compDiff: {
@@ -28553,7 +28553,7 @@ var MAPDATA = {
 					'D': {
 						type: 1,
 						x: 529,
-						y: 328,
+						y: 329,
 						distance: 3,
 						routeC: function(ships){
 							if(CHDATA.fleets.combined === 2) return 'E';
@@ -28570,16 +28570,16 @@ var MAPDATA = {
 					},
 					'E': {
 						type: 4,
-						ressource: 1,
-						x: 477,
-						y: 251,
+						resource: 1,
+						x: 478,
+						y: 252,
 						distance: 3,
 						route: 'F',
 					},
 					'F': {
 						type: 3,
 						x: 430,
-						y: 275,
+						y: 276,
 						distance: 4,
 						routeS: ['G', 'H']
 					},
@@ -28605,14 +28605,14 @@ var MAPDATA = {
 					'H': {
 						type: 3,
 						x: 363,
-						y: 309,
+						y: 310,
 						distance: 5,
 						routeS: ['J', 'I'],
 					},
 					'I': {
 						type: 1,
 						x: 309,
-						y: 336,
+						y: 337,
 						distance: 5,
 						route: 'K',
 						compDiff: {
@@ -28625,7 +28625,7 @@ var MAPDATA = {
 					'J': {
 						type: 1,
 						x: 298,
-						y: 279,
+						y: 280,
 						get end(){
 							return CHDATA.event.maps[4].routes.indexOf(1) === -1;
 						},
@@ -28644,12 +28644,12 @@ var MAPDATA = {
 						distance: 6,
 						routeL: { 0: 'M', 3: 'L'},
 						x: 264,
-						y: 356,
+						y: 357,
 					},
 					'L': {
 						type: 1,
 						x: 243,
-						y: 294,
+						y: 295,
 						distance: 6,
 						boss: true,
 						end: true,
@@ -28870,7 +28870,7 @@ var MAPDATA = {
 					'T': {
 						type: 1,
 						x: 185,
-						y: 143,
+						y: 144,
 						hidden: 2,
 						distance: 7,
 						route: 'U',
@@ -28889,7 +28889,7 @@ var MAPDATA = {
 					'U': {
 						type: 1,
 						x: 134,
-						y: 56,
+						y: 57,
 						hidden: 2,
 						distance: 8,
 						boss: true,
@@ -28996,7 +28996,7 @@ var MAPDATA = {
 			},
 			5: {
 				name: 'E-5',
-				nameT: 'Combined Fleet, sortie!<br> The New Operation Rheinübung!',
+				nameT: 'Combined Fleet, Sortie!<br> The New Operation Rheinübung!',
 				get fleetTypes() {
 					if(CHDATA.event.maps[5].part > 1) return [1,2];
 					return [1];
@@ -29136,6 +29136,7 @@ var MAPDATA = {
 
 					for (shipId of shipsId) {
 						let ship = CHDATA.ships[shipId];
+						if (!ship) continue;
 						if (lock && ship.lock && ship.lock !== lock){
 							if (lock == 9) errors.push('Only H-force tagged ship can be used in CTF');
 							else errors.push('Only Rheinübung tagged ship can be used in STF');
@@ -29147,13 +29148,13 @@ var MAPDATA = {
 					'Start1': {
 						type: 3,
 						x: 259,
-						y: 336.8,
+						y: 337,
 						route: 'C'
 					},
 					'Start2': {
 						type: 3,
 						x: 726,
-						y: 218.8,
+						y: 219,
 						hidden: 1,
 						route: 'U'
 					},
@@ -29198,7 +29199,7 @@ var MAPDATA = {
 					'C': {
 						type: 1,
 						x: 177,
-						y: 294,
+						y: 293,
 						subonly: true,
 						distance: 6,
 						compDiff: {
@@ -29212,7 +29213,7 @@ var MAPDATA = {
 					'D': {
 						type: 3,
 						x: 197,
-						y: 185,
+						y: 186,
 						distance: 5,
 						routeS: ['E', 'F']
 					},
@@ -29246,7 +29247,7 @@ var MAPDATA = {
 					'H': {
 						type: 1,
 						x: 295,
-						y: 109.2,
+						y: 110,
 						distance: 4,
 						get end(){
 							return CHDATA.event.maps[5].routes.indexOf(2) === -1;
@@ -29265,7 +29266,7 @@ var MAPDATA = {
 					'I': {
 						type: 1,
 						x: 325,
-						y: 212.2,
+						y: 212,
 						distance: 3,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3'],
@@ -29301,7 +29302,7 @@ var MAPDATA = {
 					'K': {
 						type: 1,
 						x: 344,
-						y: 150.8,
+						y: 151,
 						hidden: 1,
 						distance: 3,
 						raid: true,
@@ -29326,8 +29327,8 @@ var MAPDATA = {
 					},
 					'L': {
 						type: 1,
-						x: 352,
-						y: 261.8,
+						x: 353,
+						y: 262,
 						hidden: 1,
 						distance: 3,
 						compDiff: {
@@ -29346,7 +29347,7 @@ var MAPDATA = {
 					'M': {
 						type: 1,
 						x: 368,
-						y: 87.2,
+						y: 87,
 						hidden: 1,
 						distance: 3,
 						compDiff: {
@@ -29369,8 +29370,8 @@ var MAPDATA = {
 					},
 					'N': {
 						type: 3,
-						x: 390,
-						y: 342.2,
+						x: 391,
+						y: 343,
 						hidden: 1,
 						end: true,
 						distance: 3,
@@ -29378,7 +29379,7 @@ var MAPDATA = {
 					'O': {
 						type: 3,
 						x: 402,
-						y: 289.2,
+						y: 289,
 						hidden: 1,
 						distance: 2,
 						route: 'W'
@@ -29386,7 +29387,7 @@ var MAPDATA = {
 					'P': {
 						type: 1,
 						x: 419,
-						y: 145.2,
+						y: 145,
 						hidden: 1,
 						distance: 2,
 						compDiff: {
@@ -29404,7 +29405,7 @@ var MAPDATA = {
 					'Q': {
 						type: 3,
 						x: 511,
-						y: 58.2,
+						y: 59,
 						hidden: 1,
 						distance: 3,
 						routeC: function(ships) {
@@ -29426,7 +29427,7 @@ var MAPDATA = {
 					'R': {
 						type: 3,
 						x: 571,
-						y: 96.2,
+						y: 96,
 						hidden: 1,
 						distance: 2,
 						route: 'Q',
@@ -29434,7 +29435,7 @@ var MAPDATA = {
 					'S': {
 						type: 1,
 						x: 587,
-						y: 197.2,
+						y: 197,
 						hidden: 1,
 						distance: 1,
 						subonly: true,
@@ -29449,7 +29450,7 @@ var MAPDATA = {
 					'T': {
 						type: 1,
 						x: 627,
-						y: 150.2,
+						y: 150,
 						hidden: 1,
 						distance: 2,
 						subonly: true,
@@ -29472,15 +29473,15 @@ var MAPDATA = {
 					'U': {
 						type: 3,
 						x: 672,
-						y: 212.2,
+						y: 212,
 						hidden: 1,
 						distance: 2,
 						route: 'V'
 					},
 					'V': {
 						type: 3,
-						x: 688,
-						y: 143.2,
+						x: 689,
+						y: 143,
 						hidden: 1,
 						distance: 3,
 						route: 'T'
@@ -29525,8 +29526,8 @@ var MAPDATA = {
 					},
 					'X': {
 						type: 3,
-						x: 242.2,
-						y: 74.8,
+						x: 242,
+						y: 75,
 						hidden: 2,
 						distance: 5,
 						routeC: function(ships) {
@@ -29545,8 +29546,8 @@ var MAPDATA = {
 					},
 					'Y': {
 						type: 1,
-						x: 202.2,
-						y: 144.8,
+						x: 202,
+						y: 146,
 						hidden: 2,
 						distance: 5,
 						compDiff: {
@@ -29555,12 +29556,12 @@ var MAPDATA = {
 							1: ['Easy 1','Easy 2','Easy 3'],
 							4: ['Casual 1','Casual 2'],
 						},
-						routeL: { 3: 'Z2', 0: 'Y' }
+						routeL: { 3: 'Z2', 0: 'Z' }
 					},
 					'Z': {
 						type: 3,
-						x: 156.2,
-						y: 118.8,
+						x: 157,
+						y: 119,
 						hidden: 2,
 						end: true,
 						distance: 6,
@@ -29568,7 +29569,7 @@ var MAPDATA = {
 					'Z2': {
 						type: 1,
 						x: 96,
-						y: 169.2,
+						y: 169,
 						hidden: 2,
 						distance: 7,
 						boss: true,
@@ -29644,7 +29645,7 @@ var MAPDATA = {
 					'Z3': {
 						type: 1,
 						x: 160,
-						y: 67.8,
+						y: 68,
 						hidden: 3,
 						distance: 6,
 						raid: true,

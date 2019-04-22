@@ -26,7 +26,8 @@ var MECHANICDATES = {
 	aswSoftCap: '2017-11-10',
 	LBASBuff: '2017-11-17',
 	equipBonus: '2017-12-22',
-	specialAttacks: '2018-09-12',
+	installRevamp: '2018-08-17',
+	specialAttacks: '2018-09-08',
 };
 
 var MECHANICDATESOTHER = {
