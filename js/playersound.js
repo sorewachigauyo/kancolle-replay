@@ -269,5 +269,7 @@ var BGMLIST = {
 	3002: {url:'assets/music/Sound_se_63.ogg'},
 	3003: {url:'assets/music/Sound_se_52.ogg'},
 	3004: {url:'assets/music/Sound_se_31.ogg'},
+	'd_00_01': {url:'assets/music/【艦これBGMアレンジ】西村艦隊の戦い　オーケストラアレンジ - Niconico Video.m4a',voldef:.35},
+	'd_00_02': {url:'assets/music/【艦これボーカルアレンジ】二羽の鶴【鶴墜ちる海】 - Niconico Video.m4a',voldef:.35},
 };
 

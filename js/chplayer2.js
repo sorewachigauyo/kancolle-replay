@@ -1540,7 +1540,11 @@ function prepBattle(letter) {
 			SIMCONSTS[key] = MAPDATA[WORLD].vanguardConsts[key];
 		}
 	}
-	
+	let nowhp;
+	if (mapdata.battleSpecial) { 
+		mapdata.battleSpecial(); 
+		nowhp = FLEETS2[0].ships[0].HP;
+	}
 	NEWFORMAT = CHDATA.fleets.sf || mapdata.nightToDay2 || mapdata.friendFleet;
 	var res;
 	if (mapdata.nightToDay2) {
@@ -1575,7 +1579,6 @@ function prepBattle(letter) {
 	}
 	CHAPI.battles.push(BAPI);
 	$('#code').val(JSON.stringify(CHAPI)); //remove?
-	
 	res.NBonly = NBonly;
 	res.landbomb = landbomb;
 	res.noammo = compd.noammo;
@@ -1599,38 +1602,41 @@ function prepBattle(letter) {
 	
 	bossBarReset();
 	eventqueue = [[shuttersPrebattle,[]]]; e = -1;
-	processAPI(CHAPI);
+	if (mapdata.stageSpecial) mapdata.stageSpecial(CHAPI, nowhp);
+	else processAPI(CHAPI);
 	NBSELECT = false;
-	if (!mapdata.nightToDay && !mapdata.nightToDay2) {
-		for (var i=0; i<eventqueue.length; i++) {
-			if (eventqueue[i][0] == shutters) { eventqueue[i][0] = shuttersSelect; break; }
-		}
-	}
 	if (!MAPDATA[WORLD].maps[MAPNUM].transport && MAPDATA[WORLD].maps[MAPNUM].hpmode != 1) lastdance = FLEETS2[0].ships[0].maxHP >= CHDATA.event.maps[MAPNUM].hp; //if last dance hp < boss hp, still play sunk line
-	if (mapdata.boss && lastdance && res.flagsunk && !MAPDATA[WORLD].maps[MAPNUM].transport) {
-		var shipid = compd.c[0];
-		if (VOICES[shipid] && VOICES[shipid]['sunk']) {
-			var sndindex = eventqueue.length;
-			var snd = SM._sounds['Vsunk'+shipid] = new Howl({
-				src:[VOICES[shipid]['sunk']],
-				volume:.4*SM._volume,
-				html5:true,
-				onload: function() {
-					var waittime = this.duration()*1000 + 2000;
-					eventqueue.splice(sndindex,0,[wait,[waittime]]);
-				}
-			});
+	if (!mapdata.stageSpecial) {
+		if (!mapdata.nightToDay && !mapdata.nightToDay2) {
+			for (var i=0; i<eventqueue.length; i++) {
+				if (eventqueue[i][0] == shutters) { eventqueue[i][0] = shuttersSelect; break; }
+			}
 		}
-	}
-	eventqueue.push([shuttersPostbattle,[]]);
-	eventqueue.push([showResults,[]]);
-	shutterTop2.y = 0; shutterBottom2.y = 210;
-	if (!MAPDATA[WORLD].maps[MAPNUM].nodes[letter].end) {
-		if (CHDATA.fleets.combined || CHDATA.fleets.sf) eventqueue.push([FCFSelect,[]]);
-		eventqueue.push([continueSelect,[]]);
-		eventqueue.push([wait,[1000]]);
-	} else {
-		eventqueue.push([endMap,[]]);
+		if (mapdata.boss && lastdance && res.flagsunk && !MAPDATA[WORLD].maps[MAPNUM].transport) {
+			var shipid = compd.c[0];
+			if (VOICES[shipid] && VOICES[shipid]['sunk']) {
+				var sndindex = eventqueue.length;
+				var snd = SM._sounds['Vsunk'+shipid] = new Howl({
+					src:[VOICES[shipid]['sunk']],
+					volume:.4*SM._volume,
+					html5:true,
+					onload: function() {
+						var waittime = this.duration()*1000 + 2000;
+						eventqueue.splice(sndindex,0,[wait,[waittime]]);
+					}
+				});
+			}
+		}
+		eventqueue.push([shuttersPostbattle,[]]);
+		eventqueue.push([showResults,[]]);
+		shutterTop2.y = 0; shutterBottom2.y = 210;
+		if (!MAPDATA[WORLD].maps[MAPNUM].nodes[letter].end) {
+			if (CHDATA.fleets.combined || CHDATA.fleets.sf) eventqueue.push([FCFSelect,[]]);
+			eventqueue.push([continueSelect,[]]);
+			eventqueue.push([wait,[1000]]);
+		} else {
+			eventqueue.push([endMap,[]]);
+		}
 	}
 	addTimeout(function() { ecomplete = true; }, 1);
 }
@@ -2834,7 +2840,7 @@ function chLoadFriendFleet(friendData) {
 		let ev = sdata.EVbase + Math.floor((sdata.EV - sdata.EVbase)*ship.LVL/99);
 		let asw = sdata.ASWbase + Math.floor((sdata.ASW - sdata.ASWbase)*ship.LVL/99);
 		let los = sdata.LOSbase + Math.floor((sdata.LOS - sdata.LOSbase)*ship.LVL/99);
-		let simShip = new ShipType(ship.mid,'',0,ship.LVL,sdata.HP,ship.FP||sdata.FP,ship.TP||sdata.TP,ship.AA,ship.AR||sdata.AR,ev,asw,los,sdata.LUK,sdata.RNG,sdata.SLOTS);
+		let simShip = new ShipType(ship.mid,'',0,ship.LVL || 99,sdata.HP,ship.FP||sdata.FP,ship.TP||sdata.TP,ship.AA || sdata.AA,ship.AR||sdata.AR,ev,asw,los,sdata.LUK,sdata.RNG,sdata.SLOTS);
 		simShip.loadEquips(ship.equips,[],[],true);
 		
 		if (ship.damage) {

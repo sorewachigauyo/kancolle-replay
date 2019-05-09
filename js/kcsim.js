@@ -2723,7 +2723,7 @@ function getNightEquips(alive1,alive2,APIyasen) {
 	return [[star1,star2],[light1,light2],[scout1,scout2],[slrerolls1,slrerolls2]];
 }
 
-function simNightFirstCombined(F1,F2,Fsupport,LBASwaves,BAPI) {
+function simNightFirstCombined(F1,F2,Fsupport,LBASwaves,BAPI,nightOnly = false) {
 	var F2C = F2.combinedWith;
 	var ships1 = F1.ships, ships2 = F2.ships, ships2C = F2C.ships;
 	var alive1 = [], alive2 = [], alive2C = [], subsalive1 = [], subsalive2 = [], subsalive2C = [];
@@ -2843,7 +2843,7 @@ function simNightFirstCombined(F1,F2,Fsupport,LBASwaves,BAPI) {
 	for (var i=0; i<ships2C.length; i++) {
 		if (ships2C[i].HP/ships2C[i].maxHP > .5) count++;
 	}
-	var doDay = !allsunk && count <= 3;
+	var doDay = !allsunk && count <= 3 && !nightOnly;
 	
 	APIyasen.api_day_flag = 0;
 	if (doDay && alive1.length+subsalive1.length > 0 && alive2.length+subsalive2.length > 0) {

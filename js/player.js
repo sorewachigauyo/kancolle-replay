@@ -1303,7 +1303,7 @@ function processAPI(root) {
 			if (!isboss && map.bgmNN != map.bgmDN) eventqueue.push([wait,[1,true]]);
 		}
 		
-		if (b==root.battles.length-1) eventqueue.push([battleEnd,[],getState()]);
+		if ((b==root.battles.length-1) && !root.battleSpecial) eventqueue.push([battleEnd,[],getState()]);
 	}
 	
 	loader2.load(function() { SHIPSLOADED = true; });
@@ -1316,7 +1316,12 @@ function processAPI(root) {
 	shutterBottom.y = 456; shutterBottom.alpha = 0;
 	
 	if (!started) animate();
-	SM.stopBGM();
+	if (root.battleSpecialContinue) {
+		addTimeout(function() { ecomplete = true; }, 1);
+	}
+	else {
+		SM.stopBGM();
+	}
 }
 
 
