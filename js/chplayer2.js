@@ -2855,3 +2855,25 @@ function chLoadFriendFleet(friendData) {
 	fleet.formation = LINEAHEAD;
 	return fleet;
 }
+
+function endSortie() {
+	if (FLEETS2[0].ships[0].HP <= 0) {
+		var shipid = FLEETS2[0].ships[0].mid;
+		if (VOICES[shipid] && VOICES[shipid]['sunk']) {
+			var sndindex = eventqueue.length;
+			var snd = SM._sounds['Vsunk'+shipid] = new Howl({
+				src:[VOICES[shipid]['sunk']],
+				volume:.4*SM._volume,
+				html5:true,
+				onload: function() {
+					var waittime = this.duration()*1000 + 2000;
+					eventqueue.splice(sndindex,0,[wait,[waittime]]);
+				}
+			});
+		}
+	}
+	eventqueue.push([shuttersPostbattle,[]]);
+	eventqueue.push([showResults,[]]);
+	eventqueue.push([endMap,[]]);
+	addTimeout(function() { ecomplete = true; }, 1);
+}

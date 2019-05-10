@@ -3504,6 +3504,62 @@ function reset(callback) {
 	};
 }
 
+function cleanStage(night) {
+	PAUSE = true;
+	CANRESET = false;
+		stage.removeChildren();
+		for (var i=0; i<fleet1.length; i++) {
+			fleet1[i].shakepid = 0; if (fleet1[i].graphic.pivot) fleet1[i].graphic.pivot.x = 0;
+			for (var j=0; j<fleet1[i].graphic.children.length; j++) fleet1[i].graphic.getChildAt(j).destroy();
+			fleet1[i].graphic.destroy();
+		}
+		for (var i=0; i<fleet1C.length; i++) {
+			fleet1C[i].shakepid = 0; if (fleet1C[i].graphic.pivot) fleet1C[i].graphic.pivot.x = 0;
+			for (var j=0; j<fleet1C[i].graphic.children.length; j++) fleet1C[i].graphic.getChildAt(j).destroy();
+			fleet1C[i].graphic.destroy();
+		}
+		fleet1C = [];
+		for (var k=0; k<allfleets2.length; k++) {
+			for (var i=0; i<allfleets2[k].length; i++) {
+				var ship = allfleets2[k][i];
+				ship.shakepid = 0; if (ship.graphic.pivot) ship.graphic.pivot.x = 0;
+				for (var j=0; j<ship.graphic.children.length; j++) ship.graphic.getChildAt(j).destroy();
+				ship.graphic.destroy();
+			}
+		}
+		allfleets2 = [];
+		for (var k=0; k<allfleets2c.length; k++) {
+			for (var i=0; i<allfleets2c[k].length; i++) {
+				var ship = allfleets2c[k][i];
+				ship.shakepid = 0; if (ship.graphic.pivot) ship.graphic.pivot.x = 0;
+				for (var j=0; j<ship.graphic.children.length; j++) ship.graphic.getChildAt(j).destroy();
+				ship.graphic.destroy();
+			}
+		}
+		allfleets2c = [];
+		stage.addChild(!night ? bg : bg2);
+		radar1.scale.set(0); radar2.scale.set(0);
+		stage.addChild(radar1);
+		stage.addChild(radar2);
+		// for (var i=0; i<dots1.children.length; i++) dots1.getChildAt(i).destroy();
+		// for (var i=0; i<dots2.children.length; i++) dots2.getChildAt(i).destroy();
+		// dots1.removeChildren(); dots2.removeChildren();
+		while (dots1.children.length) recycle(dots1.getChildAt(0));
+		while (dots2.children.length) recycle(dots2.getChildAt(0));
+		dots1.alpha = dots2.alpha = 0;
+		stage.addChild(dots1);
+		stage.addChild(dots2);
+		$('#plEngage').text('');
+		$('#plEngageT').text('');
+		$('#plAS1').text('');
+		$('#plAS2').text('');
+		fleet1 = [];
+		fleet2 = [];
+		addTimeout(function() { ecomplete = true; }, 1);
+		PAUSE = false;
+		CANRESET = true;
+}
+
 //-----------------------
 function showAS(AS1,AS2) {
 	AS1 = parseInt(AS1); AS2 = parseInt(AS2);

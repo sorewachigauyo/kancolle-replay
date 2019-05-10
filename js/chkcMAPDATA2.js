@@ -31350,17 +31350,18 @@ var MAPDATA = {
 					}
 				},
 				additionalChecks: function(ships,errors) {
-					let lock = null, allSame = true;
+					let lock = null, allSame = true, allBlue = true;
 					let num = (CHDATA.fleets.combined)? 2 : 1;
 					for (let n=1; n<=num; n++) {
 						for (let sid of CHDATA.fleets[n]) {
 							if (sid && CHDATA.ships[sid].lock) {
 								if (!lock) lock = CHDATA.ships[sid].lock;
-								if (lock != CHDATA.ships[sid].lock) { allSame = false; break; }
+								if (lock != CHDATA.ships[sid].lock) { allSame = false; }
+								if (CHDATA.ships[sid].lock != 4) { allBlue = false; }
 							}
 						}
 					}
-					if (!allSame) errors.push('No mixed locks.');
+					if (!allSame || !allBlue) errors.push('No mixed locks.');
 					if (CHDATA.fleets.combined && CHDATA.event.maps[1].routes && !CHDATA.event.maps[1].routes.length) errors.push('You cannot sortie a combined fleet at this time.')
 				},
 				startCheck: function() {
@@ -31736,10 +31737,12 @@ var MAPDATA = {
 						friendFleetS: [],
 						nightToDay2: true,
 						battleSpecial: function() {
+							NEWFORMAT = true;
 							var friendFleet = CHDATA.sortie.fleetFriend;
 							var FFAPI = {data:{},yasen:{},mvp:[],rating:'',node:22};
 							this.battle = FFAPI;
 							simNightFirstCombined(friendFleet,FLEETS2[0],FLEETS1S[1],null,FFAPI,true);
+							NEWFORMAT = false;
 						},
 						stageSpecial: function(CHAPI, nowhp) {
 							var FFAPI = Object.assign({},CHAPI);
@@ -31770,6 +31773,7 @@ var MAPDATA = {
 							eventqueue.push([shuttersNextBattle,[[null,null,null,null,null,1]]]);
 							CHAPI.battleSpecialContinue = true;
 							CHAPI.now_maphp = CHAPI.now_maphp > nowhp ? nowhp : CHAPI.now_maphp;
+							eventqueue.push([cleanStage,[true]]);
 							eventqueue.push([processAPI,[CHAPI]]);
 							eventqueue.push([endSortie,[]]); 
 						},
@@ -31832,6 +31836,7 @@ var MAPDATA = {
 							MAPDATA[90].maps[2].bgmNB = 'd_00_02';
 						},
 						battleSpecial: function() {
+							NEWFORMAT = true;
 							var nishimura = CHDATA.event.maps[2].debuff.nishimura;
 							var fleetData = loadFleet(nishimura.main);
 							var fleet1 = new Fleet(0);
@@ -31854,13 +31859,11 @@ var MAPDATA = {
 							simNightFirstCombined(fleet1,FLEETS2[0],FLEETS1S[1],null,battle1);
 
 							this.battle1hp = FLEETS2[0].ships[0].HP;
-
+							NEWFORMAT = false;
 							var battle2 = {data:{},yasen:{},mvp:[],rating:'',node:24};
 							this.battle2 = battle2;
 							sim12vs12(2,fleet2,fleet2E,FLEETS2[0],FLEETS1S[1],null,false,false,false,false,false,battle2,true,null);
 
-							console.debug(fleet1);
-							console.debug(fleet2);
 						},
 						stageSpecial: function(CHAPI, nowhp) {
 							var API1 = Object.assign({},CHAPI);
@@ -31878,24 +31881,26 @@ var MAPDATA = {
 							API1.fleet1 = genFleet(nishimura.main);
 							processAPI(API1);
 							eventqueue.push([shuttersNextBattle,[[]]]);
+							eventqueue.push([cleanStage,[]])
 
 							var API2 = Object.assign({},CHAPI);
 							API2.fleet1 = [];
 							API2.fleet2 = [];
 							API2.battles = [this.battle2];
 							API2.battleSpecial = 1;
-							API2.battleSpecialContinue = true;
+							API2.battleSpecialContinue = 1;
 							var kurita = CHDATA.event.maps[1].debuff.kurita;
 							API2.fleet1 = genFleet(kurita.main);
 							API2.fleet2 = genFleet(kurita.escort);
 							API2.now_maphp = API2.now_maphp > this.battle1hp ? this.battle1hp : API2.now_maphp;
 
-							CHAPI.battleSpecialContinue = true;
+							CHAPI.battleSpecialContinue = 1;
 							CHAPI.now_maphp = CHAPI.now_maphp > nowhp ? nowhp : CHAPI.now_maphp;
-							eventqueue.push([function(){
+							eventqueue.push([function(){								
 								processAPI(API2);
 								eventqueue.push([shuttersNextBattle,[[]]]);
-								eventqueue.push([function(){
+								eventqueue.push([cleanStage,[]]);
+								eventqueue.push([function(){									
 									processAPI(CHAPI);
 									for (var i=eventqueue.length-1; i>-1; i--) {
 										if (eventqueue[i][0] == shutters) { eventqueue[i][0] = shuttersSelect; break; }
@@ -32062,28 +32067,6 @@ function savePlayerFleet(fleet) {
 	}));
 }
 
-function endSortie() {
-	if (FLEETS2[0].ships[0].HP <= 0) {
-		var shipid = FLEETS2[0].ships[0].mid;
-		if (VOICES[shipid] && VOICES[shipid]['sunk']) {
-			var sndindex = eventqueue.length;
-			var snd = SM._sounds['Vsunk'+shipid] = new Howl({
-				src:[VOICES[shipid]['sunk']],
-				volume:.4*SM._volume,
-				html5:true,
-				onload: function() {
-					var waittime = this.duration()*1000 + 2000;
-					eventqueue.splice(sndindex,0,[wait,[waittime]]);
-				}
-			});
-		}
-	}
-	eventqueue.push([shuttersPostbattle,[]]);
-	eventqueue.push([showResults,[]]);
-	eventqueue.push([endMap,[]]);
-	addTimeout(function() { ecomplete = true; }, 1);
-}
-
 function loadFleet(array) {
 	let simShips = [];
 	for (let ship of array) {
@@ -32092,7 +32075,7 @@ function loadFleet(array) {
 		let ev = sdata.EV;
 		let asw = sdata.ASW;
 		let los = sdata.LOS;
-		let simShip = new ShipType(ship.mid,'',0,99,sdata.HP,ship.FP||sdata.FP,ship.TP||sdata.TP,ship.AA,ship.AR||sdata.AR,ev,asw,los,sdata.LUK,sdata.RNG,sdata.SLOTS);
+		let simShip = new ShipType(ship.mid,'',0,99,sdata.HP,ship.FP||sdata.FP,ship.TP||sdata.TP,ship.AA||sdata.AA,ship.AR||sdata.AR,ev,asw,los,sdata.LUK,sdata.RNG,sdata.SLOTS);
 		simShip.loadEquips(ship.equips,[],[],true);		
 		simShips.push(simShip);
 	}
