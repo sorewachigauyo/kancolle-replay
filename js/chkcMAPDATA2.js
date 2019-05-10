@@ -31886,6 +31886,7 @@ var MAPDATA = {
 							var API2 = Object.assign({},CHAPI);
 							API2.fleet1 = [];
 							API2.fleet2 = [];
+							API2.combined = 2;
 							API2.battles = [this.battle2];
 							API2.battleSpecial = 1;
 							API2.battleSpecialContinue = 1;
