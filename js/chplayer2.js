@@ -1551,7 +1551,8 @@ function prepBattle(letter) {
 	NEWFORMAT = CHDATA.fleets.sf || mapdata.nightToDay2 || mapdata.friendFleet || mapdata.ambush;
 	var res;
 	if (mapdata.nightToDay2) {
-		res = simNightFirstCombined(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,BAPI);
+		if (CHDATA.fleets.combined) res = simNightFirstCombined12vs12(CHDATA.fleets.combined,FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,BAPI)
+		else res = simNightFirstCombined(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,BAPI);
 	} else if (compd.ce) {
 		if (CHDATA.fleets.combined) res = sim12vs12(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet);
 		else res = sim6vs12(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet);

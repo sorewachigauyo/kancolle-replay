@@ -1161,6 +1161,7 @@ function processAPI(root) {
 				eventqueue.push([wait,[1000]]);
 				eventqueue.push([shutters,[true]]);
 				eventqueue.push([enemyEscortExit,[]]);
+				if (COMBINED) eventqueue.push([friendlyMainEnter,[]]);				
 			}
 		}
 		
@@ -2849,6 +2850,18 @@ function escortFadeInE(ship) {
 	return false;
 }
 
+function escortFadeOut(ship) {
+	var mask = new PIXI.Sprite.fromImage('assets/mask.png');
+	ship.graphic.mask = mask;
+	ship.mask = mask;
+	ship.graphic.addChild(mask);
+	ship.graphic.mask.x += 10;
+	if (ship.graphic.mask.x > -110) {
+		return true;
+	}
+	return false;
+}
+
 function createShield(x,side) {
 	var shield = getFromPool('shield','assets/221_shield_png$f90866d61f09304ed4b65cd1a8d0dbbc1744783129.png');
 	shield.position.set(x,(side==0)? 60 : 127);
@@ -3248,6 +3261,34 @@ function friendExit() {
 		for (var i=0; i<fleetFriend.length; i++) stage.removeChild(fleetFriend[i].graphic);
 		ecomplete = true;
 	}, 3000);
+}
+
+function friendlyMainEnter(){
+	// relocate escort fleet
+	for (var i=0; i<fleet1C.length; i++) {
+		var kk = 0;
+		addTimeout(function() {
+			updates.push([escortFadeOut,[fleet1C[kk]]]);
+			fleet1C[kk].xorigin = 152;
+			fleet1C[kk].escort = true;
+			kk++;
+		}, 500+i*100);
+		var k = 0;
+		addTimeout(function() {
+			updates.push([shipMoveTo,[fleet1C[k],152,10]]);
+			k++;
+		}, 200+i*100);	
+	}
+	// bring back main fleet
+	for (var i=0; i<fleet1.length; i++) {
+		var j = 0;
+		addTimeout(function() {
+			updates.push([shipMoveTo,[fleet1[j],fleet1[j].xorigin,10]]);
+			j++;
+		}, 500+i*100);
+	}
+
+	addTimeout(function() { ecomplete = true; }, 1000);
 }
 
 function repairTeam(ship,isgoddess) {

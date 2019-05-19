@@ -31782,12 +31782,12 @@ var MAPDATA = {
 						y: 47,
 						end: true,
 						range: 8,
-						nightToDay2: true,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
+						nightToDay2: true,
 						debuffGive: function() {
 							if (CHDATA.event.maps[2].part === 2 && CHDATA.fleets.combined === 1 && ['A','S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[2].debuff.Q = true;
 						},
