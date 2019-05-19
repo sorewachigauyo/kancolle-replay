@@ -31399,7 +31399,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						debuffGive: () => CHDATA.event.maps[1].debuff.M = CHDATA.maps[1].diff > 1 ? ['A','S'].includes(CHDATA.temp.rank) : true
+						debuffGive: () => CHDATA.event.maps[1].debuff.M = CHDATA.event.maps[1].diff > 1 ? ['A','S'].includes(CHDATA.temp.rank) : true
 					},
 					'N': {
 						type: 1,
