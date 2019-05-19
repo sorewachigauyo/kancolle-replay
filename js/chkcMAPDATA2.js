@@ -31538,17 +31538,20 @@ var MAPDATA = {
 					if (CHDATA.fleets.combined === 1 && !allPurple && allRed) errors.push('You cannot sortie a CTF with the Manchuria Fleet')
 					if (CHDATA.fleets.combined != 1 && allPurple && !allRed) errors.push('You must sortie a CTF with the Teiko Fleet')
 				},
-				startCheck: function() {
+				startCheck: function() {					
+					let num = (CHDATA.fleets.combined)? 2 : 1;
 					if (CHDATA.fleets.combined != 1) {
-						for (let n=1; n<=(CHDATA.fleets.combined)? 2 : 1; n++) {
+						for (let n=1; n<=num; n++) {
 							for (let i=0; i<CHDATA.fleets[n].length; i++) {
 								chGiveLock(n,i+1,71);
 							}
 						}
 						return 'Start1';
 					}
-					for (let i=0; i<CHDATA.fleets[1].length; i++) {
-						chGiveLock(1,i+1,72);
+					for (let n=1; n<=2; n++) {
+						for (let i=0; i<CHDATA.fleets[n].length; i++) {
+							chGiveLock(n,i+1,72);
+						}
 					}
 					return 'Start2';
 				},
