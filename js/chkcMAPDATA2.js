@@ -31345,7 +31345,7 @@ var MAPDATA = {
 						type: 1,
 						x: 374,
 						y: 332,
-						routeC: s => s.SS > 0 || s.CVL > 1 || s.aBB > 1 ? 'J' : 'L',
+						routeC: s => s.SS + s.SSV > 0 || s.CVL > 1 || s.aBB > 1 ? 'J' : 'L',
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
