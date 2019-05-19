@@ -786,6 +786,7 @@ var VOICES = {
 		damage1: "assets/voice/Shiratsuyu-Minor_Damage_1.ogg",
 		damage2: "assets/voice/ShiratsuyuKai2-Minor_Damage_2.ogg",
 		damage3: "assets/voice/ShiratsuyuKai2-Major_Damage.ogg",
+		friend700: "assets/voice/ShiratsuyuKai2-Starting_A_Sortie.ogg"
 	},
 	145: {
 		start: "assets/voice/Shigure-Battle_Start.ogg",
@@ -2164,6 +2165,7 @@ var VOICES = {
 		damage1: "assets/voice/Abukuma-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Abukuma-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Abukuma-Major_Damage.ogg",
+		friend700:  "assets/voice/AbukumaKai2-Attack.ogg",
 	},
 	115: {
 		start: "assets/voice/Yuubari-Battle_Start.ogg",
@@ -3768,6 +3770,7 @@ var VOICES = {
 		damage1: "assets/voice/Fujinami-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Fujinami-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Fujinami-Major_Damage.ogg",
+		friend700: "assets/voice/Fujinami-Battle_Start.ogg",
 	},
     492:{
         start: "assets/voice/Richelieu-Battle_Start.ogg",
@@ -3948,6 +3951,7 @@ var VOICES = {
 		damage2: "assets/voice/Gangut-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Gangut-Major_Damage.ogg",
 		friend141: "assets/voice/Gangut-FriendFleet.mp3",
+		friend700: "assets/voice/Gangut-Joining_A_Fleet.ogg"
 	},
     515: {
 		start: "assets/voice/Ark_Royal-Battle_Start.ogg",
@@ -5858,5 +5862,17 @@ var VOICES = {
 		attack: "assets/voice/Kongou_fog_Attack1.ogg",
 		damage: "assets/voice/Kongou_fog_Damaged1.ogg",
 		sunk: "assets/voice/Kongou_fog_Sunk.ogg",
+	},
+	7000: {
+		start: "assets/voice/European_Princess_Intro.ogg",
+		attack: "assets/voice/European_Princess_Attack.ogg",
+		damage: "assets/voice/European_Princess_Damaged.ogg",
+		sunk: "assets/voice/European_Princess_Prefinal_Sunk.ogg",
+	},
+	7001: {
+		start: "assets/voice/European_Princess_Broken_Form_Intro.ogg",
+		attack: "assets/voice/European_Princess_Broken_Form_Attack.ogg",
+		damage: "assets/voice/European_Princess_Broken_Form_Damaged.ogg",
+		sunk: "assets/voice/European_Princess_Sunk.ogg",
 	},
 }

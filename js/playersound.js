@@ -150,6 +150,7 @@ var BGMLIST = {
 	1003: {url:'assets/music/129w.ogg'}, //Combined Fleet Flagship
 	1004: {url:'assets/music/241e.ogg'}, //The Glistening Dew After The Rainy Season
 	1005: {url:'assets/music/125h.ogg'}, //World 6 moving BGM
+	1006: {url:'assets/music/233r.ogg'}, //Birth of the Jets
 	3: {url:'assets/music/Sound_b_bgm_3.ogg'},
 	4: {url:'assets/music/Sound_b_bgm_4.ogg'},
 	5: {url:'assets/music/Sound_b_bgm_5.ogg'},
@@ -245,6 +246,7 @@ var BGMLIST = {
 	124: {url:'assets/music/Sound_b_bgm_124.ogg'},
 	127: {url:'assets/music/127_8537.mp3'},
 	128: {url:'assets/music/128_9964.mp3'},
+	129: {url:'assets/music/Sound_b_bgm_129.oga'},
 	130: {url:'assets/music/130_1852.mp3'},
 	131: {url:'assets/music/131_5644.mp3'},
 	998: {url:'assets/music/savior of song.mp3',voldef:.25},
@@ -271,5 +273,7 @@ var BGMLIST = {
 	3004: {url:'assets/music/Sound_se_31.ogg'},
 	'd_00_01': {url:'assets/music/【艦これBGMアレンジ】西村艦隊の戦い　オーケストラアレンジ - Niconico Video.m4a',voldef:.35},
 	'd_00_02': {url:'assets/music/【艦これボーカルアレンジ】二羽の鶴【鶴墜ちる海】 - Niconico Video.m4a',voldef:.35},
+	'n_01_00': {url:'assets/music/n_01_00.mp3',voldef:.35},
+	'n_01_01': {url:'assets/music/n_01_01.ogg',voldef:.35},
 };
 

@@ -5064,6 +5064,17 @@ var EQDATA = {
 		ASW: 7,
 		RNG: 2,
 	},
+	7000: {
+		name: 'Abyssal Skyhawk Jet-Bomber',
+		nameJP: '',
+		b_image: 15,
+		type: JETBOMBER,
+		isjet: true,
+		DIVEBOMB: 14,
+		AA: 12,
+		EV: 2,
+		ACC: 2,
+	},
 };
 
 var LBASDATA = {

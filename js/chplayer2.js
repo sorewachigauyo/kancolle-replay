@@ -481,6 +481,7 @@ function mapBattleNode(ship,letter) {
 	if (!mapnodes[letter]) addMapNode(letter);
 	let node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
 	if ((node.aironly || node.raid || node.night2 || node.nightToDay2) && (WORLD > 27 || WORLD == 20)) addMapNode(letter);
+	const ambush = node.ambush;
 
 	var radarstop = false, radartimer = 270;
 	updates.push([function() {
@@ -553,7 +554,8 @@ function mapBattleNode(ship,letter) {
 	}
 	
 	FORMSELECTED = 0;
-	if (formcombined) addTimeout(function() { chShowFormSelectC(afterSelect); }, 3200);
+	if (ambush) addTimeout(function() { FORMSELECTED = !formcombined ? 1 : 14; afterSelect(); }, 3200);
+	else if (formcombined) addTimeout(function() { chShowFormSelectC(afterSelect); }, 3200);
 	else if (CHSHIPCOUNT.total >= 4) addTimeout(function() { chShowFormSelect(afterSelect); }, 3200);
 	else addTimeout(function() { FORMSELECTED = 1; afterSelect(); }, 3200);
 	
@@ -1526,6 +1528,7 @@ function prepBattle(letter) {
 	var aironly = compd.air;
 	var landbomb = compd.bomb;
 	var supportfleet = (MAPDATA[WORLD].maps[MAPNUM].nodes[letter].boss)? FLEETS1S[1] : FLEETS1S[0];
+	var ambush = compd.ambush;
 	
 	var LBASwaves = null;
 	if (CHDATA.sortie.lbasNodes && CHDATA.sortie.lbasNodes[letter]) {
@@ -1545,7 +1548,7 @@ function prepBattle(letter) {
 		mapdata.battleSpecial(); 
 		nowhp = FLEETS2[0].ships[0].HP;
 	}
-	NEWFORMAT = CHDATA.fleets.sf || mapdata.nightToDay2 || mapdata.friendFleet;
+	NEWFORMAT = CHDATA.fleets.sf || mapdata.nightToDay2 || mapdata.friendFleet || mapdata.ambush;
 	var res;
 	if (mapdata.nightToDay2) {
 		res = simNightFirstCombined(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,BAPI);
@@ -1553,7 +1556,7 @@ function prepBattle(letter) {
 		if (CHDATA.fleets.combined) res = sim12vs12(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet);
 		else res = sim6vs12(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet);
 	} else {
-		if (CHDATA.fleets.combined) res = simCombined(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet);
+		if (CHDATA.fleets.combined) res = simCombined(CHDATA.fleets.combined,FLEETS1[0],FLEETS1[1],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet,ambush);
 		else res = sim(FLEETS1[0],FLEETS2[0],supportfleet,LBASwaves,doNB,NBonly,aironly,landbomb,false,BAPI,true,friendFleet);
 	}
 	NEWFORMAT = false;
@@ -1588,6 +1591,9 @@ function prepBattle(letter) {
 		res.rank = res.rankDay = getRankRaid(FLEETS1[0].ships,(CHDATA.fleets.combined)? FLEETS1[1].ships : null);
 		delete BAPI.data.api_hougeki1;
 	}
+	if (ambush) {
+		res.rank = res.rankDay = getRankRaid(FLEETS1[0].ships,(CHDATA.fleets.combined)? FLEETS1[1].ships : null);
+	}
 	CHDATA.temp = res;
 	//update morale after NB select
 	
@@ -1607,7 +1613,7 @@ function prepBattle(letter) {
 	NBSELECT = false;
 	if (!MAPDATA[WORLD].maps[MAPNUM].transport && MAPDATA[WORLD].maps[MAPNUM].hpmode != 1) lastdance = FLEETS2[0].ships[0].maxHP >= CHDATA.event.maps[MAPNUM].hp; //if last dance hp < boss hp, still play sunk line
 	if (!mapdata.stageSpecial) {
-		if (!mapdata.nightToDay && !mapdata.nightToDay2) {
+		if (!mapdata.nightToDay && !mapdata.nightToDay2 && !mapdata.ambush) {
 			for (var i=0; i<eventqueue.length; i++) {
 				if (eventqueue[i][0] == shutters) { eventqueue[i][0] = shuttersSelect; break; }
 			}

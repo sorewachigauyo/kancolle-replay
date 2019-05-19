@@ -423,15 +423,16 @@ function createShip(data,side,i,damaged) {
 }
 
 function processAPI(root) {
-	var data = root.battles[0].data; //get first battle for initial hp values
+	var data = root.battles[0].data; //get first battle for initial hp values	
+	var ldShooting = data.api_name == 'ld_shooting' || data.api_name == 'fc_ld_shooting';
 	if (Object.keys(data).length <= 0) {  //night only nodes
 		data = root.battles[0].yasen;
 		stage.removeChild(bg);
 		stage.addChildAt(bg2,0);
-	} else if (data.api_n_hougeki1) {
+	} else if (data.api_n_hougeki1 || ldShooting) {
 		stage.removeChild(bg);
 		stage.addChildAt(bg2,0);
-	}
+	}	
 	console.log(root);
 	COMBINED = root.combined;
 	PVPMODE = (root.world <= 0);
@@ -659,7 +660,7 @@ function processAPI(root) {
 				j++;
 			}
 		}
-		var NBonly = (!!data.api_hougeki || Object.keys(data).length <= 0 || data.api_n_hougeki1);
+		var NBonly = (!!data.api_hougeki || Object.keys(data).length <= 0 || data.api_n_hougeki1) || data.api_name == 'ld_shooting' || data.api_name == 'fc_ld_shooting';
 		var battledata = [data.api_formation[2],data.api_formation[0],data.api_formation[1],0,0,(NBonly)?1:0];
 		var escape = [[],[]];
 		if (data.api_escape_idx) escape[0] = data.api_escape_idx;
@@ -1215,7 +1216,7 @@ function processAPI(root) {
 		if (data.api_opening_atack) processRaigeki(data.api_opening_atack,f,(data.api_ship_ke_combined));
 		
 		//engagement
-		if (data.hasOwnProperty('api_hougeki1')) eventqueue.push([battleEngageShow,[data.api_formation[2]]]);
+		if (data.hasOwnProperty('api_hougeki1') && !ldShooting) eventqueue.push([battleEngageShow,[data.api_formation[2]]]);
 		
 		//if air node, second air phase
 		if (data.api_kouku2) processKouku(data.api_kouku2);
@@ -1223,7 +1224,7 @@ function processAPI(root) {
 		
 
 		//shelling 1, 2, 3
-		if (COMBINED && data.api_ship_ke_combined) { //12vs12
+		if (COMBINED && data.api_ship_ke_combined || ldShooting) { //12vs12
 			if (COMBINED == 2) {
 				if (data.api_hougeki1) processHougeki(data.api_hougeki1,fleet1,true);
 				if (data.api_hougeki2) processHougeki(data.api_hougeki2,fleet1,true);
