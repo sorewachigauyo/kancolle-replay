@@ -31952,7 +31952,13 @@ var MAPDATA = {
 							if (totalHPLost <= 0) CHDATA.event.maps[3].debuff.AB = 1 + (CHDATA.event.maps[3].debuff.AB || 0);
 						}
 					}
-				},				
+				},
+				debuffCheck: function(debuff) {
+					if (!debuff) return false;
+					if (debuff.I && debuff.M) return CHDATA.event.maps[3].diff === 3 ? debuff.T_2 && (debuff.LB > 1 || CHDATA.config.disableRaidReq) : 
+							CHDATA.event.maps[3].diff === 2 ? debuff.LB > 0 || CHDATA.config.disableRaidReq : true;
+					return false;
+				},		
 				hiddenRoutes: {
 					1: {
 						images: [{ name: '3_1.png', x: 0, y: 0 }],
@@ -31973,8 +31979,8 @@ var MAPDATA = {
 						images: [{ name: '3_3.png', x: 0, y: 0 }],
 						unlock: function(debuff) {
 							if (!debuff) return false;
-							if (debuff.I && debuff.M) return CHDATA.event.maps[3].diff === 3 ? debuff.T_2 && (debuff.LB > 1 || CHDATA.config.disableRaidReq) : 
-								CHDATA.event.maps[3].diff === 2 ? debuff.LB > 0 || CHDATA.config.disableRaidReq : true;
+							if (debuff.I && debuff.M) return CHDATA.event.maps[3].diff === 3 ? debuff.T_2 && (debuff.AB > 1 || CHDATA.config.disableRaidReq) : 
+								CHDATA.event.maps[3].diff === 2 ? debuff.AB > 0 || CHDATA.config.disableRaidReq : true;
 							return false;
 						}
 					},
@@ -32279,6 +32285,7 @@ var MAPDATA = {
 						range: 7,
 						end: true,
 						friendFleet: ['e3p_1','e3p_2','e3p_3','e3p_4','e3p_5','e3p_6'],
+						debuffAmount: 110,
 						setupSpecial: function() {
 							MAPDATA[70].maps[3].bgmDB = 'n_01_01';
 							MAPDATA[70].maps[3].bgmNB = 'n_01_01';
