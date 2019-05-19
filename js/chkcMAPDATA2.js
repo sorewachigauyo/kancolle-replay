@@ -31412,7 +31412,7 @@ var MAPDATA = {
 						},
 						routeC: function(ships) {
 							if(ships.CVL >= 2) return 'O'
-							this.showLoSPlane = checkELoS33(getELoS33(1,1, CHDATA.fleets.combined),{ 36: 'P', 35.99: 'O' });
+							this.showLoSPlane = checkELoS33(getELoS33(1,3, CHDATA.fleets.combined),{ 36: 'P', 35.99: 'O' });
 							return this.showLoSPlane;
 						}
 					},
