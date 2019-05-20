@@ -32093,7 +32093,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						routeC: s => s.DD < 3 ? 'D' : s.CV + s.CB < 4 && Math.min(s.speed, s.escort.speed) > 5 ? 'I' : 'H'
+						routeC: s => s.DD + s.escort.DD < 3 ? 'D' : s.CV + s.CVB < 4 && Math.min(s.speed, s.escort.speed) > 5 ? 'I' : 'H'
 					},
 					'F': {
 						type: 1,
