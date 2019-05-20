@@ -31773,7 +31773,7 @@ var MAPDATA = {
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
-						routeC: s => s.AV + s.AO + s.escort.AV + s.escort.AO > 0 ? 'U' : 'O',
+						routeC: s => s.AV + s.AO + s.escort.AV + s.escort.AO > 0 ? 'U' : 'S',
 						hidden: 1
 					},
 					'Q': {
@@ -32220,6 +32220,12 @@ var MAPDATA = {
 							}
 							else {
 								this.stageSpecial = function(CHAPI, nowhp) {
+									var genFleet = array => array.map(ship => ({
+										mst_id: ship.mid,
+										equip: ship.equips,
+										kyouka: [],
+									}));
+									
 									var API = Object.assign({},CHAPI);
 									API.fleet1 = [];
 									API.fleet2 = [];
@@ -32231,13 +32237,18 @@ var MAPDATA = {
 									API.fleet2 = genFleet(teiko.escort);
 
 									processAPI(API);
-									eventqueue.push([shuttersNextBattle,[[null,null,null,null,null,1]]]);
+									eventqueue.push([shuttersNextBattle,[[]]]);
 
 									CHAPI.battleSpecialContinue = true;
 									CHAPI.now_maphp = CHAPI.now_maphp > nowhp ? nowhp : CHAPI.now_maphp;
-									eventqueue.push([cleanStage,[true]]);
-									eventqueue.push([processAPI,[CHAPI]]);
-									eventqueue.push([endSortie,[]]);
+									eventqueue.push([cleanStage,[]]);
+									eventqueue.push([function(){									
+										processAPI(CHAPI);
+										for (var i=eventqueue.length-1; i>-1; i--) {
+											if (eventqueue[i][0] == shutters) { eventqueue[i][0] = shuttersSelect; break; }
+										}
+										eventqueue.push([endSortie,[]])
+									},[]]);
 								}
 								fleetData = loadFleet(teiko.main);
 								var fleet = new Fleet(0);
@@ -32245,7 +32256,7 @@ var MAPDATA = {
 								fleet.formation = teiko.mainForm;
 
 								var fleetE = new Fleet(0, fleet2);
-								fleetData = loadFleet(kurita.escort);
+								fleetData = loadFleet(teiko.escort);
 								fleetE.loadShips(fleetData);
 								fleetE.formation = teiko.escortForm;
 
