@@ -31520,7 +31520,7 @@ var MAPDATA = {
 					MAPDATA[70].maps[2].bgmNN = 5;
 					MAPDATA[70].maps[2].bgmDB = 60;
 					MAPDATA[70].maps[2].bgmNB = 60;
-					if (CHDATA.event.maps[2].routes && CHDATA.event.maps[2].routes.includes(2)) this.lbasSortie = 2;
+					if (CHDATA.event.maps[2].routes && CHDATA.event.maps[2].routes.includes(2)) MAPDATA[70].maps[2].lbasSortie = 2;
 					let lock = null, allSame = true, allRed = true, allPurple = true;
 					let num = (CHDATA.fleets.combined)? 2 : 1;
 					for (let n=1; n<=num; n++) {
@@ -31574,13 +31574,13 @@ var MAPDATA = {
 						x: 112,
 						y: 283,
 						end: true,
-						range: 5
+						distance: 5
 					},
 					'B': {
 						type: 1,
 						x: 206,
 						y: 255,
-						range: 4,
+						distance: 4,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31592,7 +31592,7 @@ var MAPDATA = {
 						type: 1,
 						x: 225,
 						y: 191,
-						range: 4,
+						distance: 4,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31605,7 +31605,7 @@ var MAPDATA = {
 						type: 1,
 						x: 314,
 						y: 191,
-						range: 3,
+						distance: 3,
 						route: 'F',
 						compDiff: {
 							3: ['Hard 1', 'Hard 2'],
@@ -31619,7 +31619,7 @@ var MAPDATA = {
 						y: 256,
 						route: 'F',
 						raid: true,
-						range: 2,
+						distance: 2,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31633,7 +31633,7 @@ var MAPDATA = {
 						type: 1,
 						x: 400,
 						y: 191,
-						range: 2,
+						distance: 2,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31654,7 +31654,7 @@ var MAPDATA = {
 						x: 466,
 						y: 99,
 						showNoCompass: false,
-						range: 4,
+						distance: 4,
 						routeC: function() {
 							MAPDATA[70].maps[2].nodes.H.compDiff = CHDATA.fleets.combined != 1 ?
 								{
@@ -31672,22 +31672,24 @@ var MAPDATA = {
 						y: 44,
 						boss: true,
 						end: true,
-						range: 5,
+						distance: 5,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
 							1: ['Easy 1'],
 						},
 						debuffGive: function() {
-							if ( CHDATA.fleets.combined === 1 && ['A','S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[2].debuff.H = true;
-							if (CHDATA.event.maps[2].part === 2 && CHDATA.fleets.combined === 1 && ['A','S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[2].debuff.H_2 = true;
+							if (CHDATA.event.maps[2].part === 2 && ['A','S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[2].debuff.H = true;
+							if (CHDATA.event.maps[2].part === 2 && CHDATA.fleets.combined === 1 && ((CHDATA.event.maps[2].diff < 3 && ['A','S'].includes(CHDATA.temp.rank))
+							|| CHDATA.temp.rank == 'S')) CHDATA.event.maps[2].debuff.H_2 = true;
+							
 						}
 					},
 					'I': {
 						type: 2,
 						x: 488,
 						y: 181,
-						range: 3,						
+						distance: 3,						
 						resource: 0,
 						route: 'G'
 					},
@@ -31695,14 +31697,14 @@ var MAPDATA = {
 						type: 3,
 						x: 544,
 						y: 87,
-						range: 5,
+						distance: 5,
 						end: true
 					},
 					'K': {
 						type: 3,
 						x: 409,
 						y: 280,
-						range: 1,
+						distance: 1,
 						routeS: ['F', 'L', 'M'],
 						hidden: 1
 					},
@@ -31710,7 +31712,7 @@ var MAPDATA = {
 						type: 1,
 						x: 488,
 						y: 245,
-						range: 3,
+						distance: 3,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31725,7 +31727,7 @@ var MAPDATA = {
 						y: 289,
 						raid: true,
 						route: 'N',
-						range: 3,
+						distance: 3,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31740,7 +31742,7 @@ var MAPDATA = {
 						type: 1,
 						x: 576,
 						y: 245,
-						range: 4,
+						distance: 4,
 						route: 'P',
 						compDiff: {
 							3: ['Hard 1'],
@@ -31754,7 +31756,7 @@ var MAPDATA = {
 						type: 1,
 						x: 581,
 						y: 170,
-						range: 5,
+						distance: 5,
 						route: 'S',
 						compDiff: {
 							3: ['Hard 1'],
@@ -31767,7 +31769,7 @@ var MAPDATA = {
 						type: 1,
 						x: 628,
 						y: 211,
-						range: 5,
+						distance: 5,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31781,7 +31783,7 @@ var MAPDATA = {
 						x: 628,
 						y: 47,
 						end: true,
-						range: 8,
+						distance: 8,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31789,7 +31791,8 @@ var MAPDATA = {
 						},
 						nightToDay2: true,
 						debuffGive: function() {
-							if (CHDATA.event.maps[2].part === 2 && CHDATA.fleets.combined === 1 && ['A','S'].includes(CHDATA.temp.rank)) CHDATA.event.maps[2].debuff.Q = true;
+							if (CHDATA.event.maps[2].part === 2 && CHDATA.fleets.combined === 1 && ((CHDATA.event.maps[2].diff < 3 && ['A','S'].includes(CHDATA.temp.rank))
+						|| CHDATA.temp.rank == 'S')) CHDATA.event.maps[2].debuff.Q = true;
 						},
 						hidden: 1,
 						setupSpecial: function() {
@@ -31801,7 +31804,7 @@ var MAPDATA = {
 						type: 1,
 						x: 628,
 						y: 103,
-						range: 6,
+						distance: 6,
 						route: 'Q',
 						compDiff: {
 							3: ['Hard 1'],
@@ -31816,7 +31819,7 @@ var MAPDATA = {
 						x: 669,
 						y: 162,
 						raid: true,
-						range: 6,
+						distance: 6,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -31836,7 +31839,7 @@ var MAPDATA = {
 						type: 3,
 						x: 686,
 						y: 87,
-						range: 7,
+						distance: 7,
 						end: true,
 						hidden: 1
 					},
@@ -31845,7 +31848,7 @@ var MAPDATA = {
 						x: 686,
 						y: 221,
 						end: true,
-						range: 6,
+						distance: 6,
 						hidden: 1,
 						compDiff: {
 							3: ['Hard 1'],
@@ -31858,7 +31861,7 @@ var MAPDATA = {
 						type: 1,
 						x: 727,
 						y: 148,
-						range: 7,
+						distance: 7,
 						end: true,
 						boss: true,
 						hidden: 3,
@@ -32036,14 +32039,14 @@ var MAPDATA = {
 						type: 3,
 						x: 681,
 						y: 169,
-						range: 8,
+						distance: 8,
 						routeS: ['B','E']
 					},
 					'B': {
 						type: 1,
 						x: 660,
 						y: 233,
-						range: 9,
+						distance: 9,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32055,7 +32058,7 @@ var MAPDATA = {
 						type: 1,
 						x: 661,
 						y: 318,
-						range: 10,
+						distance: 10,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32070,7 +32073,7 @@ var MAPDATA = {
 						type: 1,
 						x: 602,
 						y: 85,
-						range: 7,
+						distance: 7,
 						route: 'H',
 						compDiff: {
 							3: ['Hard 1'],
@@ -32083,7 +32086,7 @@ var MAPDATA = {
 						type: 1,
 						x: 595,
 						y: 169,
-						range: 7,
+						distance: 7,
 						overrideCost: { fuel: .04, ammo: .08 },
 						compDiff: {
 							3: ['Hard 1'],
@@ -32096,7 +32099,7 @@ var MAPDATA = {
 						type: 1,
 						x: 594,
 						y: 268,
-						range: 9,
+						distance: 9,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32109,7 +32112,7 @@ var MAPDATA = {
 						x: 593,
 						y: 339,
 						end: true,
-						range: 9,
+						distance: 9,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32126,7 +32129,7 @@ var MAPDATA = {
 						type: 1,
 						x: 547,
 						y: 106,
-						range: 6,
+						distance: 6,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32139,7 +32142,7 @@ var MAPDATA = {
 						x: 521,
 						y: 170,
 						raid: true,
-						range: 5,
+						distance: 5,
 						route: 'J',
 						compDiff: {
 							3: ['Hard 1'],
@@ -32154,7 +32157,7 @@ var MAPDATA = {
 						type: 1,
 						x: 450,
 						y: 149,
-						range: 4,
+						distance: 4,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32166,14 +32169,14 @@ var MAPDATA = {
 						type: 3,
 						x: 374,
 						y: 189,
-						range: 3,
+						distance: 3,
 						routeS: ['L','R']
 					},
 					'L': {
 						type: 1,
 						x: 308,
 						y: 189,
-						range: 4,
+						distance: 4,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
@@ -32188,7 +32191,7 @@ var MAPDATA = {
 						type: 1,
 						x: 261,
 						y: 272,
-						range: 6,
+						distance: 6,
 						boss: true,
 						end: true,
 						debuffGive: function() {
@@ -32271,14 +32274,14 @@ var MAPDATA = {
 						type: 3,
 						x: 229,
 						y: 173,
-						range: 4,
+						distance: 4,
 						end: true
 					},
 					'O': {
 						type: 1,
 						x: 218,
 						y: 234,
-						range: 4,
+						distance: 4,
 						aironly: true,
 						compDiff: {
 							3: ['Hard 1'],
@@ -32293,7 +32296,7 @@ var MAPDATA = {
 						y: 303,
 						boss: true,
 						hidden: 1,
-						range: 7,
+						distance: 7,
 						end: true,
 						friendFleet: ['e3p_1','e3p_2','e3p_3','e3p_4','e3p_5','e3p_6'],
 						debuffAmount: 110,
@@ -32334,7 +32337,7 @@ var MAPDATA = {
 						type: 1,
 						x: 447,
 						y: 353,
-						range: 8,
+						distance: 8,
 						raid: true,
 						route: 'P',
 						hidden: 1,
@@ -32350,7 +32353,7 @@ var MAPDATA = {
 						y: 235,
 						hidden: 1,
 						route: 'T',
-						range: 4,
+						distance: 4,
 						compDiff: {
 							3: ['Hard 1','Hard 2'],
 							2: ['Medium 1', 'Medium 2'],
@@ -32366,7 +32369,7 @@ var MAPDATA = {
 						x: 370,
 						y: 331,
 						hidden: 1,
-						range: 7,
+						distance: 7,
 						compDiff: {
 							3: ['Hard 1','Hard 2'],
 							2: ['Medium 1', 'Medium 2'],
@@ -32379,7 +32382,7 @@ var MAPDATA = {
 						x: 327,
 						y: 284,
 						hidden: 1,
-						range: 7,
+						distance: 7,
 						raid: true,
 						routeC: function(ships) {
 							const russianIds = [35, 511, 516];
@@ -32404,14 +32407,14 @@ var MAPDATA = {
 						y: 334,
 						end: true,
 						hidden: 1,
-						range: 7,
+						distance: 7,
 					},
 					'V': {
 						type: 1,
 						x: 391,
 						y: 128,
 						hidden: 2,
-						range: 2,
+						distance: 2,
 						route: 'K',
 						compDiff: {
 							3: ['Hard 1'],
@@ -32424,7 +32427,7 @@ var MAPDATA = {
 						x: 333,
 						y: 139,
 						hidden: 2,
-						range: 2,
+						distance: 2,
 						route: 'V',
 						compDiff: {
 							3: ['Hard 1'],
@@ -32438,7 +32441,7 @@ var MAPDATA = {
 						x: 391,
 						y: 282,
 						hidden: 3,
-						range: 5,
+						distance: 5,
 						compDiff: {
 							3: ['Hard 1'],
 							2: ['Medium 1'],
