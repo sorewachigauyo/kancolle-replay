@@ -31922,9 +31922,9 @@ var MAPDATA = {
 							1: { 1: 3500 },
 						},
 						finalhp: {
-							3: 800,
-							2: 800,
-							1: 800,
+							3: 700,
+							2: 700,
+							1: 700,
 						},
 					},
 					2: {
@@ -32243,7 +32243,8 @@ var MAPDATA = {
 									eventqueue.push([shuttersNextBattle,[[]]]);
 
 									CHAPI.battleSpecialContinue = true;
-									CHAPI.now_maphp = CHAPI.now_maphp > nowhp ? nowhp : CHAPI.now_maphp;
+									CHAPI.now_maphp -= (700 - nowhp);
+									if (CHAPI.now_maphp < 1) CHAPI.now_maphp = 1;
 									eventqueue.push([cleanStage,[]]);
 									eventqueue.push([function(){									
 										processAPI(CHAPI);
