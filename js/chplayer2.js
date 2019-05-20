@@ -416,6 +416,9 @@ function addMapNode(letter,type) {
 			nodeG = PIXI.Sprite.fromImage('assets/maps/nodeND.png');
 			nodeG.pivot.set(10,10);
 		}
+	} else if (node.ambush) {
+		nodeG = PIXI.Sprite.fromImage('assets/maps/nodeAmbush.png');
+		nodeG.pivot.set(11,27);
 	} else if (!node.boss) {
 		if (node.dropoff) {
 			nodeG = PIXI.Sprite.fromImage('assets/maps/nodeAnchor.png');

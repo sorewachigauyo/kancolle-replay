@@ -31828,7 +31828,7 @@ var MAPDATA = {
 							return this.showLoSPlane;
 						},
 						debuffGive: function() {
-							if (FLEETS1[0].AS >= 1) CHDATA.event.maps[2].debuff.E = 1;
+							if (FLEETS1[0].AS >= 1) CHDATA.event.maps[2].debuff.S = 1;
 						},
 						hidden: 1
 					},
