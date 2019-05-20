@@ -32365,7 +32365,7 @@ var MAPDATA = {
 						}
 					},
 					'S': {
-						type: 3,
+						type: 1,
 						x: 370,
 						y: 331,
 						hidden: 1,
@@ -32388,7 +32388,7 @@ var MAPDATA = {
 							const russianIds = [35, 511, 516];
 							const count = russianIds.reduce((acc, basemid) => acc + isShipInList(FLEETS1[0].ships.concat(FLEETS1[1].ships), basemid) ? 1: 0, 0);
 							this.showLoSPlane = checkELoS33(getELoS33(1,1, CHDATA.fleets.combined),{ 43: CHDATA.event.maps[3].routes.includes(3) && 
-								(ships.CAV + ships.escort.CAV > 2 || ships.LHA + ships.escort.LHA > 0 || count >= 2) && ships.aCV + ships.escort.aCV < 2 ? 'X' : 'S', 42.99: 'U' });
+								(ships.CA + ships.escort.CA  + ships.CAV + ships.escort.CAV > 2 || ships.LHA + ships.escort.LHA > 0 || count >= 2) && ships.aCV + ships.escort.aCV < 2 ? 'X' : 'S', 42.99: 'U' });
 							return this.showLoSPlane;
 						},
 						compDiff: {
