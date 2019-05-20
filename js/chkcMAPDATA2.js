@@ -32316,7 +32316,7 @@ var MAPDATA = {
 									const midList = JSON.parse(key);
 									if (midList.includes(getBaseId(ship.mid))) ship.bonusSpecial = [{ mod: bonusList[key] }];
 								}
-								if(ship.equips.some(equip => equip.mid === 282)) ship.bonusSpecial[0].mod *= 1.5;
+								if(ship.equips.some(equip => equip.mid === 282)) ship.bonusSpecial ? ship.bonusSpecial[0].mod *= 1.5 : ship.bonusSpecial = [{ mod: 1.5 }];
 							}
 						},
 						compDiff: {
