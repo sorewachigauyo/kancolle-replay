@@ -189,6 +189,7 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 	var installeqs = {DH1:0,DH2:0,DH3:0,WG:0,AP:0,T3:0,SB:0,SF:0,DH1stars:0,DH3stars:0};
 	var fitcounts = {};
 	var tpEquip = 0;
+	var aswPenetrate = 0;
 	for (var i=0; i<equips.length; i++){
 		if (!equips[i]) continue;
 		var eq = new Equip(equips[i],levels[i],profs[i]);
@@ -246,16 +247,16 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 			this.APbonus += eq.APbonus;
 		}
 		if (eq.isdivebomber||eq.istorpbomber) {
-			if (eq.rank > 5) {
+			if (eq.exp > 0) {
 				if (!this.critratebonus) this.critratebonus = 0;
 				if (!this.critdmgbonus) this.critdmgbonus = 1;
-				var mod;
-				if (eq.rank == 7) mod = 8;
-				else if (eq.rank == 6) mod = 5.6;
-				this.critratebonus += mod*.75; //x.75????
-				this.critdmgbonus += (Math.sqrt(eq.exp*1.2) + mod)/((i==0)? 100:200); //seems browser version is actually +.1 on max? added 1.2
+				var mod = 0;
+				if (eq.rank == 7) mod = 10;
+				else if (eq.rank == 6) mod = 7;
+				this.critratebonus += mod*.6; //x.75????
+				this.critdmgbonus += Math.floor(Math.sqrt(eq.exp) + mod)/((i==0)? 100:200);
+				planeexp += eq.exp;
 			}
-			if (eq.exp) planeexp += eq.exp;
 			planecount++;
 		}
 		
@@ -272,6 +273,10 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 		
 		if (eq.LOS) this.LOSeq += eq.LOS;
 		if (eq.TP) tpEquip += eq.TP;
+		
+		if (eq.btype == B_DEPTHCHARGE2 && eq.ASW) {
+			aswPenetrate += Math.max(0, Math.sqrt(eq.ASW - 2) + +(this.type == 'DE'));
+		}
 		
 		this.equips.push(eq);
 	}
@@ -401,6 +406,8 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 	if (this.repairs) this.repairsOrig = this.repairs.slice();
 	
 	this.hasTorpStat = this.TP - tpEquip > 0 && SHIPDATA[this.mid].TP > 0;
+	
+	if (aswPenetrate > 0) this.aswPenetrate = aswPenetrate;
 }
 Ship.prototype.getFormation = function() {
 	if (!this.fleet || !this.fleet.formation) return null;
@@ -843,7 +850,8 @@ CAV.prototype.rocketBarrageChance = function() {
 		if (equip.canBarrage) num++;
 	}
 	if (num <= 0) return 0;
-	return (this.weightedAntiAir()+this.LUK)/(322-(40*num+70*this.rocketBonus));
+	let base = 48, numBonus = 40 + 30*num, classBonus = 70*(this.sclass == 2);
+	return (this.weightedAntiAir() + .9*this.LUK)/(400 - (base + numBonus + classBonus));
 }
 
 function BBV(id,name,side,LVL,HP,FP,TP,AA,AR,EV,ASW,LOS,LUK,RNG,planeslots) {
@@ -1050,7 +1058,10 @@ function LandBase(equips,levels,profs) {
 	this.PLANESLOTS = [18,18,18,18];
 	this.planecount = this.PLANESLOTS.slice();
 	this.equips = [];
-	for (var i=0; i<equips.length; i++) this.equips.push(new Equip(equips[i],levels[i],profs[i],true));
+	for (var i=0; i<equips.length; i++) {
+		this.equips.push(new Equip(equips[i],levels[i],profs[i],true));
+		this.equips[i].rankInit = profs[i];
+	}
 	this.AS = 0;
 }
 LandBase.prototype.airState = function() { return this.AS; }
@@ -1096,6 +1107,9 @@ LandBase.prototype.airPowerDefend = function() {
 }
 LandBase.prototype.reset = function() {
 	this.planecount = this.PLANESLOTS.slice();
+	for (let eq of this.equips) {
+		if (eq.rank != eq.rankInit) eq.setProficiency(eq.rankInit);
+	}
 }
 LandBase.prototype.getCost = function() {
 	var cost = [0,0,0]; //fuel,ammo,baux
