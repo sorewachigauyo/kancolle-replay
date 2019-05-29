@@ -245,6 +245,8 @@ function shell(ship,target,APIhou,attackSpecial) {
 		} else {
 			postMod *= (ship.ptDmgMod||1) * .6;
 			accMod2 *= (ship.ptAccMod||1) * .5;
+			let moraleMod = ship.moraleMod();
+			if (moraleMod > 1) accMod /= moraleMod;
 		}
 	}
 	
@@ -457,6 +459,8 @@ function NBattack(ship,target,NBonly,NBequips,APIyasen,attackSpecial) {
 		} else {
 			postMod *= (ship.ptDmgMod||1) * .6;
 			accMod2 *= (ship.ptAccMod||1) * .5;
+			let moraleMod = ship.moraleMod();
+			if (moraleMod > 1) accMod /= moraleMod;
 		}
 	}
 	
@@ -917,14 +921,14 @@ function nightPhase(order1,order2,alive1,subsalive1,alive2,subsalive2,NBonly,API
 		if (alive2[i].hasSearchlight) { light2 = true; lightship2 = i; slrerolls2 = alive2[i].hasSearchlight; break; }
 	}
 	var scout1 = false;
-	if (alive1[0] && alive1[0].fleet.AP != -2 && (NBonly || alive1[0].fleet.AP != 0)) {
+	if (alive1[0] && alive1[0].fleet.AS != -2 && (NBonly || alive1[0].fleet.AS != 0)) {
 		for (var i=0; i<alive1.length; i++) {
 			if (alive1[i].retreated) continue;
 			if (alive1[i].hasNightScout && Math.random() < Math.floor(Math.sqrt(alive1[i].LVL)*Math.sqrt(3))/25) { scout1 = true; if (C) APIyasen.api_touch_plane[0] = 102; break; }
 		}
 	}
 	var scout2 = false;
-	if (alive2[0] && alive2[0].fleet.AP != -2 && (NBonly || alive2[0].fleet.AP != 0)) {
+	if (alive2[0] && alive2[0].fleet.AS != -2 && (NBonly || alive2[0].fleet.AS != 0)) {
 		for (var i=0; i<alive2.length; i++) {
 			if (alive2[i].retreated) continue;
 			if (alive2[i].hasNightScout && Math.random() < Math.floor(Math.sqrt(alive2[i].LVL)*Math.sqrt(3))/25) { scout2 = true; if (C) APIyasen.api_touch_plane[1] = 102; break; }
