@@ -26,7 +26,7 @@ loader.add('BG1','assets/82_res.images.ImgBackgroundDay.jpg')
 	.add('shutter11','assets/512_res.common.ImgShutterTop.png')
 	.add('shutter12','assets/510_res.common.ImgShutterBottom.png')
 	.add('radar','assets/375_res.battle.images.ImgRaderBG.png')
-	.add('aradar','assets/_res.battle.common.ImgAmbushRadar.png')
+	.add('aradar','assets/ImgAmbushRadar.png')
 	.add('nmiss','assets/Nmiss.png')
 	.add('ccrit','assets/Ccrit.png')
 	.add('dminor','assets/d383.png')
@@ -1672,7 +1672,7 @@ function battleStart(battledata,newships,newshipsC,escape,bgm,showbosshp) {
 	for (var i=newships.length-1; i>=0; i--) stage.addChildAt(newships[i].graphic,5/*ind*/);
 	createDots(dots1,battledata[1],fleet1.length,0);
 	if (battledata[6]) {
-		var aRadar = getFromPool('aradar','assets/_res.battle.common.ImgAmbushRadar.png');
+		var aRadar = getFromPool('aradar','assets/ImgAmbushRadar.png');
 		aRadar.position.set(-1,-4);
 		aRadar.anchor.set(.5);
 		aRadar.scale.set(1);
