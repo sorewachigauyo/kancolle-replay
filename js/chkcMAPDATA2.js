@@ -30866,7 +30866,7 @@ var MAPDATA = {
 						},
 						routeC: function(ships) {
 							if (CHDATA.fleets.combined) return 'C';
-							return 'F';
+							return 'E';
 						}
 					},
 					'G': {
