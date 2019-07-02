@@ -529,7 +529,7 @@ function chSetEquip(itemid) {
 	
 	if (item && DIALOGFLEETSEL == 5) { //LBAS only
 		var type = EQDATA[item.masterId].type;
-		var num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
+		var num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT || type == LANDSCOUT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
 		CHDATA.event.resources.baux += num * LBASDATA[item.masterId].cost;
 		chUIUpdateResources();
 	}
@@ -599,7 +599,7 @@ function chShipEquipItem(shipid,itemid,slot) {
 function chGetLBASNumPlanes(item) {
 	if (!EQDATA[item.masterId]) return (MAPDATA[WORLD].lbasSlotCount || 18);
 	let type = EQDATA[item.masterId].type;
-	let num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
+	let num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT || type == LANDSCOUT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
 	return num;
 }
 
@@ -1150,6 +1150,7 @@ function chDoStartChecks() {
 		errors.push('Support not allowed');
 	}
 	
+	if (!CHDATA.event.maps[MAPNUM].routes) CHDATA.event.maps[MAPNUM].routes = [];
 	if (MAPDATA[WORLD].maps[MAPNUM].additionalChecks) MAPDATA[WORLD].maps[MAPNUM].additionalChecks(counts,errors);
 	
 	return errors;
@@ -1225,7 +1226,7 @@ function chStart() {
 			for (var j=0; j<LBAS[i].equips.length; j++) {
 				var equip = LBAS[i].equips[j];
 				if (equip.type == LANDBOMBER || equip.type == INTERCEPTOR) { fuel += 27; ammo += 12; }
-				else if (equip.type == CARRIERSCOUT || equip.type == SEAPLANE || equip.type == FLYINGBOAT) { fuel += 4; ammo += 3; }
+				else if (equip.type == CARRIERSCOUT || equip.type == SEAPLANE || equip.type == FLYINGBOAT || equip.type == LANDSCOUT) { fuel += 4; ammo += 3; }
 				else { fuel += 18; ammo += 11; }
 			}
 		}
@@ -1987,6 +1988,35 @@ function chAddLBAS(num) {
 	} else {
 		CHDATA.fleets['lbas'+num] = false;
 		$('#btnLBAS'+num).css('opacity',.5);
+	}
+}
+
+function chAddFriendFleet() {
+	if (CHDATA.fleets.ff === 0) {
+		chSetFriendFleet(1);
+	} else if (CHDATA.fleets.ff === 1 && MAPDATA[WORLD].allowStrongFF) {
+		chSetFriendFleet(2);
+	} else {
+		chSetFriendFleet(0);
+	}
+}
+
+function chSetFriendFleet(num) {
+	if (num == 1) {
+		CHDATA.fleets.ff = 1;
+		$('#btnFF').css('opacity',1);
+		$('#imgFF').show();
+		$('#imgFFStrong').hide();
+	} else if (num == 2) {
+		CHDATA.fleets.ff = 2;
+		$('#btnFF').css('opacity',1);
+		$('#imgFF').hide();
+		$('#imgFFStrong').show();
+	} else {
+		CHDATA.fleets.ff = 0;
+		$('#btnFF').css('opacity',.5);
+		$('#imgFF').show();
+		$('#imgFFStrong').hide();
 	}
 }
 
