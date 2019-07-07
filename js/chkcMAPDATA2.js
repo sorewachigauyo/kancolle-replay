@@ -29729,7 +29729,7 @@ var MAPDATA = {
 				{ mid: 680, LVL: 80, FP: 52, TP: 78, AA: 59, AR: 49, equips: [267,286,88] },
 				{ mid: 688, LVL: 81, FP: 51, TP: 80, AA: 58, AR: 49, equips: [286,286,286] },
 			] },
-			'E2-3': { voice: [686,243], ships: [
+			'E2-3': { voice: [373,243], ships: [
 				{ mid: 373, LVL: 82, FP: 52, TP: 79, AA: 58, AR: 49, equips: [267,15,88] },
 				{ mid: 688, LVL: 81, FP: 51, TP: 80, AA: 58, AR: 49, equips: [267,15,88] },
 				{ mid: 680, LVL: 80, FP: 52, TP: 78, AA: 59, AR: 49, equips: [286,286,286] },
@@ -29763,7 +29763,7 @@ var MAPDATA = {
 				{ mid: 542, LVL: 88, FP: 67, TP: 87, AA: 66, AR: 53, equips: [267,267,101] },
 				{ mid: 563, LVL: 87, FP: 64, TP: 90, AA: 65, AR: 53, equips: [267,286,240] },
 			] },
-			'E3-5': { voice: [690,243], ships: [
+			'E3-5': { voice: [586,243], ships: [
 				{ mid: 557, LVL: 90, FP: 61, TP: 82, AA: 90, AR: 53, equips: [122,286,88] },
 				{ mid: 354, LVL: 88, FP: 49, TP: 79, AA: 49, AR: 49, equips: [266,286,88] },
 				{ mid: 355, LVL: 87, FP: 50, TP: 79, AA: 49, AR: 49, equips: [266,286,88] },
@@ -29775,7 +29775,7 @@ var MAPDATA = {
 				{ mid: 294, LVL: 81, FP: 49, TP: 79, AA: 49, AR: 49, equips: [266,286,88] },
 				{ mid: 690, LVL: 48, FP: 53, TP: 45, AA: 62, AR: 46, equips: [310,310,101] },
 			] },
-			'E3-7': { voice: [131,141], ships: [
+			'E3-7': { voice: [136,141], ships: [
 				{ mid: 136, LVL: 84, FP: 139, TP: 0, AA: 104, AR: 118, equips: [276,276,276,74] },
 				{ mid: 321, LVL: 82, FP: 70, TP: 49, AA: 74, AR: 68, equips: [235,235,275,101] },
 				{ mid: 369, LVL: 79, FP: 51, TP: 82, AA: 49, AR: 48, equips: [266,286,88] },
@@ -30808,7 +30808,11 @@ var MAPDATA = {
 							4: ['Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
-							if (!CHDATA.fleets.combined) return 'F';
+							if (!CHDATA.fleets.combined) {
+								if (ships.SS + ships.SSV >= ships.total) return 'D';
+								if (ships.DD >= ships.total) return 'D';
+								return 'F';
+							}
 							if (ships.AV + ships.escort.AV && (CHDATA.event.maps[3].diff == 1 || CHDATA.event.maps[3].diff == 4)) return 'G';
 							return 'D';
 						}

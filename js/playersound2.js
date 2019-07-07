@@ -2401,6 +2401,7 @@ var VOICES = {
 		damage1: "assets/voice/Yamato-Minor_Damage_1.ogg",
 		damage2: "assets/voice/Yamato-Minor_Damage_2.ogg",
 		damage3: "assets/voice/Yamato-Major_Damage.ogg",
+		friend141: "assets/voice/Yamato_FriendFleet.mp3",
 	},
 	301: {
 		start: "assets/voice/Akigumo-Battle_Start.ogg",
@@ -4446,6 +4447,7 @@ var VOICES = {
 		damage1: "assets/voice/581_damage1.mp3",
 		damage2: "assets/voice/581_damage2.mp3",
 		damage3: "assets/voice/581_damage3.mp3",
+		friend243: "assets/voice/NisshinKai-Friend_Fleet_2.mp3",
 	},
 	583: {
 		start: "assets/voice/583_start.mp3",
