@@ -1395,8 +1395,17 @@ function getEnemyComp(letter,mapdata,diff,lastdance) {
 		if (mapdata.compDiffC && CHDATA.event.maps[MAPNUM].hp <= 0) comps = mapdata.compDiffC[diff];
 		if (mapdata.compDiffC && MAPDATA[WORLD].maps[MAPNUM].currentBoss && MAPDATA[WORLD].maps[MAPNUM].currentBoss != letter) comps = mapdata.compDiffC[diff];
 	}
-	var comp = comps[Math.floor(Math.random()*comps.length)];
-	var compd;
+	var comp, compd;
+	if (Array.isArray(comps)) {
+		comp = comps[Math.floor(Math.random()*comps.length)];
+	} else {
+		let r = Math.floor(100*Math.random());
+		for (let key in comps) {
+			comp = key;
+			r -= comps[key];
+			if (r < 0) break;
+		}
+	}
 	if (WORLD == 20) {
 		let n = (mapdata.compName)? mapdata.compName : (mapdata.boss)? 'Boss' : letter;
 		compd = ENEMYCOMPS['World '+MAPDATA[WORLD].maps[MAPNUM].world][MAPDATA[WORLD].maps[MAPNUM].name][n][comp];
@@ -1451,7 +1460,9 @@ function prepBattle(letter) {
 	
 	let friendFleet = null;
 	if (mapdata.friendFleet && CHDATA.fleets.ff !== 0) {
-		friendFleet = chLoadFriendFleet(chChooseFriendFleet(mapdata.friendFleet));
+		let friendFleets = mapdata.friendFleet;
+		let friendFleetsS = (CHDATA.fleets.ff == 2)? mapdata.friendFleetS : null;
+		friendFleet = chLoadFriendFleet(chChooseFriendFleet(friendFleets,friendFleetsS));
 		CHDATA.sortie.fleetFriend = friendFleet;
 		console.log(friendFleet);
 	}
@@ -2716,7 +2727,7 @@ function doSimEnemyRaid(numLB,compd) {
 	var fleetLB = new Fleet(0);
 	var lbShips = [];
 	for (var i=0; i<numLB; i++) {
-		var ship = new Ship(5001+i,'',0,1,200,0,0,0,80,45,0,0,0,0,[]);
+		var ship = new Ship(5001+i,'',0,1,200,0,0,0,50,45,0,0,0,0,[]);
 		ship.HP = LBAS[i].HP;
 		if (!CHDATA.fleets['lbas'+(i+1)] && LBAS[i].equips.length) ship.lbas = LBAS[i];
 		lbShips.push(ship);
@@ -2821,7 +2832,10 @@ function prepEnemyRaid() {
 }
 
 
-function chChooseFriendFleet(friendFleets) {
+function chChooseFriendFleet(friendFleets,friendFleetsStrong) {
+	if (friendFleetsStrong) {
+		friendFleets = friendFleets.concat(friendFleetsStrong).concat(friendFleetsStrong);
+	}
 	let pool = [friendFleets[0]];
 	let curShips = FLEETS1[0].ships;
 	if (CHDATA.fleets.combined) curShips = curShips.concat(FLEETS1[1].ships);
@@ -2830,8 +2844,10 @@ function chChooseFriendFleet(friendFleets) {
 		let fleet = MAPDATA[WORLD].friendFleet[name];
 		let found = false;
 		for (let ship of fleet.ships) {
+			let mid = getBaseId(ship.mid);
 			for (let shipC of curShips) {
-				if (ship.mid == shipC.mid) { found = true; break; }	
+				let midC = getBaseId(shipC.mid);
+				if (mid == midC) { found = true; break; }	
 			}
 			if (found) break;
 		}
@@ -2859,7 +2875,7 @@ function chLoadFriendFleet(friendData) {
 		}
 		simShips.push(simShip);
 		
-		if (ship.mid == friendData.voice[0]) simShip.voiceFriend = [friendData.voice[1],1];
+		if (friendData.voice && ship.mid == friendData.voice[0]) simShip.voiceFriend = [friendData.voice[1],1];
 	}
 	fleet.loadShips(simShips);
 	fleet.formation = LINEAHEAD;

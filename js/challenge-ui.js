@@ -28,6 +28,10 @@ var MECHANICDATES = {
 	equipBonus: '2017-12-22',
 	installRevamp: '2018-08-17',
 	specialAttacks: '2018-09-08',
+	echelonBuff: '2019-02-27',
+	aaResist: '2019-03-22',
+	zuiunCI: '2019-03-27',
+	divebomberInstall: '2019-03-27',
 };
 
 var MECHANICDATESOTHER = {
@@ -1242,6 +1246,7 @@ function chStart() {
 	MECHANICS.fixFleetAA = MAPDATA[WORLD].date >= MECHANICDATES.fixFleetAA;
 	SHELLDMGBASE = CHDATA.config.shelldmgbase;
 	ASWDMGBASE = CHDATA.config.aswdmgbase;
+	toggleEchelon(CHDATA.config.mechanics.echelonBuff);
 	
 	if (MAPDATA[CHDATA.event.world].ptImpSpecial == 2) { BREAKPTIMPS = true; NERFPTIMPS = false; }
 	else if (MAPDATA[CHDATA.event.world].ptImpSpecial == 1) { BREAKPTIMPS = false; NERFPTIMPS = true; }
@@ -1609,8 +1614,8 @@ function chUpdateFleetInfo(fleetnum) {
 		var losOld = testGetLoSOld(fleetnum,CHDATA.fleets.combined);
 		$('#fleetefflos'+fleetnum).parent().attr('title','Old = '+(Math.floor(losOld*10)/10));
 	} else {
-		var los3 = getELoS33(fleetnum,3,CHDATA.fleets.combined), los4 = getELoS33(fleetnum,4,CHDATA.fleets.combined);
-		$('#fleetefflos'+fleetnum).parent().attr('title','C3 = '+(Math.floor(los3*10)/10)+', C4 = '+(Math.floor(los4*10)/10));
+		var los3 = getELoS33(fleetnum,3,CHDATA.fleets.combined), los4 = getELoS33(fleetnum,4,CHDATA.fleets.combined), los2 = getELoS33(fleetnum,2,CHDATA.fleets.combined);
+		$('#fleetefflos'+fleetnum).parent().attr('title','C2 = '+(Math.floor(los2*10)/10)+', C3 = '+(Math.floor(los3*10)/10)+', C4 = '+(Math.floor(los4*10)/10));
 	}
 	$('#fleetspd'+fleetnum).text(spd);
 	

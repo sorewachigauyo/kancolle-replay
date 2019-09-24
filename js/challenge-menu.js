@@ -384,6 +384,8 @@ function chShowReward(data,tracker) {
 				272: 'assets/maps/40/Striking_Force_Fleet_Command_Facility_272_Card.png',
 				311: 'assets/maps/43/i311.png',
 				312: 'assets/maps/43/i312.png',
+				333: 'assets/maps/44/i333.png',
+				334: 'assets/maps/44/i334.png',
 			};
 			var ind = tracker-numShips;
 			if (imageSpecial[data.items[ind]]) {
