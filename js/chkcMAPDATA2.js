@@ -33244,7 +33244,7 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
+							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
 							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
 						},
 						route: 'F'
@@ -33258,7 +33258,7 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
+							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
 							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
 						},
 						routeC: function(ships) {
@@ -33274,9 +33274,15 @@ var MAPDATA = {
 						distance: 2,
 						raid: true,
 						compDiff: {
-							3: ['Hard 1','Hard 2','Hard 3'],
+							3: ['Hard 1','Hard 2'],
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':40,'Easy 3':20,'Easy 4':10},
+							4: ['Casual 1','Casual 2','Casual 3'],
+						},
+						compDiffF: {
+							3: ['Hard 3'],
+							2: ['Medium 1','Medium 2','Medium 3'],
+							1: ['Easy 3','Easy 4'],
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						route: 'G'
@@ -33304,13 +33310,13 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':55,'Hard 2':45},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							1: {'Easy 1':55,'Easy 2':45},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							1: ['Easy 3'],
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						route: 'H'
@@ -33323,7 +33329,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':60,'Hard 2':20,'Hard 3':20},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
+							1: {'Easy 1':40,'Easy 2':20,'Easy 3':10,'Easy 4':15,'Easy 5':15},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33340,7 +33346,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':35,'Hard 3':30},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':30,'Easy 3':10,'Easy 4':30},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33357,7 +33363,7 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
+							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
 							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
 						},
 						routeC: function(ships) {
@@ -33373,7 +33379,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':25,'Hard 2':60,'Hard 3':15},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':40,'Easy 3':20,'Easy 4':10},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						debuffGive: function() {
@@ -33394,7 +33400,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':30,'Hard 3':25},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':10,'Easy 2':40,'Easy 3':35,'Easy 4':15},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						debuffGive: function() {
@@ -33411,13 +33417,13 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':55},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2'],
+							1: ['Easy 1'],
 							4: ['Casual 1','Casual 2'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2'],
+							1: ['Easy 2'],
 							4: ['Casual 1','Casual 2'],
 						},
 						debuffGive: function() {
@@ -33451,7 +33457,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':25,'Hard 3':40},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':40,'Easy 3':20,'Easy 4':10},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33468,13 +33474,13 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':50,'Hard 2':30,'Hard 3':20},
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':20,'Easy 3':30,'Easy 4':20},
 							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: ['Easy 3'],
 							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
 						},
 						routeC: function(ships) {
@@ -33495,7 +33501,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':50,'Hard 2':30,'Hard 3':20},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
+							1: {'Easy 1':30,'Easy 2':25,'Easy 3':15,'Easy 4':15,'Easy 5':15},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						route: 'S'
@@ -33508,7 +33514,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':50,'Hard 2':30,'Hard 3':20},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
+							1: {'Easy 1':35,'Easy 2':15,'Easy 3':15,'Easy 4':10,'Easy 5':25},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33527,13 +33533,13 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':55},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2'],
+							1: ['Easy 1'],
 							4: ['Casual 1','Casual 2'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2'],
+							1: ['Easy 2'],
 							4: ['Casual 1','Casual 2'],
 						},
 						routeC: function(ships) {
@@ -33554,7 +33560,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':30,'Hard 2':50,'Hard 3':20},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':10,'Easy 3':40,'Easy 4':20},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						debuffGive: function() {
@@ -33576,7 +33582,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':60,'Hard 2':40},
 							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2'],
+							1: {'Easy 1':65,'Easy 2':35},
 							4: ['Casual 1','Casual 2'],
 						},
 						debuffGive: function() {
@@ -33628,7 +33634,7 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
+							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
 							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
 						},
 						routeC: function(ships) {
@@ -33653,7 +33659,7 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':35,'Hard 3':30},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							1: {'Easy 1':30,'Easy 2':30,'Easy 3':30,'Easy 4':10},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33680,13 +33686,13 @@ var MAPDATA = {
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':65},
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							1: {'Easy 1':35,'Easy 2':65},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
 							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							1: ['Easy 3'],
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33813,9 +33819,9 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: {'Hard 1':20,'Hard 2':15,'Hard 3':15,'Hard 4':15,'Hard 5':35},
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							2: {'Medium 1':15,'Medium 2':10,'Medium 3':30,'Medium 4':25,'Medium 5':10,'Medium 6':10},
+							1: {'Easy 1':20,'Easy 2':25,'Easy 3':20,'Easy 4':15,'Easy 5':10,'Easy 6':10},
+							4: {'Casual 1':40,'Casual 2':30,'Casual 3':15,'Casual 4':15},
 						},
 						route: 'D'
 					},
@@ -33827,9 +33833,9 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: {'Hard 1':20,'Hard 2':15,'Hard 3':15,'Hard 4':15,'Hard 5':35},
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5','Easy 6'],
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							2: {'Medium 1':15,'Medium 2':10,'Medium 3':30,'Medium 4':25,'Medium 5':10,'Medium 6':10},
+							1: {'Easy 1':20,'Easy 2':25,'Easy 3':20,'Easy 4':15,'Easy 5':10,'Easy 6':10},
+							4: {'Casual 1':40,'Casual 2':30,'Casual 3':15,'Casual 4':15},
 						},
 						routeC: function(ships) {
 							if (ships.AV + ships.escort.AV) return 'G';
@@ -33852,9 +33858,9 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':40,'Hard 2':60},
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2'],
-							4: ['Casual 1','Casual 2'],
+							2: {'Medium 1':40,'Medium 2':60},
+							1: {'Easy 1':40,'Easy 2':60},
+							4: {'Casual 1':40,'Casual 2':60},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
@@ -33880,15 +33886,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 3':55,'Hard 2':45},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 3':55,'Medium 2':45},
+							1: {'Easy 1':40,'Easy 2':40,'Easy 4':20},
+							4: {'Casual 1':40,'Casual 2':40,'Casual 3':20},
 						},
 						compDiffF: {
 							3: ['Hard 1'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 1'],
+							1: ['Easy 3','Easy 4'],
+							4: ['Casual 3'],
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[5].part == 1) return;
@@ -33907,15 +33913,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 3':55,'Hard 2':45},
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':45,'Medium 2':55},
+							1: {'Easy 1':45,'Easy 2':35,'Easy 3':20},
+							4: {'Casual 1':40,'Casual 2':40,'Casual 3':20},
 						},
 						compDiffF: {
 							3: ['Hard 1'],
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: ['Easy 3','Easy 4'],
+							4: ['Casual 3'],
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[5].part == 1) return;
@@ -33935,15 +33941,15 @@ var MAPDATA = {
 						distance: 3,
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':55},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':45,'Medium 2':55},
+							1: {'Easy 1':35,'Easy 2':35,'Easy 3':10,'Easy 4':20},
+							4: {'Casual 1':55,'Casual 2':35,'Casual 3':10},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: ['Easy 3','Easy 4'],
+							4: ['Casual 3'],
 						},
 						route: 'J'
 					},
@@ -33954,8 +33960,8 @@ var MAPDATA = {
 						distance: 4,
 						compDiff: {
 							3: {'Hard 1':60,'Hard 2':20,'Hard 3':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
+							2: {'Medium 1':60,'Medium 2':20,'Medium 3':20},
+							1: {'Easy 1':40,'Easy 2':20,'Easy 3':10,'Easy 4':15,'Easy 5':15},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -33994,14 +34000,14 @@ var MAPDATA = {
 						distance: 5,
 						compDiff: {
 							3: {'Hard 1':40,'Hard 2':30,'Hard 3':30},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							2: {'Medium 1':40,'Medium 2':30,'Medium 3':30},
+							1: {'Easy 1':35,'Easy 2':35,'Easy 3':10,'Easy 4':20},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							2: ['Medium 3'],
+							1: ['Easy 3','Easy 4'],
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -34023,14 +34029,14 @@ var MAPDATA = {
 						distance: 5,
 						compDiff: {
 							3: {'Hard 1':40,'Hard 2':30,'Hard 3':30},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							2: {'Medium 1':40,'Medium 2':30,'Medium 3':30},
+							1: {'Easy 1':30,'Easy 2':35,'Easy 3':25,'Easy 4':10},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						compDiffF: {
 							3: ['Hard 1'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
+							2: ['Medium 1'],
+							1: {'Easy 1':60,'Easy 4':40},
 							4: ['Casual 1','Casual 2','Casual 3'],
 						},
 						routeC: function(ships) {
@@ -34060,15 +34066,15 @@ var MAPDATA = {
 						distance: 5,
 						compDiff: {
 							3: {'Hard 1':20,'Hard 2':40,'Hard 3':20,'Hard 4':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':50,'Medium 2':20,'Medium 3':30},
+							1: {'Easy 1':25,'Easy 2':35,'Easy 3':10,'Easy 4':20,'Easy 5':10},
+							4: {'Casual 1':30,'Casual 2':20,'Casual 3':50},
 						},
 						compDiffF: {
 							3: {'Hard 2':40,'Hard 4':60},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: {'Easy 1':25,'Easy 2':35,'Easy 3':10,'Easy 4':20,'Easy 5':10},
+							4: {'Casual 1':30,'Casual 2':20,'Casual 3':50},
 						},
 						routeC: function(ships) {
 							this.showNoCompass = true;
@@ -34087,15 +34093,15 @@ var MAPDATA = {
 						distance: 6,
 						compDiff: {
 							3: {'Hard 1':25,'Hard 2':30,'Hard 3':25,'Hard 4':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':50,'Medium 2':20,'Medium 3':30},
+							1: {'Easy 1':25,'Easy 2':35,'Easy 3':10,'Easy 4':20,'Easy 5':10},
+							4: {'Casual 1':30,'Casual 2':20,'Casual 3':50},
 						},
 						compDiffF: {
 							3: {'Hard 2':48,'Hard 4':52},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4','Easy 5'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: {'Easy 1':25,'Easy 2':35,'Easy 3':10,'Easy 4':20,'Easy 5':10},
+							4: {'Casual 1':30,'Casual 2':20,'Casual 3':50},
 						},
 						routeC: function(ships) {
 							this.showNoCompass = true;
@@ -34163,13 +34169,13 @@ var MAPDATA = {
 						compDiff: {
 							3: ['Hard 1','Hard 2'],
 							2: ['Medium 1'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							1: ['Easy 1','Easy 1','Easy 2','Easy 3'],
 							4: ['Casual 1','Casual 2'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
 							2: ['Medium 1'],
-							1: ['Easy 1','Easy 2','Easy 3'],
+							1: ['Easy 3'],
 							4: ['Casual 1','Casual 2'],
 						},
 						route: 'W'
@@ -34183,15 +34189,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':55,'Hard 2':45},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':55,'Medium 2':45},
+							1: {'Easy 1':55,'Easy 2':45},
+							4: {'Casual 1':65,'Casual 2':35},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: ['Easy 3'],
+							4: ['Casual 3'],
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[5].part == 1) return;
@@ -34223,15 +34229,15 @@ var MAPDATA = {
 						ambush: true,
 						compDiff: {
 							3: {'Hard 1':25,'Hard 2':45,'Hard 3':30},
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2'],
+							2: {'Medium 1':25,'Medium 2':20,'Medium 3':45,'Medium 4':10},
+							1: {'Easy 1':45,'Easy 2':30,'Easy 3':15,'Easy 4':10},
+							4: {'Casual 1':45,'Casual 2':30,'Casual 3':25},
 						},
 						compDiffF: {
 							3: ['Hard 4'],
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2'],
+							2: ['Medium 4'],
+							1: ['Easy 4'],
+							4: {'Casual 1':45,'Casual 2':30,'Casual 3':25},
 						},
 						route: 'X'
 					},
@@ -34243,15 +34249,15 @@ var MAPDATA = {
 						hidden: 1,
 						compDiff: {
 							3: {'Hard 1':65,'Hard 2':35},
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2'],
+							2: {'Medium 1':65,'Medium 2':35},
+							1: {'Easy 2':40,'Easy 3':60},
+							4: {'Casual 2':65,'Casual 3':35},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2'],
+							2: ['Medium 3'],
+							1: ['Easy 1'],
+							4:  {'Casual 1':35,'Casual 3':65},
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[5].part == 1) return;
@@ -34274,15 +34280,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':40,'Hard 2':60},
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':40,'Medium 2':60},
+							1: {'Easy 1':40,'Easy 2':60},
+							4: {'Casual 1':55,'Casual 2':45},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: ['Easy 3'],
+							4: ['Casual 3'],
 						},
 						routeC: function(ships) {
 							let radars = checkSurfaceRadar(FLEETS1[0].ships.concat(FLEETS1[1].ships));
@@ -34298,15 +34304,15 @@ var MAPDATA = {
 						hidden: 1,
 						compDiff: {
 							3: {'Hard 1':60,'Hard 2':40},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: {'Medium 1':60,'Medium 2':40},
+							1: {'Easy 2':40,'Easy 3':60},
+							4: {'Casual 2':65,'Casual 3':35},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							2: ['Medium 3'],
+							1: ['Easy 1'],
+							4: {'Casual 1':35,'Casual 3':65},
 						},
 						debuffGive: function() {
 							if (CHDATA.event.maps[5].part == 1) return;
@@ -34329,15 +34335,15 @@ var MAPDATA = {
 						ambush: true,
 						compDiff: {
 							3: {'Hard 1':25,'Hard 2':45,'Hard 3':30},
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2'],
+							2: {'Medium 1':25,'Medium 2':20,'Medium 3':45,'Medium 4':10},
+							1: {'Easy 1':45,'Easy 2':30,'Easy 3':15,'Easy 4':10},
+							4: {'Casual 1':45,'Casual 2':30,'Casual 3':25},
 						},
 						compDiffF: {
 							3: ['Hard 4'],
-							2: ['Medium 1','Medium 2','Medium 3'],
-							1: ['Easy 1','Easy 2','Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2'],
+							2: ['Medium 4'],
+							1: ['Easy 4'],
+							4: {'Casual 1':45,'Casual 2':30,'Casual 3':25},
 						},
 						route: 'X'
 					},
