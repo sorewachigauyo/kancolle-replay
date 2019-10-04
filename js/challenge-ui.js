@@ -1202,6 +1202,10 @@ function chStart() {
 		$('#srtErrors').html(errtext);
 		return;
 	}
+	
+	for (var mechanic in MECHANICS) {
+		MECHANICS[mechanic] = CHDATA.config.mechanics[mechanic];
+	}
 
 	chLoadMainFleet();
 	if (CHDATA.fleets.combined) chLoadEscortFleet();
@@ -1239,9 +1243,6 @@ function chStart() {
 		chUIUpdateResources();
 	}
 	
-	for (var mechanic in MECHANICS) {
-		MECHANICS[mechanic] = CHDATA.config.mechanics[mechanic];
-	}
 	MECHANICS.morale = true;
 	MECHANICS.fixFleetAA = MAPDATA[WORLD].date >= MECHANICDATES.fixFleetAA;
 	SHELLDMGBASE = CHDATA.config.shelldmgbase;

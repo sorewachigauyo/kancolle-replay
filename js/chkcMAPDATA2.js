@@ -31708,9 +31708,9 @@ var MAPDATA = {
 			] }
 		},
 		overrideStats: {
-			1687: { HP: 600, divebombWeak: 1 },
-			1688: { HP: 800, divebombWeak: 1 },
-			1689: { HP: 900, divebombWeak: 1 },
+			1687: { HP: 600 },
+			1688: { HP: 800 },
+			1689: { HP: 900 },
 		},
 		historical: {
 			'E2_1': [131,139,20,41,425,532,167,170],
@@ -32908,7 +32908,8 @@ var MAPDATA = {
 							if (CHDATA.event.maps[3].routes.indexOf(1) != -1) {
 								this.showNoCompass = false;
 								let num = ships.aBB + ships.escort.aBB + ships.aCV + ships.escort.aCV;
-								if (CHDATA.fleets.combined == 1 && num <= 3) return 'O';
+								// if (CHDATA.fleets.combined == 1 && num <= 3) return 'O';
+								if (CHDATA.fleets.combined == 1) return 'P';
 								if (num <= 4) return 'P';
 							}
 							return 'L';
@@ -33243,9 +33244,9 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
+							2: {'Medium 1':20,'Medium 2':20,'Medium 3':20,'Medium 4':20,'Medium 5':10,'Medium 6':10},
 							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							4: {'Casual 1':35,'Casual 2':35,'Casual 3':15,'Casual 4':15},
 						},
 						route: 'F'
 					},
@@ -33257,9 +33258,9 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
+							2: {'Medium 1':20,'Medium 2':20,'Medium 3':20,'Medium 4':20,'Medium 5':10,'Medium 6':10},
 							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							4: {'Casual 1':35,'Casual 2':35,'Casual 3':15,'Casual 4':15},
 						},
 						routeC: function(ships) {
 							let num = ships.aBB + ships.aCV + ships.escort.aBB + ships.escort.aCV;
@@ -33275,15 +33276,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: ['Hard 1','Hard 2'],
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: ['Medium 1','Medium 2'],
 							1: {'Easy 1':30,'Easy 2':40,'Easy 3':20,'Easy 4':10},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':60,'Casual 2':30,'Casual 3':10},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: ['Medium 3'],
 							1: ['Easy 3','Easy 4'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':60,'Casual 2':30,'Casual 3':10},
 						},
 						route: 'G'
 					},
@@ -33309,15 +33310,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':55,'Hard 2':45},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':55,'Medium 2':45},
 							1: {'Easy 1':55,'Easy 2':45},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':75,'Casual 2':25},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: ['Medium 3'],
 							1: ['Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: ['Casual 3'],
 						},
 						route: 'H'
 					},
@@ -33328,9 +33329,9 @@ var MAPDATA = {
 						distance: 3,
 						compDiff: {
 							3: {'Hard 1':60,'Hard 2':20,'Hard 3':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':60,'Medium 2':20,'Medium 3':20},
 							1: {'Easy 1':40,'Easy 2':20,'Easy 3':10,'Easy 4':15,'Easy 5':15},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':50,'Casual 2':25,'Casual 3':25},
 						},
 						routeC: function(ships) {
 							if (ships.speed >= 15) return 'J';
@@ -33345,9 +33346,9 @@ var MAPDATA = {
 						distance: 3,
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':35,'Hard 3':30},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':35,'Medium 2':35,'Medium 3':30},
 							1: {'Easy 1':30,'Easy 2':30,'Easy 3':10,'Easy 4':30},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':35,'Casual 2':30,'Casual 3':35},
 						},
 						routeC: function(ships) {
 							if (ships.aBB + ships.escort.aBB) return 'K';
@@ -33364,7 +33365,7 @@ var MAPDATA = {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
 							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
 							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							4: {'Casual 1':40,'Casual 2':40,'Casual 3':10,'Casual 4':10},
 						},
 						routeC: function(ships) {
 							if (ships.speed >= 15) return 'L';
@@ -33378,9 +33379,9 @@ var MAPDATA = {
 						distance: 4,
 						compDiff: {
 							3: {'Hard 1':25,'Hard 2':60,'Hard 3':15},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':25,'Medium 2':60,'Medium 3':15},
 							1: {'Easy 1':30,'Easy 2':40,'Easy 3':20,'Easy 4':10},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':60,'Casual 2':30,'Casual 3':10},
 						},
 						debuffGive: function() {
 							if (CHDATA.temp.rank == 'S') CHDATA.event.maps[4].debuff.J = 1;
@@ -33399,9 +33400,9 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':30,'Hard 3':25},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':45,'Medium 2':30,'Medium 3':25},
 							1: {'Easy 1':10,'Easy 2':40,'Easy 3':35,'Easy 4':15},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':55,'Casual 2':30,'Casual 3':15},
 						},
 						debuffGive: function() {
 							if (FLEETS1[0].AS >= 1) CHDATA.event.maps[4].debuff.K = 1;
@@ -33416,15 +33417,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':55},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':45,'Medium 2':55},
 							1: ['Easy 1'],
-							4: ['Casual 1','Casual 2'],
+							4: ['Casual 1'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: ['Medium 3'],
 							1: ['Easy 2'],
-							4: ['Casual 1','Casual 2'],
+							4: ['Casual 2'],
 						},
 						debuffGive: function() {
 							if (FLEETS1[0].AS >= 1) CHDATA.event.maps[4].debuff.L = 1;
@@ -33456,9 +33457,9 @@ var MAPDATA = {
 						distance: 5,
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':25,'Hard 3':40},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':35,'Medium 2':25,'Medium 3':40},
 							1: {'Easy 1':30,'Easy 2':40,'Easy 3':20,'Easy 4':10},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':25,'Casual 2':45,'Casual 3':30},
 						},
 						routeC: function(ships) {
 							if (ships.aBB + ships.escort.aBB + ships.aCV + ships.escort.aCV > 4) return 'P';
@@ -33473,15 +33474,15 @@ var MAPDATA = {
 						distance: 6,
 						compDiff: {
 							3: {'Hard 1':50,'Hard 2':30,'Hard 3':20},
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4'],
+							2: {'Medium 1':30,'Medium 2':20,'Medium 3':30,'Medium 4':20},
 							1: {'Easy 1':30,'Easy 2':20,'Easy 3':30,'Easy 4':20},
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							4: {'Casual 1':40,'Casual 2':35,'Casual 3':15,'Casual 4':10},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4'],
+							2: ['Medium 3'],
 							1: ['Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							4: {'Casual 1':40,'Casual 2':35,'Casual 3':15,'Casual 4':10},
 						},
 						routeC: function(ships) {
 							this.showLoSPlane = null;
@@ -33500,9 +33501,9 @@ var MAPDATA = {
 						distance: 6,
 						compDiff: {
 							3: {'Hard 1':50,'Hard 2':30,'Hard 3':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':50,'Medium 2':30,'Medium 3':20},
 							1: {'Easy 1':30,'Easy 2':25,'Easy 3':15,'Easy 4':15,'Easy 5':15},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':50,'Casual 2':30,'Casual 3':20},
 						},
 						route: 'S'
 					},
@@ -33513,9 +33514,9 @@ var MAPDATA = {
 						distance: 7,
 						compDiff: {
 							3: {'Hard 1':50,'Hard 2':30,'Hard 3':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':45,'Medium 2':35,'Medium 3':20},
 							1: {'Easy 1':35,'Easy 2':15,'Easy 3':15,'Easy 4':10,'Easy 5':25},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':25,'Casual 2':50,'Casual 3':25},
 						},
 						routeC: function(ships) {
 							this.showLoSPlane = null;
@@ -33532,15 +33533,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':45,'Hard 2':55},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':45,'Medium 2':55},
 							1: ['Easy 1'],
-							4: ['Casual 1','Casual 2'],
+							4: ['Casual 1'],
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: ['Medium 3'],
 							1: ['Easy 2'],
-							4: ['Casual 1','Casual 2'],
+							4: ['Casual 2'],
 						},
 						routeC: function(ships) {
 							this.showLoSPlane = null;
@@ -33559,9 +33560,9 @@ var MAPDATA = {
 						distance: 7,
 						compDiff: {
 							3: {'Hard 1':30,'Hard 2':50,'Hard 3':20},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':50,'Medium 2':30,'Medium 3':20},
 							1: {'Easy 1':30,'Easy 2':10,'Easy 3':40,'Easy 4':20},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':60,'Casual 2':30,'Casual 3':10},
 						},
 						debuffGive: function() {
 							if (CHDATA.temp.rank == 'S') CHDATA.event.maps[4].debuff.S = 1;
@@ -33581,9 +33582,9 @@ var MAPDATA = {
 						distance: 8,
 						compDiff: {
 							3: {'Hard 1':60,'Hard 2':40},
-							2: ['Medium 1','Medium 2'],
+							2: {'Medium 1':60,'Medium 2':40},
 							1: {'Easy 1':65,'Easy 2':35},
-							4: ['Casual 1','Casual 2'],
+							4: {'Casual 1':65,'Casual 2':35},
 						},
 						debuffGive: function() {
 							if (CHDATA.temp.rank == 'S') CHDATA.event.maps[4].debuff.T = 1;
@@ -33633,9 +33634,9 @@ var MAPDATA = {
 						subonly: true,
 						compDiff: {
 							3: ['Hard 1','Hard 2','Hard 3','Hard 4','Hard 5'],
-							2: ['Medium 1','Medium 2','Medium 3','Medium 4','Medium 5','Medium 6'],
+							2: {'Medium 1':20,'Medium 2':20,'Medium 3':20,'Medium 4':20,'Medium 5':10,'Medium 6':10},
 							1: {'Easy 1':20,'Easy 2':20,'Easy 3':20,'Easy 4':20,'Easy 5':10,'Easy 6':10},
-							4: ['Casual 1','Casual 2','Casual 3','Casual 4'],
+							4: {'Casual 1':45,'Casual 2':35,'Casual 3':10,'Casual 4':10},
 						},
 						routeC: function(ships) {
 							if (ships.aBB + ships.escort.aBB + ships.CV + ships.CVB <= 3) {
@@ -33658,9 +33659,9 @@ var MAPDATA = {
 						hidden: 1,
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':35,'Hard 3':30},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':35,'Medium 2':30,'Medium 3':35},
 							1: {'Easy 1':30,'Easy 2':30,'Easy 3':30,'Easy 4':10},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':30,'Casual 2':30,'Casual 3':40},
 						},
 						routeC: function(ships) {
 							if (ships.aCV + ships.escort.aCV > 1) return 'K';
@@ -33685,15 +33686,15 @@ var MAPDATA = {
 						raid: true,
 						compDiff: {
 							3: {'Hard 1':35,'Hard 2':65},
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: {'Medium 1':35,'Medium 2':65},
 							1: {'Easy 1':35,'Easy 2':65},
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: {'Casual 1':55,'Casual 2':45},
 						},
 						compDiffF: {
 							3: ['Hard 3'],
-							2: ['Medium 1','Medium 2','Medium 3'],
+							2: ['Medium 3'],
 							1: ['Easy 3'],
-							4: ['Casual 1','Casual 2','Casual 3'],
+							4: ['Casual 3'],
 						},
 						routeC: function(ships) {
 							if (ships.speed >= 10) return 'O';
@@ -34533,6 +34534,7 @@ function checkSurfaceRadar(ships) {
 			if ((eq.type == RADARS || eq.type == RADARL || eq.type == RADARXL) && eq.LOS >= 5) {
 				if (i == 0) flagship = true;
 				num++;
+				break;
 			}
 		}
 	}
