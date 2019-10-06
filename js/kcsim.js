@@ -786,7 +786,10 @@ function canSpecialAttack(ship) {
 		for (let s of ship.fleet.ships) { if (s.isSub) return false; }
 		if (ship.fleet.ships[2].CVshelltype || ship.fleet.ships[4].CVshelltype) return false;
 		if (ship.fleet.ships[2].retreated || ship.fleet.ships[4].retreated) return false;
-		return Math.random() < SIMCONSTS.nelsonTouchRate/100;
+		// let rate = SIMCONSTS.nelsonTouchRate;
+		let rate = 36 + .08*ship.LVL + .04*ship.fleet.ships[2].LVL + .04*ship.fleet.ships[4].LVL + ship.LUK*.24;
+		if (ship.fleet.ships[2].type == 'DD' || ship.fleet.ships[4].type == 'DD' || ship.fleet.ships[2].type == 'AV' || ship.fleet.ships[4].type == 'AV') rate -= 10;
+		return Math.random() < rate/100;
 	} else if (ship.attackSpecial == 101 || ship.attackSpecial == 102) {
 		if (ship.fleet.ships[0] != ship) return false;
 		if (ship.fleet.ships.length < 2) return false;
@@ -1121,11 +1124,16 @@ function torpedoPhase(alive1,subsalive1,alive2,subsalive2,opening,APIrai,combine
 			}
 		}
 		
+		let postMod = 1;
+		if (target.isAnchorage) {
+			postMod *= ship.anchoragePostMult;
+		}
+		
 		var res = rollHit(accuracyAndCrit(ship,target,acc,target.getFormation().torpev,evFlat,1.5));
 		var realdmg = 0, dmg = 0;
 		if (res) {
 			var bonus = (ship.improves.Ptorp)? ship.improves.Ptorp : 0;
-			dmg = damage(ship,target,power,1,res,10000); //power already capped
+			dmg = damage(ship,target,power,1,res*postMod,10000); //power already capped
 			realdmg = takeDamage(target,dmg);
 		}
 		ship.fleet.giveCredit(ship,realdmg);
@@ -1864,7 +1872,8 @@ function LBASPhase(lbas,alive2,subsalive2,isjetphase,APIkouku) {
 		}
 		contactMod *= contactModLB;
 		
-		var targets = (MECHANICS.LBASBuff && eq.ASW >= 7)? subsalive2 : alive2;
+		let isASWPlane = MECHANICS.LBASBuff && eq.ASW >= 7;
+		var targets = (isASWPlane)? subsalive2.concat(alive2) : alive2;
 		if (targets.length) {
 			if (targets[0].fleet.combinedWith) {
 				var targetsM = [], targetsE = [];
@@ -1875,6 +1884,10 @@ function LBASPhase(lbas,alive2,subsalive2,isjetphase,APIkouku) {
 				if (!targetsE.length) targets = targetsM;
 				else if (!targetsM.length) targets = targetsE;
 				else targets = (Math.random() < .5)? targetsM : targetsE;
+			}
+			if (isASWPlane) {
+				let targetsSub = targets.filter(ship => ship.isSub);
+				if (targetsSub.length) targets = targetsSub;
 			}
 			var target = choiceWProtect(targets);
 			var dmg = airstrikeLBAS(lbas,target,i,contactMod);
@@ -1958,7 +1971,7 @@ function airstrikeLBAS(lbas,target,slot,contactMod) {
 		// postMod *= (target.divebombWeak || 1);
 		if (target.fleet.combinedWith) postMod *= 1.1;
 		dmg = damage(lbas,target,dmgbase,preMod,res*contactMod*postMod,150);
-		if (target.installtype == 3) dmg += 100;
+		if (target.installtype == 3 && target.mid <= 1658) dmg += 100;
 		realdmg = takeDamage(target,dmg);
 	}
 	if(C) {
@@ -2656,6 +2669,22 @@ function simLBRaid(F1,F2,BAPI) {
 	}
 	
 	var ap1 = 0; for (let ship of ships1) if (ship.lbas) ap1 += ship.lbas.airPowerDefend();
+	if (F2.ships.find(ship => ship.equips.find(eq => eq.highAltitude))) {
+		let numRocket = 0;
+		for (let ship of ships1) {
+			if (ship.lbas) numRocket += ship.lbas.equips.filter(eq => eq.isRocket).length;
+		}
+		if (numRocket >= 3) {
+			ap1 *= 1.2;
+		} else if (numRocket == 2) {
+			ap1 *= 1.1;
+		} else if (numRocket == 1) {
+			ap1 *= .8;
+		} else {
+			ap1 *= .5;
+		}
+		ap1 = Math.floor(ap1);
+	}
 	var ap2 = F2.fleetAirPower(false,true);
 	if (ap1 == 0 && ap2 == 0) { F1.AS = F2.AS = 0; }
 	else if (ap1 >= ap2*3) { F1.AS = 2; F2.AS = -2; }

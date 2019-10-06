@@ -359,7 +359,7 @@ EQTDATA[LANDINGCRAFT] = {
 	btype: B_LC1,
 	improve: {Pshell:1,Pnb:1,ACCshell:1,ACCnb:1.3},
 	canequip: ['AV','LHA'],
-	canequipS: [147, 198, 199, 200, 352, 418, 434, 435, 464, 468, 469, 470, 478, 487, 488, 489, 490, 498, 500, 541, 547, 548, 563],
+	canequipS: [147, 198, 199, 200, 352, 418, 434, 435, 464, 468, 469, 470, 478, 487, 488, 489, 490, 498, 500, 541, 547, 548, 563, 587],
 	cannotequipS: [445, 491]
 };
 EQTDATA[SEARCHLIGHTS] = {
@@ -399,12 +399,13 @@ EQTDATA[SRF] = {
 	name: 'Misc',
 	image: 26,
 	canequip: ['AR'],
+	canequipS: [450],
 };
 EQTDATA[FCF] = {
 	name: 'Misc',
 	image: 28,
 	canequip: ['CL','CT','CLT','CA','CAV','FBB','BB','BBV','CVL','CV','CVB','AS','AV','LHA'],
-	canequipS: [464, 497, 498, 500, 542, 543, 567],
+	canequipS: [464, 497, 498, 500, 542, 543, 567, 587],
 	cannotequipS: [521]
 };
 EQTDATA[DRUM] = {
@@ -452,7 +453,7 @@ EQTDATA[LANDINGTANK] = {
 	btype: B_LC3,
 	improve: {Pshell:1,Pnb:1},
 	canequip: ['SS','SSV','AV','LHA'],
-	canequipS: [147, 198, 199, 200, 352, 418, 464, 468, 470, 478, 487, 488, 489, 490, 497, 500, 541, 547, 548, 568, 573],
+	canequipS: [147, 198, 199, 200, 352, 418, 464, 468, 470, 478, 487, 488, 489, 490, 497, 500, 541, 547, 548, 568, 573, 587],
 	cannotequipS: [445, 491, 581]
 };
 EQTDATA[OILDRUM] = {
@@ -4346,6 +4347,7 @@ var EQDATA = {
 		nameJP: 'Me163B',
 		added: '2019-08-28',
 		type: INTERCEPTOR,
+		isRocket: true,
 		AA: 2,
 		ACC: 9,
 	},
@@ -4354,6 +4356,7 @@ var EQDATA = {
 		nameJP: '試製 秋水',
 		added: '2019-08-28',
 		type: INTERCEPTOR,
+		isRocket: true,
 		AA: 2,
 		ACC: 8,
 	},
@@ -4362,6 +4365,7 @@ var EQDATA = {
 		nameJP: '秋水',
 		added: '2019-08-28',
 		type: INTERCEPTOR,
+		isRocket: true,
 		AA: 3,
 		ACC: 9,
 	},
@@ -5338,6 +5342,8 @@ var EQDATA = {
 		nameJP: '深海空要塞',
 		added: '2019-09-04',
 		type: DIVEBOMBER,
+		b_image: 19,
+		highAltitude: true,
 		FP: 17,
 		DIVEBOMB: 3,
 		AA: 9,
@@ -5350,6 +5356,8 @@ var EQDATA = {
 		nameJP: '深海空要塞Ace',
 		added: '2019-09-04',
 		type: DIVEBOMBER,
+		b_image: 19,
+		highAltitude: true,
 		FP: 17,
 		DIVEBOMB: 7,
 		AA: 17,
@@ -5372,6 +5380,8 @@ var EQDATA = {
 		nameJP: '深海空要塞(重爆型)',
 		added: '2019-09-04',
 		type: DIVEBOMBER,
+		b_image: 20,
+		highAltitude: true,
 		FP: 17,
 		DIVEBOMB: 27,
 		AA: 9,
@@ -5384,6 +5394,8 @@ var EQDATA = {
 		nameJP: '深海空要塞Ace(重爆型)',
 		added: '2019-09-04',
 		type: DIVEBOMBER,
+		b_image: 20,
+		highAltitude: true,
 		FP: 17,
 		DIVEBOMB: 37,
 		AA: 17,
@@ -5964,6 +5976,13 @@ var EQUIPBONUSDATA2 = {
 			{ bonus: { FP: 1, num: 1 }, shipS: [152] },
 		],
 	},
+	'2019-06-25': {
+		194: [
+			{ bonus: { FP: 3, EV: 2, LOS: 2 }, shipS: [491] },
+			{ bonus: { FP: 1, EV: 2, LOS: 2 }, shipS: [392] },
+			{ bonus: { EV: 1, LOS: 2 }, shipS: [162,451] },
+		]
+	},
 };
 
 function getBonusStats(mid,eqids) {
@@ -6200,6 +6219,12 @@ var EQTDATAHISTORY = {
 		11: { canequipS: [305,306,307,314] },
 		27: { canequipS: [305,306,307,314] },
 	},
+	'2019-08-08': {
+		15: { canequip: ['LHA'] },
+	},
+	'2019-08-30': {
+		31: { canequipS: [450] },
+	},
 };
 
 function setEquipDataDate(dateSet) {
@@ -6268,4 +6293,5 @@ var IMPROVEMENTHISTORY = {
 	'2019-02-08': [32,61,184],
 	'2019-02-27': [35],
 	'2019-03-27': [69],
+	'2019-06-25': [16,82],
 };

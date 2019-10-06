@@ -1248,6 +1248,11 @@ function chStart() {
 	SHELLDMGBASE = CHDATA.config.shelldmgbase;
 	ASWDMGBASE = CHDATA.config.aswdmgbase;
 	toggleEchelon(CHDATA.config.mechanics.echelonBuff);
+	if (WORLD >= 45) { //unknown when/if changed
+		TTFCOMBINED1E.accbase = TTFCOMBINED2E.accbase = TTFCOMBINED3E.accbase = TTFCOMBINED4E.accbase = 50;
+	} else {
+		TTFCOMBINED1E.accbase = TTFCOMBINED2E.accbase = TTFCOMBINED3E.accbase = TTFCOMBINED4E.accbase = 75;
+	}
 	
 	if (MAPDATA[CHDATA.event.world].ptImpSpecial == 2) { BREAKPTIMPS = true; NERFPTIMPS = false; }
 	else if (MAPDATA[CHDATA.event.world].ptImpSpecial == 1) { BREAKPTIMPS = false; NERFPTIMPS = true; }
@@ -1888,7 +1893,9 @@ function chClickedSortieRight() {
 function chSortieStartChangeDiff() {
 	chAddSortieError(1);
 	$('#srtDiffTitle').text('');
-	$('#srtHPBar').css('width','146px');
+	let width = 146;
+	if (WORLD >= 41 && CHDATA.event.maps[MAPNUM].diff == 3) width = Math.min(146, +$('#srtHPBar').css('width').replace('px','') + 36);
+	$('#srtHPBar').css('width',width+'px');
 	$('#srtHPBar').css('animation','');
 	$('#srtHPBar').css('animation','fadein 0.5s ease 0s infinite alternate');
 	
@@ -1918,13 +1925,22 @@ function chSortieEndChangeDiff() {
 }
 
 function chSortieChangeDiff(diff) {
+	let data = CHDATA.event.maps[CHDATA.event.mapnum];
+	if (diff == data.diff) return;
+	let diffNow = (data.diff == 4)? 0 : data.diff;
+	if (WORLD >= 41 && data.diff && (diff == 4 || diff < diffNow)) {
+		let hp = getMapHP(WORLD,CHDATA.event.mapnum,diff);
+		data.hp = Math.min(hp, CHDATA.event.maps[CHDATA.event.mapnum].hp + Math.ceil(hp/4));
+		data.diff = diff;
+		return;
+	}
 	if (MAPDATA[WORLD].maps[MAPNUM].parts) {
 		mapChangePart(WORLD,MAPNUM,1);
 		CHDATA.event.maps[CHDATA.event.mapnum].part = 1;
 	}
 	CHDATA.event.maps[CHDATA.event.mapnum].diff = diff;
 	CHDATA.event.maps[CHDATA.event.mapnum].hp = getMapHP(WORLD,CHDATA.event.mapnum,diff);
-	if (diff == 3) {
+	if (diff == 3 && WORLD != 36) {
 		delete CHDATA.event.maps[CHDATA.event.mapnum].debuff;
 		delete CHDATA.event.maps[CHDATA.event.mapnum].debuffed;
 		delete CHDATA.event.maps[CHDATA.event.mapnum].routes;
