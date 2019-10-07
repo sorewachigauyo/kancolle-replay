@@ -266,7 +266,7 @@ EQTDATA[SEAPLANEBOMBER] = {
 	name: 'Seaplane Bomber',
 	image: 10,
 	btype: B_RECON,
-	canequip: ['CAV','BBV','SSV','AV','AO'],
+	canequip: ['CAV','BBV','SSV','AV','AO','LandBase'],
 	canequipS: [305, 306, 307, 314, 358, 361, 446, 447, 488, 496, 547, 574, 579, 591],
 	isPlane: true,
 	isfighter: true,

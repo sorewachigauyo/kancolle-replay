@@ -185,6 +185,8 @@ var MAPDATA45 = {
 			], },
 		},
 		overrideStats: {
+			1700: { HP: 650 },
+			1701: { HP: 750 },
 			1702: { HP: 500 },
 			1703: { HP: 650 },
 			1704: { HP: 750 },
@@ -623,7 +625,9 @@ var MAPDATA45 = {
 						'british': 1.15,
 						'french': 1.1,
 					};
-					for (let ship of FLEETS1[0].ships) {
+					let s = FLEETS1[0].ships;
+					if (FLEETS1[1]) s = s.concat(FLEETS1[1].ships);
+					for (let ship of s) {
 						let mid = getBaseId(ship.mid);
 						for (let type in bonusTypes) {
 							if (MAPDATA[45].historical[type].indexOf(mid) != -1) {
@@ -1231,7 +1235,9 @@ var MAPDATA45 = {
 						'usa': 1.1,
 						'british': 1.15,
 					};
-					for (let ship of FLEETS1[0].ships) {
+					let s = FLEETS1[0].ships;
+					if (FLEETS1[1]) s = s.concat(FLEETS1[1].ships);
+					for (let ship of s) {
 						let mid = getBaseId(ship.mid);
 						for (let type in bonusTypes) {
 							if (MAPDATA[45].historical[type].indexOf(mid) != -1) {
