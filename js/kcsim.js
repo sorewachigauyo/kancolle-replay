@@ -787,8 +787,8 @@ function canSpecialAttack(ship) {
 		if (ship.fleet.ships[2].CVshelltype || ship.fleet.ships[4].CVshelltype) return false;
 		if (ship.fleet.ships[2].retreated || ship.fleet.ships[4].retreated) return false;
 		// let rate = SIMCONSTS.nelsonTouchRate;
-		let rate = 36 + .08*ship.LVL + .04*ship.fleet.ships[2].LVL + .04*ship.fleet.ships[4].LVL + ship.LUK*.24;
-		if (ship.fleet.ships[2].type == 'DD' || ship.fleet.ships[4].type == 'DD' || ship.fleet.ships[2].type == 'AV' || ship.fleet.ships[4].type == 'AV') rate -= 10;
+		// let rate = 36 + .08*ship.LVL + .04*ship.fleet.ships[2].LVL + .04*ship.fleet.ships[4].LVL + ship.LUK*.24;
+		let rate = 25 + Math.sqrt(ship.LVL) + Math.sqrt(ship.fleet.ships[2].LVL) + Math.sqrt(ship.fleet.ships[4].LVL) + ship.LUK*.24;
 		return Math.random() < rate/100;
 	} else if (ship.attackSpecial == 101 || ship.attackSpecial == 102) {
 		if (ship.fleet.ships[0] != ship) return false;
