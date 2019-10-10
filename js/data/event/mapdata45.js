@@ -931,6 +931,7 @@ var MAPDATA45 = {
 								}
 								if (mid == 515) ship.bonusSpecial.push({mod:1.25});
 								if (mid == 519) ship.bonusSpecial.push({mod:1.2});
+								if (mid == 444) ship.bonusSpecial = [{mod:1.68}];
 							}
 						},
 						compDiff: {
