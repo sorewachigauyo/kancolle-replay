@@ -28,6 +28,10 @@ var MECHANICDATES = {
 	equipBonus: '2017-12-22',
 	installRevamp: '2018-08-17',
 	specialAttacks: '2018-09-08',
+	echelonBuff: '2019-02-27',
+	aaResist: '2019-03-22',
+	zuiunCI: '2019-03-27',
+	divebomberInstall: '2019-03-27',
 };
 
 var MECHANICDATESOTHER = {
@@ -529,7 +533,7 @@ function chSetEquip(itemid) {
 	
 	if (item && DIALOGFLEETSEL == 5) { //LBAS only
 		var type = EQDATA[item.masterId].type;
-		var num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
+		var num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT || type == LANDSCOUT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
 		CHDATA.event.resources.baux += num * LBASDATA[item.masterId].cost;
 		chUIUpdateResources();
 	}
@@ -599,7 +603,7 @@ function chShipEquipItem(shipid,itemid,slot) {
 function chGetLBASNumPlanes(item) {
 	if (!EQDATA[item.masterId]) return (MAPDATA[WORLD].lbasSlotCount || 18);
 	let type = EQDATA[item.masterId].type;
-	let num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
+	let num = (type == SEAPLANE || type == CARRIERSCOUT || type == FLYINGBOAT || type == LANDSCOUT)? 4 : (MAPDATA[WORLD].lbasSlotCount || 18);
 	return num;
 }
 
@@ -1150,6 +1154,7 @@ function chDoStartChecks() {
 		errors.push('Support not allowed');
 	}
 	
+	if (!CHDATA.event.maps[MAPNUM].routes) CHDATA.event.maps[MAPNUM].routes = [];
 	if (MAPDATA[WORLD].maps[MAPNUM].additionalChecks) MAPDATA[WORLD].maps[MAPNUM].additionalChecks(counts,errors);
 	
 	return errors;
@@ -1197,6 +1202,10 @@ function chStart() {
 		$('#srtErrors').html(errtext);
 		return;
 	}
+	
+	for (var mechanic in MECHANICS) {
+		MECHANICS[mechanic] = CHDATA.config.mechanics[mechanic];
+	}
 
 	chLoadMainFleet();
 	if (CHDATA.fleets.combined) chLoadEscortFleet();
@@ -1225,7 +1234,7 @@ function chStart() {
 			for (var j=0; j<LBAS[i].equips.length; j++) {
 				var equip = LBAS[i].equips[j];
 				if (equip.type == LANDBOMBER || equip.type == INTERCEPTOR) { fuel += 27; ammo += 12; }
-				else if (equip.type == CARRIERSCOUT || equip.type == SEAPLANE || equip.type == FLYINGBOAT) { fuel += 4; ammo += 3; }
+				else if (equip.type == CARRIERSCOUT || equip.type == SEAPLANE || equip.type == FLYINGBOAT || equip.type == LANDSCOUT) { fuel += 4; ammo += 3; }
 				else { fuel += 18; ammo += 11; }
 			}
 		}
@@ -1234,13 +1243,16 @@ function chStart() {
 		chUIUpdateResources();
 	}
 	
-	for (var mechanic in MECHANICS) {
-		MECHANICS[mechanic] = CHDATA.config.mechanics[mechanic];
-	}
 	MECHANICS.morale = true;
 	MECHANICS.fixFleetAA = MAPDATA[WORLD].date >= MECHANICDATES.fixFleetAA;
 	SHELLDMGBASE = CHDATA.config.shelldmgbase;
 	ASWDMGBASE = CHDATA.config.aswdmgbase;
+	toggleEchelon(CHDATA.config.mechanics.echelonBuff);
+	if (WORLD >= 45) { //unknown when/if changed
+		TTFCOMBINED1E.accbase = TTFCOMBINED2E.accbase = TTFCOMBINED3E.accbase = TTFCOMBINED4E.accbase = 50;
+	} else {
+		TTFCOMBINED1E.accbase = TTFCOMBINED2E.accbase = TTFCOMBINED3E.accbase = TTFCOMBINED4E.accbase = 75;
+	}
 	
 	if (MAPDATA[CHDATA.event.world].ptImpSpecial == 2) { BREAKPTIMPS = true; NERFPTIMPS = false; }
 	else if (MAPDATA[CHDATA.event.world].ptImpSpecial == 1) { BREAKPTIMPS = false; NERFPTIMPS = true; }
@@ -1608,8 +1620,8 @@ function chUpdateFleetInfo(fleetnum) {
 		var losOld = testGetLoSOld(fleetnum,CHDATA.fleets.combined);
 		$('#fleetefflos'+fleetnum).parent().attr('title','Old = '+(Math.floor(losOld*10)/10));
 	} else {
-		var los3 = getELoS33(fleetnum,3,CHDATA.fleets.combined), los4 = getELoS33(fleetnum,4,CHDATA.fleets.combined);
-		$('#fleetefflos'+fleetnum).parent().attr('title','C3 = '+(Math.floor(los3*10)/10)+', C4 = '+(Math.floor(los4*10)/10));
+		var los3 = getELoS33(fleetnum,3,CHDATA.fleets.combined), los4 = getELoS33(fleetnum,4,CHDATA.fleets.combined), los2 = getELoS33(fleetnum,2,CHDATA.fleets.combined);
+		$('#fleetefflos'+fleetnum).parent().attr('title','C2 = '+(Math.floor(los2*10)/10)+', C3 = '+(Math.floor(los3*10)/10)+', C4 = '+(Math.floor(los4*10)/10));
 	}
 	$('#fleetspd'+fleetnum).text(spd);
 	
@@ -1888,7 +1900,9 @@ function chClickedSortieRight() {
 function chSortieStartChangeDiff() {
 	chAddSortieError(1);
 	$('#srtDiffTitle').text('');
-	$('#srtHPBar').css('width','146px');
+	let width = 146;
+	if (WORLD >= 41 && CHDATA.event.maps[MAPNUM].diff == 3) width = Math.min(146, +$('#srtHPBar').css('width').replace('px','') + 36);
+	$('#srtHPBar').css('width',width+'px');
 	$('#srtHPBar').css('animation','');
 	$('#srtHPBar').css('animation','fadein 0.5s ease 0s infinite alternate');
 	
@@ -1918,13 +1932,22 @@ function chSortieEndChangeDiff() {
 }
 
 function chSortieChangeDiff(diff) {
+	let data = CHDATA.event.maps[CHDATA.event.mapnum];
+	if (diff == data.diff) return;
+	let diffNow = (data.diff == 4)? 0 : data.diff;
+	if (WORLD >= 41 && data.diff && (diff == 4 || diff < diffNow)) {
+		let hp = getMapHP(WORLD,CHDATA.event.mapnum,diff);
+		data.hp = Math.min(hp, CHDATA.event.maps[CHDATA.event.mapnum].hp + Math.ceil(hp/4));
+		data.diff = diff;
+		return;
+	}
 	if (MAPDATA[WORLD].maps[MAPNUM].parts) {
 		mapChangePart(WORLD,MAPNUM,1);
 		CHDATA.event.maps[CHDATA.event.mapnum].part = 1;
 	}
 	CHDATA.event.maps[CHDATA.event.mapnum].diff = diff;
 	CHDATA.event.maps[CHDATA.event.mapnum].hp = getMapHP(WORLD,CHDATA.event.mapnum,diff);
-	if (diff == 3) {
+	if (diff == 3 && WORLD != 36) {
 		delete CHDATA.event.maps[CHDATA.event.mapnum].debuff;
 		delete CHDATA.event.maps[CHDATA.event.mapnum].debuffed;
 		delete CHDATA.event.maps[CHDATA.event.mapnum].routes;
@@ -1994,6 +2017,35 @@ function chAddLBAS(num) {
 	} else {
 		CHDATA.fleets['lbas'+num] = false;
 		$('#btnLBAS'+num).css('opacity',.5);
+	}
+}
+
+function chAddFriendFleet() {
+	if (CHDATA.fleets.ff === 0) {
+		chSetFriendFleet(1);
+	} else if (CHDATA.fleets.ff === 1 && MAPDATA[WORLD].allowStrongFF) {
+		chSetFriendFleet(2);
+	} else {
+		chSetFriendFleet(0);
+	}
+}
+
+function chSetFriendFleet(num) {
+	if (num == 1) {
+		CHDATA.fleets.ff = 1;
+		$('#btnFF').css('opacity',1);
+		$('#imgFF').show();
+		$('#imgFFStrong').hide();
+	} else if (num == 2) {
+		CHDATA.fleets.ff = 2;
+		$('#btnFF').css('opacity',1);
+		$('#imgFF').hide();
+		$('#imgFFStrong').show();
+	} else {
+		CHDATA.fleets.ff = 0;
+		$('#btnFF').css('opacity',.5);
+		$('#imgFF').show();
+		$('#imgFFStrong').hide();
 	}
 }
 

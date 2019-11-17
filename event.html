@@ -10,6 +10,7 @@
 		<script src="js/kcSHIPDATA.js"></script>
 		<script src="js/kcEQDATA.js"></script>
 		<script src="js/chkcMAPDATA2.js"></script>
+		<script src="js/data/event/mapdata45.js"></script>
 		<script src="js/kcENEMYCOMP.js"></script>
 		<script src="js/shared.js"></script>
 		<script src="js/kcships.js"></script>
@@ -87,6 +88,11 @@
 		</div></td>
 		<td><div id="btnLBAS3" class="btnsupport" title="Send LBAS 3 (deselected = Defend)" onclick="chAddLBAS(3)">
 			<img src="assets/plane13.png" style="width:50px;margin-top:8px;margin-left:2px" />
+		</div></td>
+		<td style="width:20px"></td>
+		<td><div id="btnFF" class="btnsupport" title="Toggle Friend Fleet" onclick="chAddFriendFleet()">
+			<img id="imgFF" src="assets/maps/buttonFriend.png" />
+			<img id="imgFFStrong" src="assets/maps/buttonFriend2.png" />
 		</div></td>
 		</tr></table>
 
@@ -289,6 +295,10 @@
 					<option value="2017-11-10">2017-11-10: ASW Soft-Cap = 150</option>
 					<option value="2017-11-17">2017-11-17: LBAS/Support Revamp</option>
 					<option value="2017-12-22">2017-12-22: Equipment Bonus</option>
+					<option value="2018-09-08">2018-09-08: Special Attacks</option>
+					<option value="2019-02-27">2019-02-27: Echelon Buff</option>
+					<option value="2019-03-22">2019-03-22: Anti-Air Resist</option>
+					<option value="2019-03-27">2019-03-27: Anti-Installation Divebombers + Zuiun CI</option>
 				</select><br>
 				<label for="menusdiff">Difficulty Selection: </label>
 				<select id="menusdiff">

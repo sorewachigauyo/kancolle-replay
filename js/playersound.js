@@ -40,6 +40,7 @@ var SOUNDNAMES = {
 	'done': { path: 'assets/sounds/41_res.sounds.SE_correct_answer3.mp3', voldef: .5 },
 	'hover': { path: 'assets/sounds/242_nodehover.mp3', voldef: .5 },
 	'ooyodoClear': { path: 'assets/voice/425.mp3', voldef: .5 },
+	'ambush': { path: 'assets/sounds/257_ambush.mp3', voldef: .5 },
 }
 SoundManager.prototype = {
 	play: function(name,vol,loop) {
@@ -49,7 +50,7 @@ SoundManager.prototype = {
 		return this._sounds[name];
 	},
 	playNew: function(path,vol) {
-		if (!this._sfxOn) return;
+		if (!this._sfxON) return;
 		vol = vol || .5;
 		let sound = new Howl({src:[path],volume:vol*this._volume});
 		sound.play();
@@ -244,11 +245,23 @@ var BGMLIST = {
 	122: {url:'assets/music/Sound_b_bgm_122.ogg'},
 	123: {url:'assets/music/Sound_b_bgm_123.ogg'},
 	124: {url:'assets/music/Sound_b_bgm_124.ogg'},
+	126: {url:'assets/music/126_1211.mp3'},
 	127: {url:'assets/music/127_8537.mp3'},
 	128: {url:'assets/music/128_9964.mp3'},
-	129: {url:'assets/music/Sound_b_bgm_129.oga'},
+	129: {url:'assets/music/129_5256.mp3'},
 	130: {url:'assets/music/130_1852.mp3'},
 	131: {url:'assets/music/131_5644.mp3'},
+	134: {url:'assets/music/134_6700.mp3'},
+	135: {url:'assets/music/135_9137.mp3'},
+	136: {url:'assets/music/136_9930.mp3'},
+	137: {url:'assets/music/137_4546.mp3'},
+	138: {url:'assets/music/138_7637.mp3'},
+	139: {url:'assets/music/139_2402.mp3'},
+	140: {url:'assets/music/140_5320.mp3'},
+	141: {url:'assets/music/141_1429.mp3'},
+	142: {url:'assets/music/142_9842.mp3'},
+	143: {url:'assets/music/143_3169.mp3'},
+	144: {url:'assets/music/144_4686.mp3'},
 	998: {url:'assets/music/savior of song.mp3',voldef:.25},
 	999: {url:'assets/music/Orel Cruising & LSC Song [ENG Sub].mp3',voldef:.3},
 	1107: {url:'assets/music/107b.ogg'},

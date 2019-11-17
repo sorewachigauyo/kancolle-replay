@@ -26,6 +26,7 @@ loader.add('BG1','assets/82_res.images.ImgBackgroundDay.jpg')
 	.add('shutter11','assets/512_res.common.ImgShutterTop.png')
 	.add('shutter12','assets/510_res.common.ImgShutterBottom.png')
 	.add('radar','assets/375_res.battle.images.ImgRaderBG.png')
+	.add('aradar','assets/ImgAmbushRadar.png')
 	.add('nmiss','assets/Nmiss.png')
 	.add('ccrit','assets/Ccrit.png')
 	.add('dminor','assets/d383.png')
@@ -88,6 +89,8 @@ loader.add('BG1','assets/82_res.images.ImgBackgroundDay.jpg')
 	.add('plane588','assets/plane588.png')
 	.add('plane590','assets/plane590.png')
 	.add('plane592','assets/plane592.png')
+	.add('plane594','assets/plane594.png')
+	.add('plane597','assets/plane597.png')
 	.add('WG1','assets/684.png')
 	.add('WG2','assets/687.png')
 	.add('WG3','assets/690.png')
@@ -403,8 +406,8 @@ function createShip(data,side,i,damaged) {
 			if (hasonlytorp == undefined && eq.type == TORPEDO) hasonlytorp = true;
 			if ([MAINGUNS,MAINGUNM,MAINGUNL].indexOf(eq.type) != -1) hasonlytorp = false;
 			if (eq.type == WG42) ship.hasWG = true;
-			if (data[j] == 68 || data[j] == 166) ship.haslandingcraft1 = true;
-			if (data[j] == 167) ship.haslandingcraft2 = true;
+			if (eq.type == LANDINGCRAFT) ship.haslandingcraft1 = true;
+			if (eq.type == LANDINGTANK) ship.haslandingcraft2 = true;
 			if (eq.atype && eq.atype != A_GUN) ship.hasAAgear = true;
 			if (eq.type == SEARCHLIGHTS || eq.type == SEARCHLIGHTL) ship.hassearchlight = true;
 			if (data[j]==42) ship.hasrepairteam = (ship.hasrepairteam)? ship.hasrepairteam+1 : 1;
@@ -413,7 +416,7 @@ function createShip(data,side,i,damaged) {
 	}
 	ship.hasonlytorp = hasonlytorp;
 	ship.issub = (sdata.type == 'SS' || sdata.type == 'SSV');
-	ship.isinstall = (sdata.type == 'Installation' || sdata.installtype > 0);
+	ship.isinstall = (sdata.type == 'Installation' || sdata.installtype > 0 || sdata.isAnchorage);
 	ship.isCV = (sdata.type == 'CV' || sdata.type == 'CVL' || sdata.type == 'CVB' || (sdata.type=='AO'&&ship.hasbomber));
 	ship.isfog = (parseInt(data[0]) >= 2000 && parseInt(data[0]) <= 2100);
 	if (sdata.nightattack==2) ship.nightgun = true;
@@ -660,8 +663,9 @@ function processAPI(root) {
 				j++;
 			}
 		}
-		var NBonly = (!!data.api_hougeki || Object.keys(data).length <= 0 || data.api_n_hougeki1) || data.api_name == 'ld_shooting' || data.api_name == 'fc_ld_shooting';
-		var battledata = [data.api_formation[2],data.api_formation[0],data.api_formation[1],0,0,(NBonly)?1:0];
+		var isAmbush = data.api_name == 'ld_shooting' || data.api_name == 'fc_ld_shooting';
+		var NBonly = (!!data.api_hougeki || Object.keys(data).length <= 0 || data.api_n_hougeki1) || isAmbush;
+		var battledata = [data.api_formation[2],data.api_formation[0],data.api_formation[1],0,0,(NBonly)?1:0,(isAmbush)?1:0];
 		var escape = [[],[]];
 		if (data.api_escape_idx) escape[0] = data.api_escape_idx;
 		if (data.api_escape_idx_combined) escape[1] = data.api_escape_idx_combined;
@@ -1015,6 +1019,11 @@ function processAPI(root) {
 						var protects = []; for (let k=0; k<hou.api_damage[j].length; k++) protects.push(d[k+2] != hou.api_damage[j][k]);
 						var args = [attackers,defenders,d.slice(2,5),d.slice(5,8),protects];
 						eventqueue.push([shootNelsonTouch,args,getState()]); break;
+					case 103:
+						var attackers = (hou.api_at_eflag && hou.api_at_eflag[j])? [f2[0],f2[1],f2[2]] : [f1[0],f1[1],f1[2]];
+						var protects = []; for (let k=0; k<hou.api_damage[j].length; k++) protects.push(d[k+2] != hou.api_damage[j][k]);
+						var args = [attackers,defenders,d.slice(2,5),d.slice(5,8),protects];
+						eventqueue.push([shootNelsonTouch,args,getState()]); break;
 				}
 				
 				handleRepair(fleet1);
@@ -1108,6 +1117,11 @@ function processAPI(root) {
 					case 101:
 					case 102:
 						var attackers = (hou.api_at_eflag && hou.api_at_eflag[j])? [f2[0],f2[0],f2[1]] : [f1[0],f1[0],f1[1]];
+						var protects = []; for (let k=0; k<hou.api_damage[j].length; k++) protects.push(d[k+2] != hou.api_damage[j][k]);
+						var args = [attackers,targets,d.slice(2,5),d.slice(5,8),protects];
+						eventqueue.push([shootNelsonTouch,args,getState()]); break;
+					case 103:
+						var attackers = (hou.api_at_eflag && hou.api_at_eflag[j])? [f2[0],f2[1],f2[2]] : [f1[0],f1[1],f1[2]];
 						var protects = []; for (let k=0; k<hou.api_damage[j].length; k++) protects.push(d[k+2] != hou.api_damage[j][k]);
 						var args = [attackers,targets,d.slice(2,5),d.slice(5,8),protects];
 						eventqueue.push([shootNelsonTouch,args,getState()]); break;
@@ -1665,7 +1679,15 @@ function battleStart(battledata,newships,newshipsC,escape,bgm,showbosshp) {
 	if (newshipsC) for (var i=newshipsC.length-1; i>=0; i--) stage.addChildAt(newshipsC[i].graphic,5);
 	for (var i=newships.length-1; i>=0; i--) stage.addChildAt(newships[i].graphic,5/*ind*/);
 	createDots(dots1,battledata[1],fleet1.length,0);
-	createDots(dots2,battledata[2],fleet2.length,1);
+	if (battledata[6]) {
+		var aRadar = getFromPool('aradar','assets/ImgAmbushRadar.png');
+		aRadar.position.set(-1,-4);
+		aRadar.anchor.set(.5);
+		aRadar.scale.set(1);
+		dots2.addChild(aRadar);
+	} else {
+		createDots(dots2,battledata[2],fleet2.length,1);
+	}
 	GEngage = battledata[0];
 	GAP1 = battledata[3];
 	GAP2 = battledata[4];
@@ -1707,7 +1729,8 @@ function battleStart(battledata,newships,newshipsC,escape,bgm,showbosshp) {
 		}
 	}
 	
-	if (VOICES[fleet2[0].mid] && VOICES[fleet2[0].mid].start && !isPlayable(fleet2[0].mid)) SM.playVoice(fleet2[0].mid,'start',10);
+	if (battledata[6]) SM.playVoice(fleet1[0].mid,'damage1',0);
+	else if (VOICES[fleet2[0].mid] && VOICES[fleet2[0].mid].start && !isPlayable(fleet2[0].mid)) SM.playVoice(fleet2[0].mid,'start',10);
 	else SM.playVoice(fleet1[0].mid,'start',0);
 	var j = 0;
 	for (var i=0; i<fleet1.length; i++) {
@@ -2415,7 +2438,7 @@ function createKleinFieldRing(field) {
 	},[]]);
 }
 
-var PLANESPRITES = ['938','914','916','918','920','922','924','926','plane9','plane10','plane11','plane12','plane13','plane544','plane511','plane588','plane590','plane592'];
+var PLANESPRITES = ['938','914','916','918','920','922','924','926','plane9','plane10','plane11','plane12','plane13','plane544','plane511','plane588','plane590','plane592','plane594','plane597'];
 function createPlane(x,y,planetypes,shots,shots2,side) {
 	var num = Math.min(3,planetypes.length);
 	if (shots) shots = shuffle(shots);
