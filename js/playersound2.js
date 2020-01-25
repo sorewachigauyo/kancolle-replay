@@ -6068,6 +6068,24 @@ var VOICES = {
 		damage: "assets/voice/Kongou_fog_Damaged1.ogg",
 		sunk: "assets/voice/Kongou_fog_Sunk.ogg",
 	},
+	3006: {
+		start: "assets/voice/Central_Princess_Intro.ogg",
+		attack: "assets/voice/Central_Princess_Attack.ogg",
+		damage: "assets/voice/Central_Princess_Damaged.ogg",
+		sunk: "assets/voice/Central_Princess_Destroyed.ogg",
+	},
+	3007: {
+		start: "assets/voice/Central_Princess_Intro.ogg",
+		attack: "assets/voice/Central_Princess_Attack.ogg",
+		damage: "assets/voice/Central_Princess_Damaged.ogg",
+		sunk: "assets/voice/Central_Princess_Destroyed.ogg",
+	},
+	3008: {
+		start: "assets/voice/Central_Princess_Intro.ogg",
+		attack: "assets/voice/Central_Princess_Attack.ogg",
+		damage: "assets/voice/Central_Princess_Damaged.ogg",
+		sunk: "assets/voice/Central_Princess_Destroyed.ogg",
+	},
 	584: {
 		start: "assets/voice/584_start.mp3",
 		attack: "assets/voice/584_attack.mp3",

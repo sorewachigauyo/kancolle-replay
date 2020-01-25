@@ -13872,7 +13872,7 @@ var MAPDATA = {
 						routeS: ['D','E']
 					},
 					'D': {
-						type: 1,
+						type: 4,
 						x: 332,
 						y: 269,
 						resource: 2,

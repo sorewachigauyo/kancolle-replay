@@ -435,6 +435,11 @@ function processAPI(root) {
 		stage.removeChild(bg);
 		stage.addChildAt(bg2,0);
 	}
+	if (root.battles[0].sim_bgtint) {
+		bg.tint = bg2.tint = root.battles[0].sim_bgtint;
+	} else {
+		bg.tint = bg2.tint = 0xffffff;
+	}
 	console.log(root);
 	COMBINED = root.combined;
 	PVPMODE = (root.world <= 0);

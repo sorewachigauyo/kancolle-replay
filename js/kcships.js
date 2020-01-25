@@ -247,18 +247,20 @@ Ship.prototype.loadEquips = function(equips,levels,profs,addstats) {
 		}
 		if (eq.isdivebomber||eq.istorpbomber) {
 			if (eq.exp > 0) {
-				if (!this.critratebonus) this.critratebonus = 0;
-				if (!this.critdmgbonus) this.critdmgbonus = 1;
-				var mod = 0;
-				if (eq.rank == 7) mod = 10;
-				else if (eq.rank == 6) mod = 7;
-				else if (eq.rank == 5) mod = 5;
-				else if (eq.rank == 4) mod = 4;
-				else if (eq.rank == 3) mod = 3;
-				else if (eq.rank == 2) mod = 2;
-				else if (eq.rank == 1) mod = 1;
-				this.critratebonus += mod*.6; //x.75????
-				this.critdmgbonus += Math.floor(Math.sqrt(eq.exp) + mod)/((i==0)? 100:200);
+				if (!MECHANICS.vitaProficiency) {
+					if (!this.critratebonus) this.critratebonus = 0;
+					if (!this.critdmgbonus) this.critdmgbonus = 1;
+					var mod = 0;
+					if (eq.rank == 7) mod = 10;
+					else if (eq.rank == 6) mod = 7;
+					else if (eq.rank == 5) mod = 5;
+					else if (eq.rank == 4) mod = 4;
+					else if (eq.rank == 3) mod = 3;
+					else if (eq.rank == 2) mod = 2;
+					else if (eq.rank == 1) mod = 1;
+					this.critratebonus += mod*.6; //x.75????
+					this.critdmgbonus += Math.floor(Math.sqrt(eq.exp) + mod)/((i==0)? 100:200);
+				}
 				planeexp += eq.exp;
 			}
 			planecount++;
@@ -591,11 +593,19 @@ Ship.prototype.NBtypes = function() {
 		if (this.hasLookout && torps && this.equiptypesB[B_RADAR]) this._nbtypes.push(8);
 	}
 	
+	if (MECHANICS.vita) {
+		if (mguns >= 3) this._nbtypes.push(5); //triple gun cut-in
+		if (mguns >= 2 && sguns) this._nbtypes.push(4);  //gun cut-in
+		if (torps >= 2) this._nbtypes.push(3);  //torp cut-in
+		if (torps && mguns) this._nbtypes.push(2);  //mix cut-in
+		if (mguns+sguns >= 2) this._nbtypes.push(1);  //double attack
+	} else {
 	if (torps >= 2) this._nbtypes.push(3);  //torp cut-in
-	else if (mguns >= 3) this._nbtypes.push(5); //triple gun cut-in
-	else if (mguns >= 2 && sguns) this._nbtypes.push(4);  //gun cut-in
-	else if (torps && mguns) this._nbtypes.push(2);  //mix cut-in
-	else if (mguns+sguns >= 2) this._nbtypes.push(1);  //double attack
+		else if (mguns >= 3) this._nbtypes.push(5); //triple gun cut-in
+		else if (mguns >= 2 && sguns) this._nbtypes.push(4);  //gun cut-in
+		else if (torps && mguns) this._nbtypes.push(2);  //mix cut-in
+		else if (mguns+sguns >= 2) this._nbtypes.push(1);  //double attack
+	}
 	return this._nbtypes;
 }
 

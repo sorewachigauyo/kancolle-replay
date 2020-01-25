@@ -116,6 +116,22 @@ function InitUI() {
 	
 	chClickedTab('#tabmain');
 	$('#mainspace').show();
+	
+	if (MAPDATA[WORLD].worldMap) {
+		initWorldMap(MAPDATA[WORLD].worldMap);
+		showWorldMap();
+	} else {
+		hideWorldMap();
+	}
+	
+	let diffNames = { 3: 'HARD', 2: 'NORMAL', 1: 'EASY', 4: 'CASUAL' };
+	if (MAPDATA[WORLD].diffNames) {
+		for (let diff in MAPDATA[WORLD].diffNames) diffNames[diff] = MAPDATA[WORLD].diffNames[diff];
+	}
+	$('#srtDiffHard').val(diffNames[3]);
+	$('#srtDiffMed').val(diffNames[2]);
+	$('#srtDiffEasy').val(diffNames[1]);
+	$('#srtDiffCasual').val(diffNames[4]);
 }
 
 var WORLD, MAPNUM;
@@ -498,7 +514,7 @@ var FORMSELECTED;
 function mapBattleNode(ship,letter) {
 	if (!mapnodes[letter]) addMapNode(letter);
 	let node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
-	if ((node.aironly || node.raid || node.night2 || node.nightToDay2 || node.ambush) && (WORLD > 27 || WORLD == 20)) addMapNode(letter);
+	if ((node.aironly || node.raid || node.night2 || node.nightToDay2 || node.ambush) && (WORLD > 27 || WORLD <= 20)) addMapNode(letter);
 
 	var radarstop = false, radartimer = 270;
 	updates.push([function() {
@@ -598,13 +614,14 @@ function mapResourceNode(ship,letter) {
 	// var num = node.min + Math.floor(Math.random()*(node.max-node.min+5)/5)*5;
 	var num;
 	if (node.resource != 0) {
-		num = node.amount[Math.floor(Math.random()*node.amount.length)];
+		let amount = node.amount || [0];
+		num = amount[Math.floor(Math.random()*amount.length)];
 	} else {
 		var ships = chGetShips(true);
 		var transportCalc = MAPDATA[WORLD].maps[MAPNUM].transportCalc || MAPDATA[WORLD].transportCalc;
 		num = transportCalc(ships,'A') + ' - ' + transportCalc(ships,'S');
 	}
-	var res = createResource(node.resource,num);
+	var res = createResource(node.resource||1,num);
 	res.alpha = 0; res.position.set(ship.x-18,ship.y-10); res.counter = 40;
 	stage.addChild(res);
 	updates.push([function() {
@@ -1037,7 +1054,7 @@ function chLoadMap(mapnum) {
 		if (MAPDATA[WORLD].maps[mapnum].nodes[letter].type==3) addMapNode(letter,1);
 		else addMapNode(letter);
 	}
-	if (WORLD > 27 || WORLD == 20) { //fill unvisited air nodes
+	if (WORLD > 27 || WORLD <= 20) { //fill unvisited air nodes
 		for (var letter in MAPDATA[WORLD].maps[MAPNUM].nodes) {
 			var node = MAPDATA[WORLD].maps[MAPNUM].nodes[letter];
 			if (node.replacedBy && CHDATA.event.maps[MAPNUM].routes.indexOf(MAPDATA[WORLD].maps[MAPNUM].nodes[node.replacedBy].hidden) != -1) continue;
@@ -1491,7 +1508,7 @@ function chGetLastDance() {
 		lastdance = CHDATA.event.maps[MAPNUM].hp <= tp && CHDATA.event.maps[MAPNUM].hp > 0;
 		if (!lastdance && MAPDATA[WORLD].maps[MAPNUM].finaltp) lastdance = (CHDATA.event.maps[MAPNUM].hp <= MAPDATA[WORLD].maps[MAPNUM].finaltp[diff] && CHDATA.event.maps[MAPNUM].hp > 0);
 	} else {
-		lastdance = (CHDATA.event.maps[MAPNUM].hp <= MAPDATA[WORLD].maps[MAPNUM].finalhp[diff] && CHDATA.event.maps[MAPNUM].hp > 0);
+		lastdance = (MAPDATA[WORLD].maps[MAPNUM].finalhp && CHDATA.event.maps[MAPNUM].hp <= MAPDATA[WORLD].maps[MAPNUM].finalhp[diff] && CHDATA.event.maps[MAPNUM].hp > 0);
 	}
 	if (MAPDATA[WORLD].maps[MAPNUM].parts && MAPDATA[WORLD].maps[MAPNUM].parts[CHDATA.event.maps[MAPNUM].part+1] && WORLD == 32) lastdance = false; //for now Fall15 only
 	return lastdance;
@@ -1666,6 +1683,9 @@ function prepBattle(letter) {
 			BAPI.yasen = {};
 		}
 	}
+	if (MAPDATA[WORLD].maps[MAPNUM].bgTint) {
+		BAPI.sim_bgtint = MAPDATA[WORLD].maps[MAPNUM].bgTint;
+	}
 	CHAPI.battles.push(BAPI);
 	$('#code').val(JSON.stringify(CHAPI)); //remove?
 	
@@ -1701,6 +1721,7 @@ function prepBattle(letter) {
 		}
 	}
 	if (!MAPDATA[WORLD].maps[MAPNUM].transport && MAPDATA[WORLD].maps[MAPNUM].hpmode != 1) lastdance = FLEETS2[0].ships[0].maxHP >= CHDATA.event.maps[MAPNUM].hp; //if last dance hp < boss hp, still play sunk line
+	if (MAPDATA[WORLD].isVita) lastdance = true; 
 	if (mapdata.boss && lastdance && res.flagsunk && !MAPDATA[WORLD].maps[MAPNUM].transport) {
 		var shipid = compd.c[0];
 		if (VOICES[shipid] && VOICES[shipid]['sunk']) {
@@ -1752,6 +1773,17 @@ function endMap() {
 			CHDATA.event.maps[MAPNUM].part = partNext;
 			mapChangePart(WORLD,MAPNUM,partNext);
 			CHDATA.event.maps[MAPNUM].hp = getMapHP(WORLD,MAPNUM,CHDATA.event.maps[MAPNUM].diff);
+		} else if (CHDATA.event.unlockedS) {
+			if (!CHDATA.event.maps[MAPNUM].clear) {
+				CHDATA.event.maps[MAPNUM].clear = 1;
+				cleared = true;
+				for (let mapnum in MAPDATA[WORLD].maps) {
+					if (CHDATA.event.unlockedS.indexOf(+mapnum) != -1) continue;
+					if (MAPDATA[WORLD].maps[mapnum].requiresMap && MAPDATA[WORLD].maps[mapnum].requiresMap.every(m => CHDATA.event.maps[m].clear)) {
+						CHDATA.event.unlockedS.push(+mapnum);
+					}
+				}
+			}
 		} else if (CHDATA.event.unlocked == MAPNUM || (CHDATA.config.unlockAll && !CHDATA.event.maps[MAPNUM].clear)) {
 			if (CHDATA.config.unlockAll) CHDATA.event.maps[MAPNUM].clear = 1;
 			else CHDATA.event.unlocked++;

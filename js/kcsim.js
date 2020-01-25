@@ -174,7 +174,10 @@ var MECHANICS = {
 	zuiunCI: false,
 	aaResist: false,
 	divebomberInstall: false,
-	specialAttacks: false
+	specialAttacks: false,
+	vita: false,
+	vitaProficiency: false,
+	vitaLove: false,
 };
 var NERFPTIMPS = false;
 var BREAKPTIMPS = false;
@@ -661,7 +664,7 @@ function ASW(ship,target,isnight,APIhou) {
 	var acc = hitRate(ship,80,sonarAcc+(ship.ACC||0),accMod);
 	var res = rollHit(accuracyAndCrit(ship,target,acc,target.getFormation().ASWev,evFlat,1.3,ship.planeasw),ship.critdmgbonus);
 	var dmg = 0, realdmg = 0;
-	var premod = (isnight)? 0 : ship.getFormation().ASWmod*ENGAGEMENT*ship.damageMod();
+	var premod = (isnight && !MECHANICS.vita)? 0 : ship.getFormation().ASWmod*ENGAGEMENT*ship.damageMod();
 	if (res) {
 		dmg = damage(ship,target,ship.ASWPower(),premod,res,ASWDMGBASE);
 		realdmg = takeDamage(target,dmg);
@@ -1198,6 +1201,25 @@ function takeDamage(ship,damage) {
 		if (ship.HP == 1) damage = 0;
 		else if (damage >= ship.HP) damage = Math.floor(ship.HP*.5+.3*Math.floor(Math.random()*ship.HP));  //overkill protection
 	}
+	if (MECHANICS.vitaLove && ship.side == 0) {
+		let love = SIMCONSTS.love || 0;
+		if (love >= 330) {
+			if (Math.random() < .7 && ship.HP/ship.maxHP > .75 && (ship.HP-damage)/ship.maxHP <= .5) {
+				damage = Math.floor(damage * .5);
+				if (C) console.log('love 3: ' + ship.name);
+			}
+		} else if (love >= 200) {
+			if (Math.random() < .6 && ship.HP/ship.maxHP > .75 && (ship.HP-damage)/ship.maxHP <= .25) {
+				damage = Math.floor(damage * .55);
+				if (C) console.log('love 2: ' + ship.name);
+			}
+		} else if (love >= 100) {
+			if (Math.random() < .5 && ship.HP/ship.maxHP > .75 && (ship.HP-damage)/ship.maxHP <= .25) {
+				damage = Math.floor(damage * .6);
+				if (C) console.log('love 1: ' + ship.name);
+			}
+		}
+	}
 	ship.HP -= damage;
 	if (ship.HP <= 0 && ship.repairs && ship.repairs.length) {
 		var repair = ship.repairs.shift();
@@ -1700,10 +1722,9 @@ function supportPhase(shipsS,alive2,subsalive2,suptype,BAPI,isboss) {
 			var accCrit, torpDmg;
 			if (suptype==3) {
 				if (!ship.canTorp()) continue;
-				torpDmg = (FIXTORPEDOSUPPORT)? ship.TP : 0;  //is this the bug in the browser version?
-				for (var j=0; j<ship.equips.length; j++) if (ship.equips[j].TP) torpDmg -= ship.equips[j].TP; //is this correct?
+				torpDmg = ship.TP;
 				torpDmg += 8;
-				accCrit = accuracyAndCrit(ship,target,hitRate(ship,54,ship.ACC+torpDmg*.35,ship.moraleMod(true)),target.getFormation().torpev,0,1.2);
+				accCrit = accuracyAndCrit(ship,target,hitRate(ship,54,ship.ACC/*+torpDmg*.35*/,ship.moraleMod(true)),target.getFormation().torpev,0,1.2);
 			} else if (suptype == 2) {
 				var baseacc;
 				if (isboss) baseacc = (SIMCONSTS.supportShellB != null)? SIMCONSTS.supportShellB : 64;
@@ -1720,9 +1741,10 @@ function supportPhase(shipsS,alive2,subsalive2,suptype,BAPI,isboss) {
 			var dmg = 0, realdmg = 0;
 			if (res) {
 				var preMod = ENGAGEMENT;
-				if (FLEETS1[0] && FLEETS1[0].formation && FLEETS1[0].formation.id == 6) preMod *= .5;
+				if (FLEETS1[0] && FLEETS1[0].formation && !FLEETS1[0].combinedWith) preMod *= FLEETS1[0].formation.shellmod;
+				if (suptype == 3 && !FIXTORPEDOSUPPORT) preMod = 0;
 				var dmg;
-				if (suptype==3) dmg = damage(ship,target,torpDmg*.55,preMod,res,150);
+				if (suptype==3) dmg = damage(ship,target,torpDmg,preMod,res,150);
 				else if (suptype == 2) dmg = damage(ship,target,ship.shellPower(target)-1,preMod,res,150);
 				else dmg = damage(ship,target,ship.ASWPower(),1,res,150);
 				realdmg = takeDamage(target,dmg);
