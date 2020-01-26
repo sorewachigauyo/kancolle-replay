@@ -47,6 +47,7 @@ MAPDATA[10] =
 				17: { x: 625, y: 260, r: 44, scale: .4, maps: [171,172,173,174] },
 			}
 		},
+		disableMore: { ships: [423,448,452] },
 		enableMore: { ships: [440] },
 		maps: {
 			11: {
