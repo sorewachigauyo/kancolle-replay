@@ -8728,7 +8728,7 @@ MAPDATA[10] =
 							
 						},
 						routeC: function(ships) {
-							this.showLoSPlane = nulll;
+							this.showLoSPlane = null;
 							if (ships.aBB + ships.CV + ships.CVB >= 5) return 'J';
 							this.showLoSPlane = 'K';
 							return checkELoS33(getELoS33(1,3),{ 29: 'K', 25: 'J' });
