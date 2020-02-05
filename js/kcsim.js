@@ -429,7 +429,8 @@ function NBattack(ship,target,NBonly,NBequips,APIyasen,attackSpecial) {
 	var postMod = 1;
 	var bonus = 5*nightscouts[0];//add if have night scout
 	
-	var accBase = (69 + starshells[0]*5)*((nightscouts[0])? 1.1 : 1);
+	var accBase = (NBonly && ship.side == 0 && ship.fleet.combinedWith)? 90 : 69;
+	accBase = (accBase + starshells[0]*5)*((nightscouts[0])? 1.1 : 1);
 	var accMod = ship.getFormation().NBacc * ship.moraleMod();
 	var accFlat = ship.ACC;
 	if (ship.improves.ACCnb) accFlat += ship.improves.ACCnb;
@@ -1112,7 +1113,7 @@ function torpedoPhase(alive1,subsalive1,alive2,subsalive2,opening,APIrai,combine
 		var ship = shots[i][0]; var target = shots[i][1];
 		
 		var power = (combinedAll)? ship.TP+15 : (ship.isescort||target.isescort)? ship.TP : (ship.TP+5);
-		power *= ship.getFormation().torpmod*ENGAGEMENT*damageMods[ship.id];
+		power *= ship.getFormation().torpmod*ENGAGEMENT*(combinedAll? ship.damageMod(true) : damageMods[ship.id]);
 		if (target.isPT && !NERFPTIMPS) power *= .6;
 		if (power > 150) power = 150 + Math.sqrt(power-150);
 		

@@ -209,6 +209,7 @@ function chAddDragEquip(fleetnum,shipslot,eqslot) {
 	imgEq.on('dragover',function(event) {
 		if (DIALOGFLEETSEL == fleetnum && DIALOGSLOTSEL == shipslot && DIALOGITEMSEL != eqslot) {
 			let sid = CHDATA.fleets[DIALOGFLEETSEL][DIALOGSLOTSEL-1];
+			if (SHIPDATA[CHDATA.ships[sid].masterId].excludeEquip || SHIPDATA[CHDATA.ships[sid].masterId].onlyEquip) return;
 			if (eqslot > SHIPDATA[CHDATA.ships[sid].masterId].SLOTS.length) return;
 			if (DIALOGITEMSEL > SHIPDATA[CHDATA.ships[sid].masterId].SLOTS.length) return;
 			event.originalEvent.preventDefault();
@@ -421,6 +422,13 @@ function chDialogShowItems(shipmid,types) {
 				if (EXPANSIONSLOTDATA[date].specialS && EXPANSIONSLOTDATA[date].specialS[eqid] && EXPANSIONSLOTDATA[date].specialS[eqid].indexOf(shipmid) != -1) { found = true; break; }
 			}
 			if (!found) include = false;
+		}
+		let type = equip.type > 100 ? equip.type - 100 : equip.type;
+		if (include && SHIPDATA[shipmid].excludeEquip && SHIPDATA[shipmid].excludeEquip[DIALOGITEMSEL]) {
+			if (SHIPDATA[shipmid].excludeEquip[DIALOGITEMSEL].indexOf(type) != -1) include = false;
+		}
+		if (include && SHIPDATA[shipmid].onlyEquip && SHIPDATA[shipmid].onlyEquip[DIALOGITEMSEL]) {
+			if (SHIPDATA[shipmid].onlyEquip[DIALOGITEMSEL].indexOf(type) == -1) include = false;
 		}
 		
 		if (include) {
@@ -1227,6 +1235,8 @@ function chStart() {
 	if (CHDATA.fleets.supportB) chLoadSupportFleetB();
 	else FLEETS1S[1] = null;
 	
+	chCombineShipCount();
+	
 	if (MAPDATA[CHDATA.event.world].allowLBAS) {
 		var numBase = 0, numBaseMax = MAPDATA[WORLD].maps[MAPNUM].lbasSortie || MAPDATA[WORLD].maps[MAPNUM].lbas;
 		for (var i=1; i<=3; i++) {
@@ -1408,6 +1418,24 @@ function chRefreshShipCountSortie() { //use in sortie only
 	if (CHDATA.fleets.combined) {
 		CHSHIPCOUNT.escort = countsA[1];
 		CHSHIPCOUNT.speed = Math.min(CHSHIPCOUNT.speed,CHSHIPCOUNT.escort.speed);
+	}
+	
+	chCombineShipCount();
+}
+
+function chCombineShipCount() {
+	if (CHSHIPCOUNT.escort) {
+		CHSHIPCOUNT.c = chNewShipCount();
+		for (let key in CHSHIPCOUNT.c) {
+			if (key == 'ids') {
+				CHSHIPCOUNT.c.ids = CHSHIPCOUNT.ids.concat(CHSHIPCOUNT.escort.ids);
+				continue;
+			}
+			CHSHIPCOUNT.c[key] = CHSHIPCOUNT[key] + CHSHIPCOUNT.escort[key];
+		}
+		CHSHIPCOUNT.c.speed = CHSHIPCOUNT.speed;
+	} else {
+		CHSHIPCOUNT.c = CHSHIPCOUNT;
 	}
 }
 
