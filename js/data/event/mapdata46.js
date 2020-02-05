@@ -2605,7 +2605,7 @@ MAPDATA[46] =
 							if (CHDATA.fleets.combined && ships.c.aBB >= 4) return 'F';
 							if (ships.c.AV) return 'I';
 							let s = FLEETS1[0].ships;
-							if (FLEETS1[1].ships) s = s.concat(FLEETS1[1].ships);
+							if (FLEETS1[1]) s = s.concat(FLEETS1[1].ships);
 							let radars = checkSurfaceRadar(s);
 							if (radars.num >= 4) return 'I';
 							if (Math.random() < .25) return 'F';
@@ -2999,7 +2999,7 @@ MAPDATA[46] =
 						showLoSPlane: 'W',
 						routeC: function(ships) {
 							let s = FLEETS1[0].ships;
-							if (FLEETS1[1].ships) s = s.concat(FLEETS1[1].ships);
+							if (FLEETS1[1]) s = s.concat(FLEETS1[1].ships);
 							let radars = checkSurfaceRadar(s);
 							if (radars.num < 3) return 'U';
 							
