@@ -834,17 +834,18 @@ function chProcessKC3File2() {
 		shipN.ammo = 10;
 		shipN.morale = 49;
 		
+		let hp = shipd.HP;
 		if (dataDate < MECHANICDATESOTHER.luckMod) {
 			shipN.LUK = shipd.LUK;
 		}
 		if (dataDate < MECHANICDATESOTHER.marriage) {
 			if (shipN.LVL > 99) {
 				shipN.LVL = 99;
-				// let hpPlus = [4,4,4,5,6,7,7,8,8,9][Math.floor(shipd.HP/10)] || 9;
-				// hpPlus = Math.min(hpPlus,shipd.HPmax - shipd.HP);
+				let hpPlus = [4,4,4,5,6,7,7,8,8,9][Math.floor(shipd.HP/10)] || 9;
+				hpPlus = Math.min(hpPlus,shipd.HPmax - shipd.HP);
+				hp += hpPlus;
 				if (shipN.LUK - shipd.LUK <= 6) shipN.LUK = shipd.LUK;
 			}
-			shipN.HP[0] = shipN.HP[1] = shipd.HP; //assumes no HP mod possible
 		} else if (dataDate < MECHANICDATESOTHER.marriage155) {
 			if (shipN.LVL > 150) shipN.LVL = 150;
 		} else if (dataDate < MECHANICDATESOTHER.marriage165) {
@@ -852,11 +853,10 @@ function chProcessKC3File2() {
 		} else if (dataDate < MECHANICDATESOTHER.marriage175) {
 			if (shipN.LVL > 165) shipN.LVL = 165;
 		}
-		if (dataDate < MECHANICDATESOTHER.hpMod) {
-			if (shipN.LVL <= 99) shipN.HP[0] = shipN.HP[1] = shipd.HP;
-		} else if (shipN.HP[0] - shipd.HP > 2) {
-			if (shipN.LVL <= 99) shipN.HP[0] = shipN.HP[1] = shipd.HP + 2;
+		if (dataDate >= MECHANICDATESOTHER.hpMod && shipO.mod[5]) {
+			hp += shipO.mod[5];
 		}
+		shipN.HP[0] = shipN.HP[1] = hp;
 		
 		//remove bonus stats/other unsupported stat changes + update for marriage level change
 		for (let stat of stats) {
@@ -878,12 +878,12 @@ function chProcessKC3File2() {
 			else numC = shipd[stat];
 			if (num != numC) {
 				if (num > numC) console.log(stat + ' ' + num + ' ' + numC + ' ' + shipd.name);
-				shipN[stat] = Math.min(num,numC) + (shipN[stat]-num);
-				// if (stat == 'ASW' && dataDate >= MECHANICDATESOTHER.hpMod && num - numC > 0 && num - numC <= 9) {
-					// shipN[stat] += num - numC;
-					// console.log('guess ASW modded' + ' ' + (num-numC));
-				// }
+				let base = (stat == 'ASW' || stat == 'LOS' || stat == 'EV')? numC : Math.min(num,numC);
+				shipN[stat] = base + (shipN[stat]-num);
 			}
+		}
+		if (dataDate >= MECHANICDATESOTHER.hpMod && shipO.mod[6]) {
+			shipN.ASW += shipO.mod[6];
 		}
 		
 		if (CHDATA.config.mechanics.equipBonus) { //re-add if enabled
@@ -908,6 +908,11 @@ function chProcessKC3File2() {
 			if (!chRevertShip(shipN,sid) || disableMore) {
 				shipN.disabled = true;
 				for (var i=0; i<shipN.items.length; i++) chShipEquipItem(sid,-1,i); //unequip items;
+			} else {
+				if (dataDate >= MECHANICDATESOTHER.hpMod) {
+					if (shipO.mod[5]) shipN.HP[0] = shipN.HP[1] += shipO.mod[5];
+					if (shipO.mod[6]) shipN.ASW += shipO.mod[6];
+				}
 			}
 		}
 		
@@ -992,29 +997,27 @@ function chRevertShip(ship,sid) {
 		newshipd = SHIPDATA[newshipd.prev];
 	} while (newshipd.added > MAPDATA[CHDATA.event.world].date);
 	
+	let items = ship.items.slice();
+	for (let i=0; i<shipd.SLOTS.length; i++) {
+		chShipEquipItem(sid,-1,i);
+	}
 	ship.masterId = newmid;
 	ship.HP = [newshipd.HP,newshipd.HP];
-	var stats = ['FP','TP','AA','AR','LUK'];
+	var stats = ['FP','TP','AA','AR'];
 	for (var i=0; i<stats.length; i++) {
-		ship[stats[i]] -= (shipd[stats[i]] - newshipd[stats[i]]);
+		ship[stats[i]] = newshipd[stats[i]];
 	}
-	if (newshipd.SLOTS.length < shipd.SLOTS.length) {
-		for (let i=newshipd.SLOTS.length; i<shipd.SLOTS.length; i++) {
-			chShipEquipItem(sid,-1,i);
-		}
-	}
+	ship.LUK -= shipd.LUK - newshipd.LUK;
 	stats = ['EV','ASW','LOS'];
 	for (var i=0; i<stats.length; i++) {
 		var base = newshipd[stats[i]+'base'], max = newshipd[stats[i]];
 		ship[stats[i]] =  Math.floor(base + (max-base)*ship.LVL/99);
-		for (var j=0; j<ship.items.length; j++) {
-			if (ship.items[j] == -1) continue;
-			var eqd = EQDATA[CHDATA.gears['x'+ship.items[j]].masterId];
-			if (eqd) ship[stats[i]] += EQDATA[CHDATA.gears['x'+ship.items[j]].masterId][stats[i]] || 0;
-		}
 	}
 	ship.RNG = newshipd.RNG;
 	ship.planes = newshipd.SLOTS;
+	for (let i=0; i<newshipd.SLOTS.length; i++) {
+		chShipEquipItem(sid,items[i],i);
+	}
 	
 	return true;
 }
