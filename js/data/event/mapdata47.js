@@ -255,7 +255,7 @@ MAPDATA[47] =
 							if (CHDATA.fleets.combined == 2) return 'A';
 							if (CHDATA.fleets.combined == 3) return 'A';
 							if (ships.speed <= 5) return 'A';
-							if (ships.c.CVB >= 3) return 'A';
+							if (ships.c.aCV >= 3) return 'A';
 							return 'D';
 						}
 					},
