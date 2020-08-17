@@ -601,6 +601,7 @@ function chShipEquipItem(shipid,itemid,slot) {
 			else if (EQDATA[CHDATA.gears['x'+item].masterId].type == ENGINE) hasBoiler = true;
 		}
 	}
+	if (SHIPDATA[ship.masterId].SPD <= 5 && ['DD','CL'].indexOf(SHIPDATA[ship.masterId].type) != -1) hasBoiler = true;
 	if (hasTurbine && hasBoiler) {
 		ship.SPD = SHIPDATA[ship.masterId].SPD + 5;
 	} else if (ship.SPD != undefined) {
