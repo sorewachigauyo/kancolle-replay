@@ -178,6 +178,7 @@ var MECHANICS = {
 };
 var NERFPTIMPS = false;
 var BREAKPTIMPS = false;
+var SPECIALATTACKS = true;
 
 function getRepairCost(ship) {
 	var base = (ship.maxHP - ship.HP)*SHIPDATA[ship.mid].fuel;
@@ -786,7 +787,7 @@ function shellPhaseAttack(ship,targetData,APIhou,attackSpecial) {
 }
 
 function canSpecialAttack(ship,isNB) {
-	if (ship.fleet.didSpecial) return false;
+	if (ship.fleet.didSpecial || !SPECIALATTACKS) return false;
 	if (ship.attackSpecial == 100) {
 		if (ship.fleet.ships[0] != ship) return false;
 		if (ship.fleet.ships.filter(ship => ship.HP > 0 && !ship.retreated).length < 6) return false;

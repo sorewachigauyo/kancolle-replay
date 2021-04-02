@@ -2560,6 +2560,7 @@ function simDataLoad(data) {
 	if (data.bucketHPPercent != null) BUCKETPERCENT = data.bucketHPPercent;
 	if (data.bucketTime != null) BUCKETTIME = data.bucketTime;
 	if (data.continueOnTaiha) DORETREAT = false;
+	if (data.didSpecial) SPECIALATTACKS = false;
 	
 	return optionsAll;
 }
